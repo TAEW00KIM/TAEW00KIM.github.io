@@ -666,7 +666,7 @@ export const projectGroups: ProjectGroup[] = [
   { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
   { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
-  { name: "사이드 프로젝트", ids: ["loci", "pinta", "vitacheck"], showOrg: true },
+  { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },
 ];
 
 export const ui = {

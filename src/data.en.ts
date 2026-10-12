@@ -638,7 +638,7 @@ export const projectGroups: ProjectGroup[] = [
   { name: "Hufscheer", note: "live cheering service for university sports, backend", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
   { name: "AI Work Environment", note: "personal", ids: ["history-mcp", "agent-env"] },
-  { name: "Side Projects", ids: ["loci", "pinta", "vitacheck"], showOrg: true },
+  { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
 ];
 
 export const ui = {
