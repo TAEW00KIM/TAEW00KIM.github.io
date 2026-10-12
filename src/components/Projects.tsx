@@ -20,13 +20,13 @@ function Item({ p, showOrg }: { p: Project; showOrg: boolean }) {
         </span>
         <span className="row-sub">
           {showOrg && <span className="org">{p.org}</span>}
-          <span className={p.metric ? "lead mono" : "lead"}>{p.metric ?? p.summary}</span>
+          <span className="lead">{p.summary}</span>
+          {p.metric && <span className="lead metric mono">{p.metric}</span>}
         </span>
         <span className="indicator" aria-hidden="true">{open ? "−" : "+"}</span>
       </button>
       </h3>
       <div id={panel} className="detail" hidden={!open}>
-        {p.metric && <p>{p.summary}</p>}
         <p className="stack">{p.tags.join(", ")}</p>
         <ul className="dash">
           {p.bullets.map((b) => (

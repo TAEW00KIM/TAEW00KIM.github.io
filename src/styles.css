@@ -76,7 +76,7 @@ ul, ol { list-style: none; }
 .toggle:hover .ptitle { text-decoration-color: var(--faint); }
 .row-sub { display: block; margin-top: 2px; }
 .lead { display: block; margin-top: 4px; font-size: 14px; color: var(--body); }
-.lead.mono { font-size: 13px; color: var(--ink); }
+.lead.metric { margin-top: 6px; font-size: 13px; color: var(--ink); }
 .indicator { position: absolute; right: 2px; top: 16px; font: 400 15px/1.7 var(--mono); color: var(--faint); }
 .toggle:hover .indicator, .is-open .indicator { color: var(--ink); }
 
