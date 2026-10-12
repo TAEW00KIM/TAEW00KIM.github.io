@@ -2,11 +2,11 @@ import Header from "./components/Header";
 import Entries from "./components/Entries";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
-import { experience, resume, site } from "./data";
-
-const tab = (id: string) => experience.tabs.find((t) => t.id === id);
+import { useData } from "./i18n";
 
 export default function App() {
+  const { experience, resume, site, ui } = useData();
+  const tab = (id: string) => experience.tabs.find((t) => t.id === id);
   const work = tab("work");
   const activity = tab("activity");
   const edu = tab("edu");
@@ -24,7 +24,7 @@ export default function App() {
       </main>
       <footer className="footer">
         <p>
-          {site.footer} / <a href={site.resumePdf} download="김태우_이력서.pdf">{resume.pdfLabel}</a>
+          {site.footer} / <a href={site.resumePdf} download={ui.resumeFilename}>{resume.pdfLabel}</a>
         </p>
       </footer>
     </>

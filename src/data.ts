@@ -659,3 +659,22 @@ export const resume = {
     { group: "AI", items: ["Claude Code", "Codex", "MCP"] },
   ],
 };
+
+export type ProjectGroup = { name: string; note?: string; ids: string[]; showOrg?: boolean };
+
+export const projectGroups: ProjectGroup[] = [
+  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
+  { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
+  { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
+  { name: "사이드 프로젝트", ids: ["loci", "pinta", "vitacheck"], showOrg: true },
+];
+
+export const ui = {
+  lang: "ko",
+  projectsTitle: "프로젝트",
+  langLinkLabel: "English",
+  langLinkHref: "/en/",
+  resumeFilename: "김태우_이력서.pdf",
+  docTitle: "Kim Taewoo | Software Engineer",
+  description: "소프트웨어 개발자 김태우의 포트폴리오. 운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
+};

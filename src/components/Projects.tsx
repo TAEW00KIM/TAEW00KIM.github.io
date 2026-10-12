@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { projects, type Project } from "../data";
+import type { Project } from "../data";
+import { useData } from "../i18n";
 
 function Item({ p, showOrg }: { p: Project; showOrg: boolean }) {
   const [open, setOpen] = useState(false);
@@ -66,18 +67,12 @@ function Item({ p, showOrg }: { p: Project; showOrg: boolean }) {
   );
 }
 
-const groups: { name: string; note?: string; ids: string[]; showOrg?: boolean }[] = [
-  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
-  { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
-  { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
-  { name: "사이드 프로젝트", ids: ["loci", "pinta", "vitacheck"], showOrg: true },
-];
-
 export default function Projects() {
+  const { projects, projectGroups: groups, ui } = useData();
   const byId = new Map(projects.map((p) => [p.id, p]));
   return (
     <section className="section" aria-labelledby="proj-h">
-      <h2 id="proj-h">프로젝트</h2>
+      <h2 id="proj-h">{ui.projectsTitle}</h2>
       {groups.map((g) => (
         <div className="pgroup" key={g.name}>
           <p className="gname">
