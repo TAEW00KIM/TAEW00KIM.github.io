@@ -4,11 +4,13 @@ export default function Entries({ id, title, items }: { id: string; title: strin
   return (
     <section className="section" aria-labelledby={`${id}-h`}>
       <h2 id={`${id}-h`}>{title}</h2>
-      {items.map((it) => (
-        <div className="entry" key={it.title + it.period}>
-          <p className="date mono">{it.period}</p>
-          <div className="body">
-            <h3>{it.title}</h3>
+      <ul className="rows">
+        {items.map((it) => (
+          <li className="entry" key={it.title + it.period}>
+            <div className="row-head">
+              <h3>{it.title}</h3>
+              <span className="date mono">{it.period}</span>
+            </div>
             <p className="org">{it.org}</p>
             {it.bullets.length > 0 && (
               <ul className="dash">
@@ -17,10 +19,9 @@ export default function Entries({ id, title, items }: { id: string; title: strin
                 ))}
               </ul>
             )}
-            {it.tags && it.tags.length > 0 && <p className="stack">{it.tags.join(", ")}</p>}
-          </div>
-        </div>
-      ))}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

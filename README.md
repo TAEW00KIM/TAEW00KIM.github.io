@@ -6,4 +6,4 @@
 - `npm install`, `npm run dev`로 개발하고 `npm run build`로 `dist/`를 만듭니다.
 - 인쇄(A4)하면 프로젝트 상세가 모두 펼쳐진 채 출력됩니다.
 - `main`에 푸시하면 `.github/workflows/deploy.yml`이 GitHub Pages로 배포합니다. 저장소 설정의 Pages 소스는 GitHub Actions로 둡니다.
-- 이력서 PDF는 `public/resume.pdf`, 프로필 사진은 `public/profile.jpg`입니다.
+- 이력서 PDF는 `public/resume.pdf`입니다.

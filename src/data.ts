@@ -11,7 +11,6 @@ export const site = {
   web: "https://kimtaewoo.dev",
   webLabel: "kimtaewoo.dev",
   resumePdf: "/resume.pdf",
-  photo: "/profile.jpg",
   footer: "2026.10 업데이트",
 };
 
@@ -388,9 +387,9 @@ export const projects: Project[] = [
     bullets: [
       "요청마다 하던 계정 상태 DB 조회를 Caffeine 캐시(30초)로 대체",
       "프로필 통계 쿼리 3개를 1개로 합치고 피드 이미지 목록의 N+1을 배치 조회로 변경",
-      "이미지 리사이징을 imgproxy(EC2)로 교체",
+      "CloudFront 온디맨드 이미지 리사이징을 Lambda@Edge로 만든 뒤 imgproxy(EC2)로 교체",
     ],
-    tags: ["Java", "Spring Boot", "MySQL", "Caffeine", "CloudFront", "imgproxy", "Flyway"],
+    tags: ["Java", "Spring Boot", "MySQL", "Caffeine", "CloudFront", "Lambda@Edge", "imgproxy", "Flyway"],
     sections: [
       {
         heading: "개요",
@@ -399,7 +398,7 @@ export const projects: Project[] = [
       {
         heading: "해결",
         paras: [
-          "인증 필터가 요청마다 하던 계정 상태 DB 조회를 Caffeine 캐시(30초)로 대체했습니다. 프로필 통계 쿼리 3개는 집계 쿼리 1개로 합쳤고, 피드 이미지 목록의 N+1은 배치 조회로 바꿨습니다. 이미지는 CloudFront 뒤의 온디맨드 리사이징을 imgproxy(EC2)로 교체했습니다.",
+          "인증 필터가 요청마다 하던 계정 상태 DB 조회를 Caffeine 캐시(30초)로 대체했습니다. 프로필 통계 쿼리 3개는 집계 쿼리 1개로 합쳤고, 피드 이미지 목록의 N+1은 배치 조회로 바꿨습니다. 이미지는 CloudFront 뒤의 온디맨드 리사이징을 Lambda@Edge로 만든 뒤 imgproxy(EC2)로 교체했습니다.",
         ],
       },
       {
