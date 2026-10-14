@@ -34,7 +34,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "Vling is a YouTube channel and video data SaaS. Since July I have worked on the frontend and shipped the video search and channel search redesigns with teammates.",
             "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations.",
-            "In the channel search redesign, I built channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
+            "In the channel search redesign, I built channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
             "A performance measurement script showed that only the search page had a high CLS. I narrowed the cause to the skeleton key and reduced CLS from 0.246 → 0.003.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
@@ -46,7 +46,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
             "I built a read-only dashboard for sending status and an unsubscribe ledger.",
-            "I wrote the email copy and operating documents with Claude Code and cross-checked them with Codex.",
+            "Claude Code drafted the email copy and operating documents, and I cross-checked them with Codex. Anything that leaves the company, such as sending email, ran only after a person approved it.",
           ],
           tags: ["Claude Code", "Codex"],
         },
@@ -81,14 +81,14 @@ export const experience: { tabs: ExpTab[] } = {
           title: "Undergraduate Teaching Assistant, Introduction to Deep Learning",
           org: "Hankuk University of Foreign Studies (HUFS)",
           period: "2025.09 ~ 2025.12",
-          bullets: ["I developed an automatic grading system for assignments."],
+          bullets: ["I supported labs and assignments for the Deep Learning Basics course and built a system that grades assignments automatically (Spring, React, FastAPI)."],
           tags: ["Spring", "React", "FastAPI"],
         },
         {
           title: "VitaCheck Booth Operation",
           org: "Seoul Job Fair",
           period: "2025.11",
-          bullets: ["100 real users a day used it."],
+          bullets: ["We ran a booth for our team project VitaCheck, a supplement recommendation service, and 100 real users a day used it."],
         },
         {
           title: "Senior KATUSA, Acting Platoon Leader",
@@ -104,9 +104,9 @@ export const experience: { tabs: ExpTab[] } = {
       items: [
         {
           title: "H-UP Best Award",
-          org: "H-UP",
+          org: "HUFS career exploration credit program",
           period: "2022",
-          bullets: ["I received it for an educational iOS app that teaches smartphone use through games."],
+          bullets: ["I received it for an educational iOS app that helps people who find smartphones hard learn basic operations through games."],
         },
       ],
     },
@@ -138,7 +138,7 @@ export const projects: Project[] = [
     result: "Spam is filtered without blocking normal users. I also found that 99% of messages were the 3 preset buttons and raised the award rule with the team.",
     bullets: [
       "Block at 120 requests per 60 seconds per visitor (cookie), and from the 4th identical message within 3 seconds (Caffeine)",
-      "Bot requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
+      "Abnormal requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
       "Found that 99% of 21,715 cheer chat messages came from 3 preset buttons, and raised the award criteria with the team",
     ],
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "sliding window"],
@@ -166,7 +166,7 @@ export const projects: Project[] = [
         paras: [
           "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400. The data was not affected.",
           "But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed. Since then I check block results by the stage that blocked, not by the response code.",
-          "After blocking, I looked at the data again. 99% of 21,715 cheer chat messages were from 3 preset buttons, and messages typed by hand were a few dozen per team. I told the team that giving awards by cheer chat count would turn into a competition of tap counts.",
+          "After blocking, I looked at the data again. 99% of 21,715 cheer chat messages were from 3 preset buttons, and messages typed by hand were a few dozen per team. I told the team that giving awards by cheer chat count would turn into a contest of who presses the button most.",
           "One limitation remains. A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
         ],
       },
@@ -195,7 +195,7 @@ export const projects: Project[] = [
     bullets: [
       "Put a static filter and a result cache in front of the LLM to reduce calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
-      "Block leaks in two stages: output validation and the prompt",
+      "Block leaked explanations in two stages: output validation and the prompt",
     ],
     tags: ["Spring Boot", "Gemini", "OpenRouter", "Caffeine"],
     links: [hufscheerRepo],
@@ -204,15 +204,15 @@ export const projects: Project[] = [
         heading: "Problem",
         paras: [
           "When a cheer chat message contains profanity, the LLM replaces the body with a masked sentence. On April 29 in production, the model misread one word as Japanese and returned an explanation with it. The server saved the response without checking it, so the explanation was shown on screen.",
-          "On May 7, the opposite happened: normal cheer initials were masked and saved. Model responses vary in format even for the same input. That was the key constraint.",
+          "On May 7, the opposite happened: normal consonant-only cheers were masked and saved. Model responses vary in format even for the same input. That was the key constraint.",
         ],
       },
       {
         heading: "Solution",
         paras: [
           "A regex profanity dictionary is fast and cheap but often masks normal sentences. So I left the judgment to the LLM and set the principle to not mask when in doubt.",
-          "I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is. It rejects responses whose length grew abnormally, responses containing leak phrases, responses where the sentence changed without a mask marker, and responses where the cheer initials of the original disappeared.",
-          "I solved the cost by reducing the number of calls. Since 99% of cheer chat messages are preset buttons, a first-stage filter skips the LLM for preset phrases, messages made only of cheer initials, and messages without Korean characters. The same sentence is cached for 5 minutes, so even a flood of spam triggers only one call.",
+          "I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is. It rejects responses whose length grew abnormally, responses with the model's explanation mixed in, responses where the sentence changed without a mask marker, and responses where the consonant-only cheers of the original disappeared.",
+          "I solved the cost by reducing the number of calls. Since 99% of cheer chat messages are preset buttons, a first-stage filter skips the LLM for preset phrases, consonant-only cheer messages, and messages without Korean characters. The same sentence is cached for 5 minutes, so even a flood of spam triggers only one call.",
           "The provider is split behind an interface, so Gemini and OpenRouter can be switched by configuration alone.",
         ],
       },
@@ -244,7 +244,7 @@ export const projects: Project[] = [
     key: "Back in about 1 week",
     problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a team mailbox nobody read.",
     solution: "Rebuilt the infrastructure in a new account with Terraform, removed the fixed access keys in favor of an instance role, and moved DNS outside the account (Cloudflare).",
-    result: "Service resumed in about 1 week. Part of the cause was that I ran operations without looking after key management and warning emails, so I added an uptime check outside the account, GuardDuty and a cost anomaly alert. The old data is not recovered yet.",
+    result: "Service resumed in about 1 week. The leaked key and the warning mailbox were not mine to manage, but to keep this from happening again I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. The old data is not recovered yet.",
     bullets: [
       "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
       "Switched S3 access from a fixed app key to an instance role",
@@ -275,7 +275,7 @@ export const projects: Project[] = [
         heading: "Result",
         paras: [
           "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
-          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. As the person running operations, part of that is on me for not looking after key management and how warning emails were read. So I removed the fixed keys and made anomalies inside and outside the account arrive as alerts.",
+          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. The keys and the account mailbox were not managed by me. In the rebuild I removed fixed keys so that nobody has to manage them, and made anomalies inside and outside the account arrive as alerts.",
           "Some risk remains. The old data is still waiting for the account to be recovered, and an off-account DB backup was designed but not turned on.",
         ],
       },
@@ -320,7 +320,7 @@ export const projects: Project[] = [
         paras: [
           "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. I put MySQL on tmpfs to remove the disk effect. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
           "I removed deployment downtime with a Blue/Green deployment using an nginx router and graceful shutdown.",
-          "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%. CPU was 7.6% even on the day bots flooded in. I decided not to do a load test, which would take 5 to 10 days.",
+          "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%. CPU was 7.6% even on the day abnormal traffic flooded in. I decided not to do a load test, which would take 5 to 10 days.",
         ],
       },
       {
@@ -490,7 +490,7 @@ export const projects: Project[] = [
     id: "vling-search",
     images: [
       { src: "/vling-video-search.png", width: 1190, height: 700, alt: "Vling video search screen", caption: "Video search. I built the curation sections and the results grid with teammates. Channel names are masked by the service." },
-      { src: "/vling-channel-search.png", width: 1190, height: 700, alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 qualitative filters. Channel names are masked by the service." },
+      { src: "/vling-channel-search.png", width: 1190, height: 700, alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 channel attribute filters. Channel names are masked by the service." },
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
@@ -502,7 +502,7 @@ export const projects: Project[] = [
     result: "Shipped the video search and channel search redesigns with teammates.",
     bullets: [
       "Video search: 4 curation sections, results grid, related channel recommendations",
-      "Channel search: channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, favorites folders",
+      "Channel search: channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, favorites folders",
       "Found before release that adding the category filter made the section disappear entirely for some accounts, and added a fallback",
     ],
     tags: ["TypeScript", "React", "Next.js", "Apollo Client", "Zustand"],
@@ -528,7 +528,7 @@ export const projects: Project[] = [
         paras: [
           "I added a fallback: if no channel is found with the category, it queries again without the category.",
           "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations.",
-          "In the channel search redesign, I built channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
+          "In the channel search redesign, I built channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
         ],
       },
       {
@@ -553,11 +553,13 @@ export const projects: Project[] = [
       { label: "Search screen CLS", before: 0.246, after: 0.003, unit: "" },
       { label: "Sort change response", before: 2194, after: 40, unit: "ms" },
       { label: "Thumbnail TTFB", before: 928, after: 154, unit: "ms" },
+      { label: "'Vlog' search time", before: 8.6, after: 2.4, unit: "s" },
+      { label: "Keyword search candidates", before: 1330, after: 22, unit: "K" },
     ],
     key: "CLS 0.246 → 0.003",
     problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
     solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes moved to shallow routing with no server round trip.",
-    result: "CLS 0.246 → 0.003, sort response 2,194ms → 40ms (sandbox measurements).",
+    result: "CLS 0.246 → 0.003, sort response 2,194ms → 40ms, 'vlog' search 8.6s → 2.4s (sandbox measurements).",
     bullets: [
       "Search page CLS 0.246 → 0.003 (changed the skeleton key to the grid slot number)",
       "Sort change response 2,194ms → 40ms (shallow routing)",
@@ -568,7 +570,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "With an AI agent, I built a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
+          "I had an AI agent write a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
           "All numbers were measured in a sandbox or locally, and are not production numbers.",
         ],
       },
@@ -579,6 +581,7 @@ export const projects: Project[] = [
           "Collecting the source nodes of layout-shift entries locally, all of them were video card skeletons.",
           "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The screen stayed frozen on the old results meanwhile.",
           "Thumbnails are videos seen for the first time in each search result, so the image optimization cache was always empty. Cards stayed blank while the server fetched the original and re-encoded it.",
+          "Keyword search had problems too. A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1.33 million, and a search for 'vlog' took 8.6 seconds.",
         ],
       },
       {
@@ -588,13 +591,14 @@ export const projects: Project[] = [
           "I changed the key to the absolute slot number in the grid. A settled card takes its place, and the remaining skeletons stay where they are.",
           "The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing.",
           "With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB). Still, I chose to download 32KB more over delaying each grid card by 800ms. So I made only thumbnails skip optimization.",
+          "For keyword search, I removed the condition that let a candidate pass on a single matching word, and set the default search period to the last 6 months.",
         ],
       },
       {
         heading: "Result",
         paras: [
           "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed.",
-          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms.",
+          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms. Keyword search candidates went from 1.33 million to 22,000, and the 'vlog' search from 8.6s to 2.4s.",
           "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
         ],
       },
@@ -659,7 +663,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I handled design, implementation, writing the evaluation set, and operation alone."],
+        paras: ["I did the design, the evaluation set and its answer rules, and operating decisions. Code was written by coding agents (Claude Code, Codex), and I re-ran the results myself to check them."],
       },
       {
         heading: "Tech stack",
@@ -713,7 +717,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I handle design, implementation, and operation alone."],
+        paras: ["I set the design and operating rules. Implementation was delegated to sub-agents, and I re-ran their results myself to check them."],
       },
       {
         heading: "Tech stack",
