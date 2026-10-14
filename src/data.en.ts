@@ -115,8 +115,10 @@ export const experience: { tabs: ExpTab[] } = {
 
 const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spectator-server" };
 
-const hufscheerOverview =
-  "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time, and lets users cheer together through cheer chat messages. The service has run since 2023, and I joined its backend in February 2026. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views. Since joining, I have written 55% of the server repository's commits (221/403, excluding merges).";
+const hufscheerOverview = [
+  "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
+  "The service has run since 2023, and I joined its backend in February 2026. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views. Since joining, I have written 55% of the server repository's commits (221/403, excluding merges).",
+];
 
 export const projects: Project[] = [
   {
@@ -137,25 +139,31 @@ export const projects: Project[] = [
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "sliding window"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: [hufscheerOverview] },
+      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
-          "Starting at 2 a.m. on April 30, 2026, 7,617 identical cheer chat messages piled up on a single match that had not started yet, over 8 minutes. 5,652 of them went to one team. The service shows team cheer rankings, so this changes the rankings directly. I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database.",
+          "Starting at 2 a.m. on April 30, 2026, 7,617 identical cheer chat messages piled up on a single match that had not started yet, over 8 minutes. 5,652 of them went to one team.",
+          "The service shows team cheer rankings, so this value changes the rankings directly. I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "I treated it as abnormal traffic instead of declaring it bots. The limit is set at a level normal users do not reach. At first I blocked by IP, but a teammate pointed out that students on a school network share one IP and would be blocked together. After discussing it with the team, we decided to issue a visitor cookie so individuals can be told apart even in a service without login. The limits follow the criteria set by the PM: 120 requests per 60 seconds per person, and blocking from the 4th identical message within 3 seconds.",
-          "A fixed window lets through up to twice the limit if requests are sent right before and right after the boundary. So I implemented a sliding window that keeps request timestamps. Production runs on one server, so I kept the window in a Caffeine local cache instead of adding Redis. Following a review comment, I split the limiting logic into an interface and an implementation, so it can be swapped for a Redis implementation if the service moves to multiple servers.",
+          "I treated it as abnormal traffic instead of declaring it bots. The limit is set at a level normal users do not reach.",
+          "At first I blocked by IP. A teammate pointed out that students on a school network share one IP and would be blocked together. After discussing it with the team, we decided to issue a visitor cookie. This lets us tell individuals apart even in a service without login.",
+          "The limits follow the criteria set by the PM: 120 requests per 60 seconds per person. Identical messages are blocked from the 4th one within 3 seconds.",
+          "A fixed window lets through up to twice the limit if requests are sent right before and right after the boundary. So I implemented a sliding window that keeps request timestamps.",
+          "Production runs on one server, so I kept the window in a Caffeine local cache instead of adding Redis. Following a review comment, I split the limiting logic into an interface and an implementation. It can be swapped for a Redis implementation if the service moves to multiple servers.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400. But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed, so since then I check block results by the stage that blocked, not by the response code. The data was not affected.",
-          "After blocking, I looked at the data again: 99% of 21,715 cheer chat messages were from 3 preset buttons, and messages typed by hand were a few dozen per team. I told the team that giving awards by cheer chat count would turn into a competition of tap counts. One limitation remains: a client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
+          "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400. The data was not affected.",
+          "But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed. Since then I check block results by the stage that blocked, not by the response code.",
+          "After blocking, I looked at the data again. 99% of 21,715 cheer chat messages were from 3 preset buttons, and messages typed by hand were a few dozen per team. I told the team that giving awards by cheer chat count would turn into a competition of tap counts.",
+          "One limitation remains. A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
         ],
       },
       {
@@ -184,24 +192,28 @@ export const projects: Project[] = [
     tags: ["Spring Boot", "Gemini", "OpenRouter", "Caffeine"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: [hufscheerOverview] },
+      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
-          "When a cheer chat message contains profanity, the LLM replaces the body with a masked sentence. On April 29 in production, the model misread one word as Japanese and returned an explanation with it. The server saved the response without checking it, so the explanation was shown on screen. On May 7, the opposite happened: normal cheer initials were masked and saved. The key constraint was that model responses vary in format even for the same input.",
+          "When a cheer chat message contains profanity, the LLM replaces the body with a masked sentence. On April 29 in production, the model misread one word as Japanese and returned an explanation with it. The server saved the response without checking it, so the explanation was shown on screen.",
+          "On May 7, the opposite happened: normal cheer initials were masked and saved. Model responses vary in format even for the same input. That was the key constraint.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "A regex profanity dictionary is fast and cheap but often masks normal sentences, so I left the judgment to the LLM and set the principle to not mask when in doubt. I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is. It rejects responses whose length grew abnormally, responses containing leak phrases, responses where the sentence changed without a mask marker, and responses where the cheer initials of the original disappeared.",
-          "I solved the cost by reducing the number of calls. Since 99% of cheer chat messages are preset buttons, a first-stage filter skips the LLM for preset phrases, messages made only of cheer initials, and messages without Korean characters. The same sentence is cached for 5 minutes, so even a flood of spam triggers only one call. The provider is split behind an interface, so Gemini and OpenRouter can be switched by configuration alone.",
+          "A regex profanity dictionary is fast and cheap but often masks normal sentences. So I left the judgment to the LLM and set the principle to not mask when in doubt.",
+          "I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is. It rejects responses whose length grew abnormally, responses containing leak phrases, responses where the sentence changed without a mask marker, and responses where the cheer initials of the original disappeared.",
+          "I solved the cost by reducing the number of calls. Since 99% of cheer chat messages are preset buttons, a first-stage filter skips the LLM for preset phrases, messages made only of cheer initials, and messages without Korean characters. The same sentence is cached for 5 minutes, so even a flood of spam triggers only one call.",
+          "The provider is split behind an interface, so Gemini and OpenRouter can be switched by configuration alone.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "After the account migration, I chose the model again. I sent 10 sentences to be masked and 12 sentences to be left alone, twice each, in the same format as production requests, and compared 9 models. The evaluation cost $0.17. The previous model had 88.6% accuracy. The one I chose, gemma-4-31b, had 100% with a median response of 0.5 seconds and $0.18 per 1,000 requests. Some reasoning models returned empty responses in other features, or had a high pass rate but broken actual output, so I chose by reading the outputs directly instead of looking only at the pass rate.",
+          "After the account migration, I chose the model again. I sent 10 sentences to be masked and 12 sentences to be left alone, twice each, in the same format as production requests, and compared 9 models. The evaluation cost $0.17.",
+          "The previous model had 88.6% accuracy. The one I chose, gemma-4-31b, had 100% with a median response of 0.5 seconds and $0.18 per 1,000 requests. Some reasoning models returned empty responses in other features, and some had a high pass rate but broken actual output. So I chose by reading the outputs directly instead of looking only at the pass rate.",
           "I have not yet confirmed that the replaced model is actually called in the deployed app. Forcing the response into JSON format also remains as follow-up work.",
         ],
       },
@@ -229,25 +241,29 @@ export const projects: Project[] = [
     tags: ["Terraform", "AWS", "Cloudflare", "Grafana", "Docker"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: [hufscheerOverview] },
+      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
-          "On September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended for a security issue. DNS, servers, and monitoring were all in the same account, so everything stopped at once. Monitoring stopped too, so no alerts came, and nobody had been reading the warning emails sent to the account since late August. I could not log in to the old account, so there was no way to take out the database.",
+          "On September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended for a security issue. DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
+          "Monitoring stopped too, so no alerts came. Nobody had been reading the warning emails sent to the account since late August. I could not log in to the old account, so there was no way to take out the database.",
         ],
       },
       {
         heading: "Solution",
         paras: [
           "I moved DNS to Cloudflare. Even if an account is lost, the domain and email must stay alive so that recovery notices can be received. I wrote the whole infrastructure again in Terraform, so that it can be rebuilt from code if the same thing happens again.",
-          "For the database, I chose to add 2GB of swap to MySQL on the server instead of using RDS. RDS would cost about $18 more per month for the instance alone, and measuring locally, I could reduce MySQL's default 409MB to 171MB by turning off performance_schema and shrinking buffers (measured with emulation). Traffic is small (7 to 11 requests per second, CPU 1 to 7%), so I combined the dev server and monitoring on one machine.",
-          "I removed the fixed access key the app used for S3 and switched to an EC2 instance role (IMDSv2 required). Secrets that used to be baked into the image moved to SSM parameters and are injected at runtime. I added an uptime check that runs outside the account (Cloudflare Worker), 17 Grafana alerts, GuardDuty, and a cost anomaly alert, and set up daily DB dumps and EBS snapshots.",
+          "For the database, I chose to add 2GB of swap to MySQL on the server instead of using RDS. RDS would cost about $18 more per month for the instance alone. Measuring locally, I could reduce MySQL's default 409MB to 171MB by turning off performance_schema and shrinking buffers (measured with emulation).",
+          "Traffic is small (7 to 11 requests per second, CPU 1 to 7%), so I combined the dev server and monitoring on one machine.",
+          "I removed the fixed access key the app used for S3 and switched to an EC2 instance role (IMDSv2 required). Secrets that used to be baked into the image moved to SSM parameters and are injected at runtime.",
+          "I added an uptime check that runs outside the account (Cloudflare Worker), 17 Grafana alerts, GuardDuty, and a cost anomaly alert. I also set up daily DB dumps and EBS snapshots.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate). The old data is still waiting for the account to be recovered, and an off-account DB backup was designed but not turned on. Looking back, the biggest risks were a structure that put everything in one account, and an operation where nobody read the account's email.",
+          "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
+          "The old data is still waiting for the account to be recovered. An off-account DB backup was designed but not turned on. Looking back, the biggest risks were a structure that put everything in one account, and an operation where nobody read the account's email.",
         ],
       },
       {
@@ -275,24 +291,25 @@ export const projects: Project[] = [
     tags: ["GitHub Actions", "MySQL", "nginx", "Docker", "Prometheus"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: [hufscheerOverview] },
+      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
-          "CI time varied from 8 to 17 minutes, and every deployment cut the service for up to 30 seconds.",
+          "CI time varied from 8 to 17 minutes. Every deployment cut the service for up to 30 seconds.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. I put MySQL on tmpfs to remove the disk effect, and kept only the documentation tests in the deploy job, which had been running the full tests a second time. I removed deployment downtime with a Blue/Green deployment using an nginx router and graceful shutdown.",
-          "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%, and CPU was 7.6% even on the day bots flooded in. I decided not to do a load test, which would take 5 to 10 days.",
+          "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. I put MySQL on tmpfs to remove the disk effect. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
+          "I removed deployment downtime with a Blue/Green deployment using an nginx router and graceful shutdown.",
+          "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%. CPU was 7.6% even on the day bots flooded in. I decided not to do a load test, which would take 5 to 10 days.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "Test DB time was fixed at 54 seconds from 101 to 632 seconds, and the deploy job went from 510 seconds to 132 seconds. The downtime of up to 30 seconds per deployment is gone.",
+          "Test DB time was fixed at 54 seconds from 101 to 632 seconds. The deploy job went from 510 seconds to 132 seconds. The downtime of up to 30 seconds per deployment is gone.",
         ],
       },
       {
@@ -327,20 +344,27 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paras: [
-          "The first marker query filtered the post table by map bounds, then computed a friend list subquery, a blocked user subquery, and a correlated subquery to pick a representative thumbnail for each cell, every time, and grouped by cell. Every map move re-aggregated all posts, and the post table had no latitude and longitude index.",
+          "The first marker query filtered the post table by map bounds, then grouped by cell. Every time, it computed a friend list subquery, a blocked user subquery, and a correlated subquery to pick a representative thumbnail for each cell.",
+          "Every map move re-aggregated all posts. The post table also had no latitude and longitude index.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "What the map needs is not each post, but how many friend posts are in a cell and what the latest thumbnail is. So I decided to aggregate in advance at write time, not compute at read time. I chose hexagonal cells at Uber H3 resolution 9 as the cell, and kept one aggregate row per user and cell, so that the lookup reads only aggregate rows. In case the new query was wrong, I made it switchable with the old query through a configuration flag, and if the new query throws an exception, it falls back to the old query.",
-          "If the same user posted to the same cell almost at the same time, two aggregate rows could be created or a count could be lost. I added a unique constraint, took a pessimistic lock on the row when updating, and retried when creating the first row at the same time hit the constraint. The problem of collection fetch join and paging together loading everything into memory in the post list was solved with @BatchSize, and the N+1 in the reaction list with JOIN FETCH. Notifications are sent from an async listener after the post transaction commits, so the post response does not wait for notifications.",
+          "What the map needs is not each post. It needs how many friend posts are in a cell and what the latest thumbnail is. So I decided to aggregate in advance at write time, not compute at read time.",
+          "I chose hexagonal cells at Uber H3 resolution 9 as the cell. I kept one aggregate row per user and cell, so that the lookup reads only aggregate rows.",
+          "In case the new query was wrong, I made it switchable with the old query through a configuration flag. If the new query throws an exception, it falls back to the old query.",
+          "If the same user posted to the same cell almost at the same time, two aggregate rows could be created or a count could be lost. I added a unique constraint and took a pessimistic lock on the row when updating. If creating the first row at the same time hits the constraint, it retries.",
+          "In the post list, collection fetch join and paging together loaded everything into memory. I solved that with @BatchSize. I solved the N+1 in the reaction list with JOIN FETCH.",
+          "Notifications are sent from an async listener after the post transaction commits. So the post response does not wait for notifications.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "I did not keep a script or execution plans that measured response time before and after the change, so I do not give a number for the improvement. The only test was context loading, and I could not verify the concurrent update handling with a load test. Because the aggregate update is async, the aggregate can drift if even the retry fails, and the IN list grows as the number of friends grows. Since this experience, I measure before changing in Hufscheer and Vling, and keep the measurement conditions together.",
+          "I did not keep a script or execution plans that measured response time before and after the change. So I do not give a number for the improvement. The only test was context loading, and I could not verify the concurrent update handling with a load test.",
+          "Because the aggregate update is async, the aggregate can drift if even the retry fails. The IN list also grows as the number of friends grows.",
+          "Since this experience, I measure before changing in Hufscheer and Vling, and keep the measurement conditions together.",
         ],
       },
       {
@@ -367,18 +391,27 @@ export const projects: Project[] = [
     sections: [
       {
         heading: "Overview",
-        paras: ["Pinta is a personal project that redesigns Lo.ci. I wrote all 56 commits myself."],
+        paras: [
+          "Pinta is a personal project that redesigns Lo.ci. I wrote all 56 commits myself.",
+        ],
+      },
+      {
+        heading: "Problem",
+        paras: [
+          "The auth filter re-read the account status from the DB on every request. Profile statistics were split across 3 queries. The feed image list had an N+1.",
+        ],
       },
       {
         heading: "Solution",
         paras: [
-          "I replaced the account status DB lookup that the auth filter made on every request with a Caffeine cache (30 seconds). I merged the 3 profile statistics queries into 1 aggregate query, and changed the N+1 in the feed image list to a batch lookup. For images, I built on-demand resizing behind CloudFront with Lambda@Edge, then replaced it with imgproxy (EC2).",
+          "I replaced the account status lookup with a Caffeine cache (30 seconds). I merged the 3 profile statistics queries into 1 aggregate query. I changed the N+1 in the feed image list to a batch lookup.",
+          "For images, I built on-demand resizing behind CloudFront with Lambda@Edge, then replaced it with imgproxy (EC2).",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "I confirmed the number of queries from the code change, but did not measure the time before and after. Because of the cache, an account that has left or been deleted can still pass for up to 30 seconds, and I did not build the invalidation logic to fix this.",
+          "I confirmed the number of queries from the code change, but did not measure the time before and after. Because of the cache, an account that has left or been deleted can still pass for up to 30 seconds. I did not build the invalidation logic to fix this.",
         ],
       },
       {
@@ -448,14 +481,21 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "Vling is a YouTube channel and video data SaaS. Since July 2026, I have worked on the frontend at Buzz & Beyond as an internship for academic credit, and shipped the video search and channel search redesigns with teammates.",
+          "Vling is a YouTube channel and video data SaaS. Since July 2026, I have worked on the frontend at Buzz & Beyond as an internship for academic credit. I shipped the video search and channel search redesigns with teammates.",
+        ],
+      },
+      {
+        heading: "Problem",
+        paras: [
+          "After I added a category filter to the channel recommendation section, the section disappeared entirely for some accounts. For accounts whose personalized category is Other, there were 0 candidates. I found this before the production release.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations. In the channel search redesign, I built channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
-          "While adding a category filter to the channel recommendation section, I found before the production release that for accounts whose personalized category is Other, there were 0 candidates and the section disappeared entirely. I added a fallback: if no channel is found with the category, it queries again without the category.",
+          "I added a fallback: if no channel is found with the category, it queries again without the category.",
+          "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations.",
+          "In the channel search redesign, I built channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
         ],
       },
       {
@@ -486,28 +526,34 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "With an AI agent, I built a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script. All numbers were measured in a sandbox or locally, and are not production numbers.",
+          "With an AI agent, I built a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
+          "All numbers were measured in a sandbox or locally, and are not production numbers.",
         ],
       },
       {
         heading: "Problem",
         paras: [
-          "I set a baseline with a script that measures the metrics of the home and search pages on every deploy. The home page had a CLS of 0.002, but only the search page had 0.246. It rarely appeared when logged in, and reproduced as a guest when thumbnail checks were slow. Collecting the source nodes of layout-shift entries locally, all of them were video card skeletons.",
-          "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB, and the screen stayed frozen on the old results meanwhile. Thumbnails are videos seen for the first time in each search result, so the image optimization cache was always empty, and cards stayed blank while the server fetched the original and re-encoded it.",
+          "I set a baseline with a script that measures the metrics of the home and search pages on every deploy. The home page had a CLS of 0.002, but only the search page had 0.246. It rarely appeared when logged in, and reproduced as a guest when thumbnail checks were slow.",
+          "Collecting the source nodes of layout-shift entries locally, all of them were video card skeletons.",
+          "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The screen stayed frozen on the old results meanwhile.",
+          "Thumbnails are videos seen for the first time in each search result, so the image optimization cache was always empty. Cards stayed blank while the server fetched the original and re-encoded it.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "The cause was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots, and when several were settled at once they moved together, so a single shift exceeded 0.1. I changed the key to the absolute slot number in the grid, so a settled card takes its place and the remaining skeletons stay where they are.",
-          "The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing. With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB), but I chose to download 32KB more over delaying each grid card by 800ms, and made only thumbnails skip optimization.",
+          "The cause of the CLS was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots. When several were settled at once they moved together, so a single shift exceeded 0.1.",
+          "I changed the key to the absolute slot number in the grid. A settled card takes its place, and the remaining skeletons stay where they are.",
+          "The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing.",
+          "With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB). Still, I chose to download 32KB more over delaying each grid card by 800ms. So I made only thumbnails skip optimization.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed. The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms.",
-          "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%, so these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
+          "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed.",
+          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms.",
+          "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
         ],
       },
       {
@@ -537,26 +583,31 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "This server collects conversations with Claude Code, Codex, and bots, plus commits and documents in one place, so that agents can search and use them. It started when I learned that Claude Code deletes conversations older than 30 days. The goal is for agents to find past decisions and their reasons instead of guessing. It runs on a home server and is provided as MCP tools.",
+          "This server collects conversations with Claude Code, Codex, and bots, plus commits and documents in one place, so that agents can search and use them. It runs on a home server and is provided as MCP tools.",
+          "It started when I learned that Claude Code deletes conversations older than 30 days. The goal is for agents to find past decisions and their reasons instead of guessing.",
         ],
       },
       {
         heading: "Problem",
         paras: [
-          "Exact keyword search is the most reliable for proper nouns, commands, and commit hashes, but keyword search is weak on questions with attached particles or reworded questions. Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91, so tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
+          "Exact keyword search is the most reliable for proper nouns, commands, and commit hashes. But keyword search is weak on questions with attached particles or reworded questions.",
+          "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "I merged the two rankings, keyword search and semantic search (e5-small), with RRF. Before adding it, I fixed the correct answers for 43 questions by rules from the real DB, and measured the rate at which the answer is in the top 10. I saved the baseline and run the same benchmark every time I change search. I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model, but the effect was small or none, so I did not include them.",
+          "I merged the two rankings, keyword search and semantic search (e5-small), with RRF.",
+          "Before adding it, I fixed the correct answers for 43 questions by rules from the real DB, and measured the rate at which the answer is in the top 10. I saved the baseline and run the same benchmark every time I change search.",
+          "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "After adding semantic search, overall recall went from 0.74 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms. The benchmark did change a decision. After I added new decision records, the exact keyword search metric dropped and was flagged as a regression. On checking, the problem was in the answer rules, so I fixed the rules.",
-          "There are limits. I made the gold set myself and there is no separate held-out evaluation set, so 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
+          "After adding semantic search, overall recall went from 0.74 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
+          "The benchmark did change a decision. After I added new decision records, the exact keyword search metric dropped and was flagged as a regression. On checking, the problem was in the answer rules, so I fixed the rules.",
+          "There are limits. I made the gold set myself and there is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
         ],
       },
       {
@@ -591,20 +642,22 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paras: [
-          "In-progress work did not show on the kanban board, and responses on the Claude channel were slow.",
+          "In-progress work did not show on the kanban board. Responses on the Claude channel were slow too. Measuring each stage showed that the CLI stayed alive for 0.7 to 1 second after producing its result.",
         ],
       },
       {
         heading: "Solution",
         paras: [
-          "For the kanban board, I used a cleanup job that automatically moves cards linked to in-progress tasks in Notion, and archives cards 3 days after they finish. For response speed, I measured each stage and found that the CLI stayed alive for 0.7 to 1 second after producing its result. I changed it to mark the response complete as soon as the result event arrives, which saved about 0.9 seconds per message (1 measurement). I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
-          "I also set and use rules for working with agents. I delegate implementation to sub-agents, and accept only the results I have re-run and confirmed myself. When fixing a bug, I run the new test without the fixed code to check that it actually fails. Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved. I limited concurrent sub-agents to 2, a rule I set after 12 ran at once in late September and work could not be tracked.",
+          "For the kanban board, I used a cleanup job that automatically moves cards linked to in-progress tasks in Notion. Cards are archived 3 days after they finish.",
+          "For response speed, I changed it to mark the response complete as soon as the result event arrives. This saved about 0.9 seconds per message (1 measurement). I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
+          "I also set and use rules for working with agents. I delegate implementation to sub-agents, and accept only the results I have re-run and confirmed myself. When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
+          "Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved. I limited concurrent sub-agents to 2. I set that rule after 12 ran at once in late September and work could not be tracked.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "I use the PWA every day. The rules run as a set, and I have not measured numerically how often the rules are followed or their effect.",
+          "I use the PWA every day. The rules run as a set. I have not measured numerically how often the rules are followed or their effect.",
         ],
       },
       {
