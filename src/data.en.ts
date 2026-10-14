@@ -245,7 +245,7 @@ export const projects: Project[] = [
     key: "Back in about 1 week",
     problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a team mailbox nobody read.",
     solution: "Rebuilt the infrastructure in a new account with Terraform, removed the fixed access keys in favor of an instance role, and moved DNS outside the account (Cloudflare).",
-    result: "Service resumed in about 1 week. The leaked key and the warning mailbox were not mine to manage, but to keep this from happening again I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. The old data is not recovered yet.",
+    result: "Service resumed in about 1 week. The leaked key and the warning mailbox were not mine to manage, but to keep this from happening again I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. A daily off-account DB copy is now pulled and was test-restored. The old data is not recovered yet.",
     bullets: [
       "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
       "Switched S3 access from a fixed app key to an instance role",
@@ -277,7 +277,7 @@ export const projects: Project[] = [
         paras: [
           "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
           "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. In the rebuild I removed fixed keys so that nobody has to manage them, and made anomalies inside and outside the account arrive as alerts.",
-          "Some risk remains. The old data is still waiting for the account to be recovered, and an off-account DB backup was designed but not turned on.",
+          "Since October 14, a copy of the DB is pulled to a machine outside the account every day, and I restored one into a temporary DB and checked it matches production. Remaining risks: the old data is still waiting for the account to be recovered, and the off-account copy lives on a single machine.",
         ],
       },
       {
