@@ -3,6 +3,7 @@ import type { Project } from "../data";
 import { useData } from "../i18n";
 
 const num = (n: number) => String(n).padStart(2, "0");
+const range = (ns: number[]) => (ns.length > 1 ? `${num(ns[0])}~${num(ns[ns.length - 1])}` : ns.length ? num(ns[0]) : "");
 
 function Figures({ images }: { images: NonNullable<Project["images"]> }) {
   return (
@@ -143,25 +144,33 @@ function useCurrent(ids: string[], enabled: boolean) {
 
 export function Glance({ side = false }: { side?: boolean }) {
   const { ui } = useData();
-  const { byId, order, numOf } = useOrder();
+  const { byId, order, groups, numOf } = useOrder();
   const current = useCurrent(order, side);
   return (
     <nav className={side ? "glance glance-side" : "glance glance-inline"} aria-label={ui.glanceTitle}>
       <p className="glance-title">{ui.glanceTitle}</p>
-      <ol>
-        {order.map((id) => {
-          const p = byId.get(id)!;
-          return (
-            <li key={id} className={current === id ? "is-current" : undefined}>
-              <a href={`#p-${id}`} aria-current={current === id ? "true" : undefined}>
-                <span className="pnum mono">{num(numOf(id))}</span>
-                <span className="gtitle">{p.title}</span>
-                <span className="gkey">{p.key ?? p.metric ?? ""}</span>
-              </a>
-            </li>
-          );
-        })}
-      </ol>
+      {groups.map((g) => {
+        const ids = g.ids.filter((id) => byId.has(id));
+        return (
+          <div className="glance-group" key={g.name}>
+            <p className="glance-gname">{g.name}</p>
+            <ol>
+              {ids.map((id) => {
+                const p = byId.get(id)!;
+                return (
+                  <li key={id} className={current === id ? "is-current" : undefined}>
+                    <a href={`#p-${id}`} aria-current={current === id ? "true" : undefined}>
+                      <span className="pnum mono">{num(numOf(id))}</span>
+                      <span className="gtitle">{p.title}</span>
+                      <span className="gkey">{p.key ?? p.metric ?? ""}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        );
+      })}
     </nav>
   );
 }
@@ -178,7 +187,15 @@ export default function Projects() {
           <p className="gname">
             {g.name}
             {g.note && <span className="gnote">{g.note}</span>}
+            <span className="grange mono">{range(g.ids.filter((id) => byId.has(id)).map(numOf))}</span>
           </p>
+          {g.about && (
+            <div className="gabout">
+              {g.about.map((t) => (
+                <p key={t.slice(0, 24)}>{t}</p>
+              ))}
+            </div>
+          )}
           <ul className="projects">
             {g.ids.map((id) => {
               const p = byId.get(id);

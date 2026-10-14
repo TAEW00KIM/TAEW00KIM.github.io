@@ -83,6 +83,12 @@ ul, ol { list-style: none; }
 .pnum { font-size: 12px; color: var(--sub); }
 
 .pgroup + .pgroup { margin-top: 40px; }
+.glance-gname { font-size: 12px; color: var(--sub); margin: 14px 0 2px; }
+.glance-group:first-of-type .glance-gname { margin-top: 0; }
+.grange { margin-left: 10px; font-size: 12px; font-weight: 400; color: var(--sub); }
+.gabout { margin: 6px 0 4px; font-size: 14px; color: var(--body); max-width: 40em; }
+.gabout p + p { margin-top: 4px; }
+
 .gname { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
 .gnote { margin-left: 10px; font-size: 13px; font-weight: 400; color: var(--sub); }
 .project { padding: 20px 0 16px; scroll-margin-top: 24px; }

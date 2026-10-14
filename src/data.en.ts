@@ -17,7 +17,7 @@ export const site = {
 export const hero = {
   tagline: [
     "I like finding and fixing the problems that come up when running a service.",
-    "I work on the backend of Hufscheer, a live cheering service for university sports, and I develop the frontend of Vling at Buzz & Beyond.",
+    "I handle the backend and infrastructure of Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
   ],
 };
 
@@ -71,7 +71,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "9th cohort President, 10th cohort Vice President and Node.js Part Lead",
           org: "UMC HUFS",
-          period: "2025.03 ~ 2026.08",
+          period: "2025.08 ~ 2026.08",
           bullets: [
             "As president of the 9th cohort, I ran a developer community of more than 30 members and designed the Spring Boot study curriculum.",
             "In the 10th cohort, I served as vice president and Node.js part lead.",
@@ -117,14 +117,14 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views. Since joining, I have written 55% of the server repository's commits (221/403, excluding merges).",
+  "The service has run since 2023, and I joined its backend in February 2026. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views.",
 ];
 
 export const projects: Project[] = [
   {
     id: "cheer-spam",
     images: [
-      { src: "/hufscheer-cheer.png", width: 416, height: 900, alt: "Hufscheer match cheering screen", caption: "Cheering screen. Taken in a local environment with made-up data. The live service is currently down." },
+      { src: "/hufscheer-cheer.png", width: 416, height: 900, alt: "Hufscheer match cheering screen", caption: "Cheering screen. Taken in a local environment with made-up data. This is not the live service screen." },
       { src: "/hufscheer-timeline.png", width: 416, height: 900, alt: "Hufscheer match timeline screen", caption: "Timeline screen. Taken in a local environment with made-up data." },
     ],
     title: "Cheer Chat Spam Defense",
@@ -144,7 +144,6 @@ export const projects: Project[] = [
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "sliding window"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
@@ -189,11 +188,10 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and also reduced the number of LLM calls.",
-    stat: { value: "88.6% → 100%", label: "masking accuracy, 9 models compared" },
-    key: "Accuracy 88.6% → 100%",
+    key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
     solution: "The model output is now checked in code and the original text is used when it looks wrong. A static filter and a 5-minute cache cut the LLM calls themselves.",
-    result: "I compared 9 models on the same sentences ($0.17 to evaluate) and replaced the 88.6%-accurate model with one at 100%.",
+    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy 88.6% → 100%, 22 sentences twice); the effect in production is not measured yet.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to reduce calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
@@ -202,7 +200,6 @@ export const projects: Project[] = [
     tags: ["Spring Boot", "Gemini", "OpenRouter", "Caffeine"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
@@ -245,9 +242,9 @@ export const projects: Project[] = [
       "The AWS account was suspended and the service stopped. I rebuilt the infrastructure in a new account with Terraform and resumed operations.",
     stat: { value: "About 1 week", label: "from detecting the suspension to service back" },
     key: "Back in about 1 week",
-    problem: "The AWS account was suspended for a security issue, and DNS, servers and monitoring all went down at once.",
-    solution: "Moved DNS to Cloudflare and rebuilt the whole infrastructure in a new account with Terraform.",
-    result: "Service resumed in about 1 week, with uptime checks running outside the account and 17 Grafana alerts added.",
+    problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a team mailbox nobody read.",
+    solution: "Rebuilt the infrastructure in a new account with Terraform, removed the fixed access keys in favor of an instance role, and moved DNS outside the account (Cloudflare).",
+    result: "Service resumed in about 1 week. Part of the cause was that I ran operations without looking after key management and warning emails, so I added an uptime check outside the account, GuardDuty and a cost anomaly alert. The old data is not recovered yet.",
     bullets: [
       "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
       "Switched S3 access from a fixed app key to an instance role",
@@ -256,12 +253,12 @@ export const projects: Project[] = [
     tags: ["Terraform", "AWS", "Cloudflare", "Grafana", "Docker"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
-          "On September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended for a security issue. DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
-          "Monitoring stopped too, so no alerts came. Nobody had been reading the warning emails sent to the account since late August. I could not log in to the old account, so there was no way to take out the database.",
+          "On September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a team mailbox nobody read.",
+          "DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
+          "Monitoring stopped too, so no alerts came, and I could not log in to the old account, so there was no way to take out the database. I could not confirm how the key leaked.",
         ],
       },
       {
@@ -278,7 +275,8 @@ export const projects: Project[] = [
         heading: "Result",
         paras: [
           "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
-          "The old data is still waiting for the account to be recovered. An off-account DB backup was designed but not turned on. Looking back, the biggest risks were a structure that put everything in one account, and an operation where nobody read the account's email.",
+          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. As the person running operations, part of that is on me for not looking after key management and how warning emails were read. So I removed the fixed keys and made anomalies inside and outside the account arrive as alerts.",
+          "Some risk remains. The old data is still waiting for the account to be recovered, and an off-account DB backup was designed but not turned on.",
         ],
       },
       {
@@ -298,11 +296,11 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "CI took anywhere from 8 to 17 minutes, and every deployment cut the service for up to 30 seconds. I found the causes, shortened CI, and made deployment zero-downtime.",
-    stat: { value: "510s → 132s", label: "deploy job time, downtime per deploy 30s → 0s" },
-    key: "Deploy 510s → 132s",
+    stat: { value: "30s → 0s", label: "service downtime during a deploy" },
+    key: "Deploy downtime 30s → 0s",
     problem: "CI swung between 8 and 17 minutes, and every deploy took the service down for up to 30 seconds.",
     solution: "Put the test DB on tmpfs and removed duplicate tests from the deploy job. Switched deploys to Blue/Green.",
-    result: "Deploy job 510s → 132s, downtime per deploy up to 30s → 0s.",
+    result: "Downtime during a deploy went from up to 30s to 0s. The deploy job went from 510s to 132s, mostly by removing the full test suite that ran twice in the deploy job.",
     bullets: [
       "Put MySQL on tmpfs, which fixed test DB time at 54 seconds (it had been 101 to 632 seconds)",
       "Kept only the documentation tests in the deploy job instead of a duplicate full test run, 510s → 132s",
@@ -311,7 +309,6 @@ export const projects: Project[] = [
     tags: ["GitHub Actions", "MySQL", "nginx", "Docker", "Prometheus"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "Overview", paras: hufscheerOverview },
       {
         heading: "Problem",
         paras: [
@@ -363,7 +360,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "Lo.ci is a location-based SNS where users leave the places they visited with friends on a map. The main screen shows friends' posts as markers on the map. I handled the backend design and implementation alone (commits 302/302).",
+          "Lo.ci is a location-based SNS where users leave the places they visited with friends on a map. The main screen shows friends' posts as markers on the map. I handled the backend design and implementation alone.",
         ],
       },
       {
@@ -422,7 +419,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "Pinta is a personal project that redesigns Lo.ci. I wrote all 56 commits myself.",
+          "Pinta is a personal project that redesigns Lo.ci. I built the backend alone.",
         ],
       },
       {
@@ -470,7 +467,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "VitaCheck is a supplement recommendation service. I worked on the backend in a team of 5 and wrote 184 of the 336 total commits. In November 2025, we ran a booth at the Seoul Job Fair, with 100 real users per day.",
+          "VitaCheck is a supplement recommendation service. I worked on the backend in a team of 5. In November 2025, we ran a booth at the Seoul Job Fair, with 100 real users per day.",
         ],
       },
       {
@@ -676,8 +673,7 @@ export const projects: Project[] = [
     org: "Personal", period: "2026.06 ~ present",
     summary:
       "In a web app that puts 3 bots and Claude Code on one screen, in-progress work did not show on the kanban board and Claude responses were slow. I fixed it with automatic status sync from Notion and a fix to when a response is marked complete.",
-    stat: { value: "About 0.9s", label: "saved per reply, 1 measurement" },
-    key: "About 0.9s faster replies",
+    key: "Kanban auto-sync, reply delay removed",
     problem: "I use 3 bots and Claude Code on one screen, but work in progress did not show on the kanban and replies were slow.",
     solution: "Notion status now flows to the kanban automatically, and a reply is marked done as soon as the CLI returns its result.",
     result: "About 0.9 seconds saved per message (1 measurement), and it became the tool I use every day.",
@@ -743,7 +739,7 @@ export const resume = {
 };
 
 export const projectGroups: ProjectGroup[] = [
-  { name: "Hufscheer", note: "live cheering service for university sports, backend", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
+  { name: "Hufscheer", note: "live cheering service for university sports, backend", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
   { name: "AI Work Environment", note: "personal", ids: ["history-mcp", "agent-env"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },

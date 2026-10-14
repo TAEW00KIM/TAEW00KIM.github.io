@@ -17,7 +17,7 @@ export const site = {
 export const hero = {
   tagline: [
     "운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
-    "대학 스포츠 응원 서비스 Hufscheer의 백엔드를 맡고 있고, 버즈앤비에서 Vling의 프론트엔드를 개발하고 있습니다.",
+    "대학 스포츠 응원 서비스 Hufscheer에서는 백엔드와 인프라를, 버즈앤비에서는 Vling의 프론트엔드를 맡고 있습니다. AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
   ],
 };
 
@@ -81,7 +81,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "9기 회장, 10기 부회장 겸 Node.js 파트장",
           org: "UMC 한국외대",
-          period: "2025.03 ~ 2026.08",
+          period: "2025.08 ~ 2026.08",
           bullets: [
             "9기 회장으로 30명 넘는 개발자 커뮤니티를 운영하고 Spring Boot 스터디 커리큘럼을 설계했습니다.",
             "10기에서는 부회장 겸 Node.js 파트장을 맡았습니다.",
@@ -152,14 +152,14 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer는 교내 축구와 농구 대회의 점수, 타임라인, 라인업을 실시간으로 보여 주는 대학 스포츠 라이브 응원 서비스입니다. 응원톡으로 함께 응원할 수도 있습니다.",
-  "2023년부터 운영되던 서비스에 2026년 2월 백엔드로 합류했습니다. 2026년 6월 GA 기준 활성 사용자는 약 4,800명, 누적 조회는 13만입니다. 합류 후 서버 저장소 커밋의 55%(221/403, 머지 제외)를 작성했습니다.",
+  "2023년부터 운영되던 서비스에 2026년 2월 백엔드로 합류했습니다. 2026년 6월 GA 기준 활성 사용자는 약 4,800명, 누적 조회는 13만입니다.",
 ];
 
 export const projects: Project[] = [
   {
     id: "cheer-spam",
     images: [
-      { src: "/hufscheer-cheer.png", width: 416, height: 900, alt: "Hufscheer 경기 응원 화면", caption: "응원 화면. 로컬 환경에서 가짜 데이터로 찍은 화면입니다. 실제 서비스는 현재 내려가 있습니다." },
+      { src: "/hufscheer-cheer.png", width: 416, height: 900, alt: "Hufscheer 경기 응원 화면", caption: "응원 화면. 로컬 환경에서 가짜 데이터로 찍은 화면입니다. 실제 서비스 화면이 아닙니다." },
       { src: "/hufscheer-timeline.png", width: 416, height: 900, alt: "Hufscheer 경기 타임라인 화면", caption: "타임라인 화면. 로컬 환경에서 가짜 데이터로 찍은 화면입니다." },
     ],
     title: "응원톡 도배 방어",
@@ -179,7 +179,6 @@ export const projects: Project[] = [
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "슬라이딩 창"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "개요", paras: hufscheerOverview },
       {
         heading: "문제",
         paras: [
@@ -224,11 +223,10 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "욕설을 가리는 LLM이 가린 문장 대신 설명을 돌려줘 그대로 화면에 나갔습니다. 출력을 코드로 검사해 막고, LLM 호출 수도 줄였습니다.",
-    stat: { value: "88.6% → 100%", label: "욕설 마스킹 정확도, 모델 9개 비교" },
-    key: "정확도 88.6% → 100%",
+    key: "설명문 노출을 출력 검사로 차단",
     problem: "욕설을 가리는 LLM이 가린 문장 대신 설명문을 돌려줬고, 그 설명이 그대로 화면에 나갔습니다.",
     solution: "모델 출력을 코드로 검사해 이상하면 원문을 쓰게 했고, 정적 필터와 5분 캐시로 LLM 호출 자체를 줄였습니다.",
-    result: "같은 문장으로 모델 9개를 비교해(평가 비용 0.17달러), 정확도 88.6%이던 모델을 100% 모델로 바꿨습니다.",
+    result: "설명문이 섞인 응답은 출력 검사에서 걸러 원문으로 대신합니다. 모델은 같은 문장으로 9개를 오프라인 비교해 바꿨고(정확도 88.6% → 100%, 22문장 2회), 운영에서 효과는 아직 재지 않았습니다.",
     bullets: [
       "정적 필터와 결과 캐시를 LLM 앞단에 두어 호출 수 감소",
       "공급자를 인터페이스로 분리해 설정만으로 Gemini와 OpenRouter 전환",
@@ -237,7 +235,6 @@ export const projects: Project[] = [
     tags: ["Spring Boot", "Gemini", "OpenRouter", "Caffeine"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "개요", paras: hufscheerOverview },
       {
         heading: "문제",
         paras: [
@@ -280,9 +277,9 @@ export const projects: Project[] = [
       "AWS 계정이 정지돼 서비스가 멈췄습니다. 새 계정에 인프라를 Terraform으로 다시 세워 운영을 재개했습니다.",
     stat: { value: "약 1주", label: "계정 정지 탐지부터 운영 재개까지" },
     key: "약 1주 만에 운영 재개",
-    problem: "AWS 계정이 보안 문제로 정지돼 DNS, 서버, 모니터링이 한꺼번에 멈췄습니다.",
-    solution: "DNS를 Cloudflare로 옮기고, 인프라 전체를 Terraform으로 새 계정에 다시 세웠습니다.",
-    result: "약 1주 만에 운영을 재개했고, 계정 밖에서 도는 가동 점검과 Grafana 알림 17종을 더했습니다.",
+    problem: "팀 계정의 IAM 액세스 키가 유출돼 AWS가 계정을 정지했고, DNS, 서버, 모니터링이 한꺼번에 멈췄습니다. 유출을 알린 경고 메일은 아무도 보지 않던 팀 메일함으로 가고 있었습니다.",
+    solution: "새 계정에 인프라를 Terraform으로 다시 세우면서 고정 액세스 키를 없애고 인스턴스 역할로 바꿨습니다. DNS는 계정 밖(Cloudflare)으로 옮겼습니다.",
+    result: "약 1주 만에 운영을 재개했습니다. 운영을 맡고 있으면서 키 관리와 경고 메일 확인을 챙기지 못한 것이 원인의 한 축이라, 계정 밖 가동 점검과 GuardDuty, 비용 이상 알림을 더했습니다. 옛 데이터는 아직 복구하지 못했습니다.",
     bullets: [
       "VPC, EC2, S3와 CloudFront, SSM을 Terraform으로 재구성하고 DNS는 Cloudflare로 이전",
       "S3 접근은 앱 고정 키 대신 인스턴스 역할로 전환",
@@ -291,12 +288,12 @@ export const projects: Project[] = [
     tags: ["Terraform", "AWS", "Cloudflare", "Grafana", "Docker"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "개요", paras: hufscheerOverview },
       {
         heading: "문제",
         paras: [
-          "2026년 9월 29일 배포가 서버 접속 시간 초과로 실패했습니다. 확인해 보니 AWS 계정이 보안 문제로 정지돼 있었습니다. DNS와 서버, 모니터링이 모두 같은 계정에 있어 한꺼번에 멈췄습니다.",
-          "모니터링도 멈춰 알림이 오지 않았습니다. 계정으로 온 경고 메일은 8월 말부터 아무도 보지 않던 상태였습니다. 옛 계정에는 들어갈 수 없어 데이터베이스를 꺼낼 방법도 없었습니다.",
+          "2026년 9월 29일 배포가 서버 접속 시간 초과로 실패했습니다. 확인해 보니 AWS 계정이 정지돼 있었습니다. 팀 계정의 IAM 사용자 액세스 키가 유출됐고, 누군가 그 키로 8월 25일과 30일에 AI 모델 구독을 수락했습니다. AWS는 키 유출 경고와 정지 예고를 보냈지만, 그 메일은 아무도 보지 않던 팀 메일함으로 가고 있었습니다.",
+          "DNS와 서버, 모니터링이 모두 같은 계정에 있어 한꺼번에 멈췄습니다.",
+          "모니터링도 같이 멈춰 알림이 오지 않았고, 옛 계정에는 들어갈 수 없어 데이터베이스를 꺼낼 방법도 없었습니다. 유출 경로는 확인하지 못했습니다.",
         ],
       },
       {
@@ -313,7 +310,8 @@ export const projects: Project[] = [
         heading: "결과",
         paras: [
           "9월 29일 탐지 후 약 1주 만인 10월 6일 새 계정에서 운영 배포를 재개했습니다. 새 구성의 월 비용은 AWS 요금 API로 54~56달러로 추정했습니다(추정치).",
-          "옛 데이터는 아직 계정 복구를 기다리고 있습니다. 계정 밖 DB 백업은 설계만 하고 켜지 않았습니다. 돌아보면 가장 큰 위험은 모든 것을 계정 하나에 둔 구조와, 계정 메일을 아무도 보지 않던 운영이었습니다.",
+          "원인은 두 가지였습니다. 오래 쓰던 고정 액세스 키가 있었고, 그 키가 유출됐다는 경고를 아무도 받지 못했습니다. 운영을 맡고 있던 제가 키 관리와 경고 메일 확인 체계를 챙기지 못한 몫이 있습니다. 그래서 고정 키를 없애고, 계정 안팎의 이상을 알림으로 받게 바꿨습니다.",
+          "남은 위험도 있습니다. 옛 데이터는 아직 계정 복구를 기다리고 있고, 계정 밖 DB 백업은 설계만 하고 켜지 않았습니다.",
         ],
       },
       {
@@ -333,11 +331,11 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "CI가 8~17분을 오갔고, 배포 때마다 서비스가 최대 30초 끊겼습니다. 원인을 찾아 CI를 줄이고 배포를 무중단으로 바꿨습니다.",
-    stat: { value: "510초 → 132초", label: "배포 잡 시간, 배포 중 끊김 30초 → 0초" },
-    key: "배포 510초 → 132초",
+    stat: { value: "30초 → 0초", label: "배포할 때 서비스가 끊기던 시간" },
+    key: "배포 중 끊김 30초 → 0초",
     problem: "CI가 8~17분을 오갔고, 배포할 때마다 서비스가 최대 30초 끊겼습니다.",
     solution: "테스트 DB를 tmpfs에 올리고 배포 잡의 중복 테스트를 걷어냈습니다. 배포는 Blue/Green으로 바꿨습니다.",
-    result: "배포 잡 510초 → 132초, 배포 중 끊김 최대 30초 → 0초.",
+    result: "배포 중 끊김은 최대 30초에서 0초가 됐습니다. 배포 잡은 510초에서 132초로 줄었는데, 대부분 배포 잡에서 중복으로 돌던 전체 테스트를 걷어낸 효과입니다.",
     bullets: [
       "MySQL을 tmpfs에 올려 테스트 DB 시간을 101~632초에서 54초로 고정",
       "배포 잡의 중복 전체 테스트를 문서 테스트만 남겨 510초 → 132초",
@@ -346,7 +344,6 @@ export const projects: Project[] = [
     tags: ["GitHub Actions", "MySQL", "nginx", "Docker", "Prometheus"],
     links: [hufscheerRepo],
     sections: [
-      { heading: "개요", paras: hufscheerOverview },
       {
         heading: "문제",
         paras: [
@@ -398,7 +395,7 @@ export const projects: Project[] = [
       {
         heading: "개요",
         paras: [
-          "Lo.ci는 친구들과 다녀온 장소를 지도에 남기는 위치 기반 SNS입니다. 친구가 남긴 게시물을 지도 위 마커로 보여 주는 것이 핵심 화면입니다. 백엔드 설계와 구현을 혼자 맡았습니다(커밋 302/302).",
+          "Lo.ci는 친구들과 다녀온 장소를 지도에 남기는 위치 기반 SNS입니다. 친구가 남긴 게시물을 지도 위 마커로 보여 주는 것이 핵심 화면입니다. 백엔드 설계와 구현을 혼자 맡았습니다.",
         ],
       },
       {
@@ -457,7 +454,7 @@ export const projects: Project[] = [
       {
         heading: "개요",
         paras: [
-          "Pinta는 Lo.ci를 다시 설계한 개인 프로젝트입니다. 커밋 56건을 모두 직접 작성했습니다.",
+          "Pinta는 Lo.ci를 다시 설계한 개인 프로젝트입니다. 백엔드를 혼자 만들었습니다.",
         ],
       },
       {
@@ -505,7 +502,7 @@ export const projects: Project[] = [
       {
         heading: "개요",
         paras: [
-          "VitaCheck는 영양제 추천 서비스입니다. 5인 팀에서 백엔드를 맡아 전체 커밋 336건 중 184건을 작성했습니다. 2025년 11월 서울시 일자리 박람회에서 부스를 운영했고 하루 실사용자는 100명이었습니다.",
+          "VitaCheck는 영양제 추천 서비스입니다. 5인 팀에서 백엔드를 맡았습니다. 2025년 11월 서울시 일자리 박람회에서 부스를 운영했고 하루 실사용자는 100명이었습니다.",
         ],
       },
       {
@@ -711,8 +708,7 @@ export const projects: Project[] = [
     org: "개인", period: "2026.06 ~ 현재",
     summary:
       "봇 3개와 Claude Code를 한 화면에서 쓰는 웹앱에서, 진행 중인 일이 칸반에 안 보이고 Claude 응답이 느렸습니다. 노션 상태 자동 반영과 완료 처리 시점 수정으로 풀었습니다.",
-    stat: { value: "약 0.9초", label: "메시지당 응답 단축, 1회 측정" },
-    key: "응답 약 0.9초 단축",
+    key: "칸반 자동 정리, 응답 지연 제거",
     problem: "봇 3개와 Claude Code를 한 화면에서 쓰는데, 진행 중인 일이 칸반에 보이지 않고 응답이 느렸습니다.",
     solution: "노션 상태를 칸반에 자동으로 반영하고, CLI가 결과를 내는 즉시 완료로 처리하게 바꿨습니다.",
     result: "메시지당 약 0.9초를 줄였고(1회 측정), 매일 쓰는 작업 도구가 됐습니다.",
@@ -777,10 +773,11 @@ export const resume = {
   ],
 };
 
-export type ProjectGroup = { name: string; note?: string; ids: string[]; showOrg?: boolean };
+// about: 묶음 소개(같은 서비스의 프로젝트마다 반복하지 않고 묶음 위에 한 번만 보여 준다)
+export type ProjectGroup = { name: string; note?: string; about?: string[]; ids: string[]; showOrg?: boolean };
 
 export const projectGroups: ProjectGroup[] = [
-  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
+  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
   { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
   { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },
