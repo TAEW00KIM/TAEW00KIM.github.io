@@ -20,8 +20,8 @@
 </div>
 <script>
   const T = {
-    ko: { label: "소프트웨어 개발자", name: "김태우", line: "운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.", url: "taew00kim.github.io" },
-    en: { label: "Software Engineer", name: "Kim Taewoo", line: "I like finding and fixing the problems that come up when running a service.", url: "taew00kim.github.io/en" },
+    ko: { label: "소프트웨어 개발자", name: "김태우", line: "운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.", url: "kimtaewoo.dev" },
+    en: { label: "Software Engineer", name: "Kim Taewoo", line: "I like finding and fixing the problems that come up when running a service.", url: "kimtaewoo.dev/en" },
   }[new URLSearchParams(location.search).get("lang") || "ko"];
   for (const k in T) document.getElementById(k).textContent = T[k];
 </script></body></html>

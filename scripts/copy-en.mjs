@@ -14,8 +14,8 @@ const swaps = [
     /<meta property="og:description" content="[^"]*" \/>/,
     '<meta property="og:description" content="I like finding and fixing the problems that come up when running a service." />',
   ],
-  [/<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="https://taew00kim.github.io/en/" />'],
-  [/<meta property="og:image" content="[^"]*" \/>/, '<meta property="og:image" content="https://taew00kim.github.io/og-en.png" />'],
+  [/<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="https://kimtaewoo.dev/en/" />'],
+  [/<meta property="og:image" content="[^"]*" \/>/, '<meta property="og:image" content="https://kimtaewoo.dev/og-en.png" />'],
   [/<meta property="og:image:alt" content="[^"]*" \/>/, '<meta property="og:image:alt" content="Kim Taewoo, Software Engineer" />'],
   [/<meta property="og:locale" content="[^"]*" \/>/, '<meta property="og:locale" content="en_US" />'],
 ];

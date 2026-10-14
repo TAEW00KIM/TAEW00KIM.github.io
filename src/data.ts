@@ -8,8 +8,8 @@ export const site = {
   github: "https://github.com/TAEW00KIM",
   githubLabel: "github.com/TAEW00KIM",
   email: "twkk0819@gmail.com",
-  web: "https://kimtaewoo.dev",
-  webLabel: "kimtaewoo.dev",
+  web: "https://taewoo.notion.site/portfolio",
+  webLabel: "Notion 이력서",
   resumePdf: "/resume.pdf",
   footer: "2026.10 업데이트",
 };
