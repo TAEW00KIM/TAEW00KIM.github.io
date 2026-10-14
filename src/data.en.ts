@@ -79,7 +79,7 @@ export const experience: { tabs: ExpTab[] } = {
           ],
         },
         {
-          title: "Undergraduate Teaching Assistant, Deep Learning Basics",
+          title: "Undergraduate Teaching Assistant, Deep Learning Basics (딥러닝기초)",
           org: "Hankuk University of Foreign Studies (HUFS)",
           period: "2025.09 ~ 2025.12",
           bullets: ["I supported labs and assignments for the Deep Learning Basics course and built a system that grades assignments automatically (Spring, React, FastAPI)."],
@@ -87,9 +87,9 @@ export const experience: { tabs: ExpTab[] } = {
         },
         {
           title: "VitaCheck Booth Operation",
-          org: "Seoul Job Fair",
+          org: "2025 Seoul Job Fair (Seoul Metropolitan Government and Industrial Bank of Korea)",
           period: "2025.11",
-          bullets: ["We ran a booth for our team project VitaCheck, a supplement recommendation service, and 100 real users a day used it."],
+          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and 100 real users a day used it."],
         },
         {
           title: "Senior KATUSA, Acting Platoon Leader",
@@ -104,7 +104,7 @@ export const experience: { tabs: ExpTab[] } = {
       label: "Awards",
       items: [
         {
-          title: "H-UP Best Award",
+          title: "H-UP First Place (최우수상)",
           org: "HUFS career exploration credit program",
           period: "2022",
           bullets: ["I received it for an educational iOS app that helps people who find smartphones hard learn basic operations through games."],

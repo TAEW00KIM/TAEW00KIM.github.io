@@ -97,9 +97,9 @@ export const experience: { tabs: ExpTab[] } = {
         },
         {
           title: "VitaCheck 부스 운영",
-          org: "서울시 일자리 박람회",
+          org: "2025 서울시 일자리박람회 (서울시, IBK기업은행)",
           period: "2025.11",
-          bullets: ["팀 프로젝트인 영양제 추천 서비스 VitaCheck로 부스를 운영했고, 하루 실사용자 100명이 이용했습니다."],
+          bullets: ["박람회의 UMC 프로젝트 데모존에서 팀 프로젝트인 영양제 추천 서비스 VitaCheck를 선보였고, 하루 실사용자 100명이 이용했습니다."],
         },
         {
           title: "Senior KATUSA, 소대장 대행",
@@ -503,7 +503,7 @@ export const projects: Project[] = [
       {
         heading: "개요",
         paras: [
-          "VitaCheck는 영양제 추천 서비스입니다. 5인 팀에서 백엔드를 맡았습니다. 2025년 11월 서울시 일자리 박람회에서 부스를 운영했고 하루 실사용자는 100명이었습니다.",
+          "VitaCheck는 영양제 추천 서비스입니다. 5인 팀에서 백엔드를 맡았습니다. 2025년 11월 서울시 일자리박람회에서 부스를 운영했고 하루 실사용자는 100명이었습니다.",
         ],
       },
       {
