@@ -46,7 +46,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
             "I built a read-only dashboard for sending status and an unsubscribe ledger.",
-            "Claude Code drafted the email copy and operating documents, and I cross-checked them with Codex. Anything that leaves the company, such as sending email, ran only after a person approved it.",
+            "I wrote the email copy and operating documents with Claude Code and cross-checked them with Codex.",
           ],
           tags: ["Claude Code", "Codex"],
         },
@@ -570,7 +570,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "I had an AI agent write a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
+          "With an AI agent, I built a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
           "All numbers were measured in a sandbox or locally, and are not production numbers.",
         ],
       },
@@ -604,7 +604,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I built the measurement script with an AI agent, and handled the cause analysis and the fix."],
+        paras: ["I decided what to measure, read the results, narrowed down the cause, and fixed it."],
       },
       {
         heading: "Tech stack",
@@ -663,7 +663,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I did the design, the evaluation set and its answer rules, and operating decisions. Code was written by coding agents (Claude Code, Codex), and I re-ran the results myself to check them."],
+        paras: ["I handled design, implementation, writing the evaluation set, and operation alone."],
       },
       {
         heading: "Tech stack",
@@ -717,7 +717,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I set the design and operating rules. Implementation was delegated to sub-agents, and I re-ran their results myself to check them."],
+        paras: ["I handle design, implementation, and operation alone."],
       },
       {
         heading: "Tech stack",
