@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Project } from "../data";
 import { useData } from "../i18n";
 
@@ -114,34 +114,65 @@ function Item({ p, n, showOrg }: { p: Project; n: number; showOrg: boolean }) {
   );
 }
 
-export default function Projects() {
-  const { projects, projectGroups: groups, ui } = useData();
+// 화면에 나오는 순서대로 01, 02 ... 번호를 매긴다
+function useOrder() {
+  const { projects, projectGroups: groups } = useData();
   const byId = new Map(projects.map((p) => [p.id, p]));
-  // 화면에 나오는 순서대로 01, 02 ... 번호를 매긴다
   const order = groups.flatMap((g) => g.ids.filter((id) => byId.has(id)));
-  const numOf = (id: string) => order.indexOf(id) + 1;
+  return { byId, order, groups, numOf: (id: string) => order.indexOf(id) + 1 };
+}
+
+// 넓은 화면에서 지금 보고 있는 프로젝트를 왼쪽 목차에 표시한다
+function useCurrent(ids: string[], enabled: boolean) {
+  const [current, setCurrent] = useState<string | null>(null);
+  useEffect(() => {
+    if (!enabled) return;
+    const els = ids.map((id) => document.getElementById(`p-${id}`)).filter((e): e is HTMLElement => !!e);
+    const io = new IntersectionObserver(
+      (entries) => {
+        const seen = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (seen[0]) setCurrent(seen[0].target.id.slice(2));
+      },
+      { rootMargin: "-30% 0px -60% 0px" },
+    );
+    els.forEach((e) => io.observe(e));
+    return () => io.disconnect();
+  }, [ids.join(","), enabled]);
+  return current;
+}
+
+export function Glance({ side = false }: { side?: boolean }) {
+  const { ui } = useData();
+  const { byId, order, numOf } = useOrder();
+  const current = useCurrent(order, side);
   return (
-    <section className="section" aria-labelledby="proj-h">
+    <nav className={side ? "glance glance-side" : "glance glance-inline"} aria-label={ui.glanceTitle}>
+      <p className="glance-title">{ui.glanceTitle}</p>
+      <ol>
+        {order.map((id) => {
+          const p = byId.get(id)!;
+          return (
+            <li key={id} className={current === id ? "is-current" : undefined}>
+              <a href={`#p-${id}`} aria-current={current === id ? "true" : undefined}>
+                <span className="pnum mono">{num(numOf(id))}</span>
+                <span className="gtitle">{p.title}</span>
+                <span className="gkey">{p.key ?? p.metric ?? ""}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+export default function Projects() {
+  const { ui } = useData();
+  const { byId, groups, numOf } = useOrder();
+  return (
+    <section className="section section-projects" aria-labelledby="proj-h">
       <h2 id="proj-h">{ui.projectsTitle}</h2>
-
-      <nav className="glance" aria-label={ui.glanceTitle}>
-        <p className="glance-title">{ui.glanceTitle}</p>
-        <ol>
-          {order.map((id) => {
-            const p = byId.get(id)!;
-            return (
-              <li key={id}>
-                <a href={`#p-${id}`}>
-                  <span className="pnum mono">{num(numOf(id))}</span>
-                  <span className="gtitle">{p.title}</span>
-                  <span className="gkey">{p.key ?? p.metric ?? ""}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-
+      <Glance />
       {groups.map((g) => (
         <div className="pgroup" key={g.name}>
           <p className="gname">

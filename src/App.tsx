@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import Entries from "./components/Entries";
-import Projects from "./components/Projects";
+import Projects, { Glance } from "./components/Projects";
 import Skills from "./components/Skills";
 import { useData } from "./i18n";
 
@@ -12,8 +12,12 @@ export default function App() {
   const edu = tab("edu");
   const award = tab("award");
   return (
-    <>
-      <Header />
+    <div className="layout">
+      <aside className="side">
+        <Header />
+        <Glance side />
+      </aside>
+      <div className="content">
       <main>
         <Projects />
         {work && <Entries id="work" title={work.label} items={work.items} />}
@@ -27,6 +31,7 @@ export default function App() {
           {site.footer} / <a href={site.resumePdf} download={ui.resumeFilename}>{resume.pdfLabel}</a>
         </p>
       </footer>
-    </>
+      </div>
+    </div>
   );
 }

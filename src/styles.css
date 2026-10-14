@@ -33,7 +33,10 @@ body {
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
 }
-#root { max-width: 640px; margin: 0 auto; padding: 104px 24px 72px; }
+#root { max-width: 720px; margin: 0 auto; padding: 104px 24px 72px; }
+/* 넓은 화면: 왼쪽에 이름, 소개, 프로젝트 목차를 붙여 두고 오른쪽에 본문 */
+.glance-side { display: none; }
+
 a { color: inherit; text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; text-decoration-thickness: 1px; transition: text-decoration-color 0.15s; }
 a:hover { text-decoration-color: var(--ink); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
@@ -154,6 +157,21 @@ figcaption { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height:
   figure:has(img[height="900"]) { width: calc(50% - 8px); }
 }
 
+@media (min-width: 1100px) {
+  #root { max-width: 1320px; padding: 96px 56px 72px; }
+  .layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 88px; }
+  .side { position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 96px); overflow-y: auto; padding-bottom: 24px; scrollbar-width: none; }
+  .side::-webkit-scrollbar { display: none; }
+  .content { max-width: 840px; }
+  .content > main > .section:first-child { margin-top: 0; }
+  .glance-inline { display: none; }
+  .glance-side { display: block; margin: 48px 0 0; }
+  .glance-side a { grid-template-columns: 26px 1fr; gap: 6px; padding: 7px 0; font-size: 13.5px; }
+  .glance-side .gkey { grid-column: 2; text-align: left; font-size: 12px; margin-top: -2px; }
+  .glance-side .gtitle { color: var(--body); }
+  .glance-side li.is-current .gtitle { color: var(--ink); font-weight: 600; }
+  .glance-side li.is-current .pnum { color: var(--ink); }
+}
 @media print {
   @page { size: A4; margin: 16mm; }
   :root { --paper: #fff; --ink: #000; --body: #222; --sub: #555; --faint: #777; --rule: #ddd; }
@@ -161,6 +179,8 @@ figcaption { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height:
   #root { max-width: none; padding: 0; }
   a { text-decoration: none; }
   .more, .glance { display: none; }
+  .layout { display: block; }
+  .side { position: static; max-height: none; overflow: visible; }
   .detail[hidden] { display: block !important; }
   .entry, figure { break-inside: avoid; }
   .section h2 { break-after: avoid; }
