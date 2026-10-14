@@ -56,7 +56,7 @@ ul, ol { list-style: none; }
 .rows > li:last-child, .project:last-child { border-bottom: 1px solid var(--rule); }
 
 .row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.date { flex: none; font-size: 12px; color: var(--faint); white-space: nowrap; }
+.date { flex: none; font-size: 12px; color: var(--sub); white-space: nowrap; }
 .org { display: block; font-size: 14px; color: var(--sub); }
 
 .entry { padding: 16px 0; }
@@ -77,7 +77,7 @@ ul, ol { list-style: none; }
 .glance a:hover .gtitle { color: var(--ink); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; }
 .gtitle { color: var(--ink); }
 .gkey { font-size: 13px; color: var(--sub); text-align: right; }
-.pnum { font-size: 12px; color: var(--faint); }
+.pnum { font-size: 12px; color: var(--sub); }
 
 .pgroup + .pgroup { margin-top: 40px; }
 .gname { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
@@ -99,11 +99,11 @@ ul, ol { list-style: none; }
 .bar-track { display: block; height: 8px; }
 .bar-fill { display: block; height: 100%; background: var(--ink); border-radius: 1px; }
 .bar-fill.is-before { background: var(--rule); }
-.bar-val { font-size: 12.5px; color: var(--faint); text-align: right; }
+.bar-val { font-size: 12.5px; color: var(--sub); text-align: right; }
 .bar-val.is-after { color: var(--ink); }
 .psr { margin-top: 12px; font-size: 14px; }
 .psr > div { display: grid; grid-template-columns: calc(var(--ind) - 12px) 1fr; gap: 12px; padding: 3px 0; }
-.psr dt { font-size: 12.5px; color: var(--faint); padding-top: 1px; }
+.psr dt { font-size: 12.5px; color: var(--sub); padding-top: 1px; }
 .psr dd { color: var(--body); }
 .psr .is-result dd { color: var(--ink); font-weight: 500; }
 .lead { margin-top: 8px; font-size: 14px; color: var(--body); }

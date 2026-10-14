@@ -348,7 +348,7 @@ export const projects: Project[] = [
     org: "Solo backend", period: "2025.11 ~ 2026.02",
     summary:
       "Every map move re-aggregated all posts. I aggregated in advance when a post is written, and made the map read only the aggregate table.",
-    stat: { value: "Not measured", label: "aggregation moved from read time to write time" },
+    stat: { value: "Aggregate on write", label: "map query structure changed, before and after time not measured" },
     key: "Aggregate on write, not read",
     problem: "Every map move re-aggregated all posts.",
     solution: "Posts are pre-aggregated per H3 cell when written, and the map reads only the aggregate rows.",
