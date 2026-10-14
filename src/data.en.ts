@@ -131,6 +131,11 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "Floods of identical cheer chat messages shifted the team rankings. I blocked the spam without blocking normal users.",
+    stat: { value: "7,617 in 8 min", label: "identical cheer messages on one match, now blocked" },
+    key: "Spam blocked, award rule rethought",
+    problem: "7,617 identical cheer messages piled onto a match that had not started, in 8 minutes, and skewed the team ranking.",
+    solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
+    result: "Spam is filtered without blocking normal users. I also found that 99% of messages were the 3 preset buttons and raised the award rule with the team.",
     bullets: [
       "Block at 120 requests per 60 seconds per visitor (cookie), and from the 4th identical message within 3 seconds (Caffeine)",
       "Bot requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
@@ -184,6 +189,11 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and also reduced the number of LLM calls.",
+    stat: { value: "88.6% → 100%", label: "masking accuracy, 9 models compared" },
+    key: "Accuracy 88.6% → 100%",
+    problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
+    solution: "The model output is now checked in code and the original text is used when it looks wrong. A static filter and a 5-minute cache cut the LLM calls themselves.",
+    result: "I compared 9 models on the same sentences ($0.17 to evaluate) and replaced the 88.6%-accurate model with one at 100%.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to reduce calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
@@ -233,6 +243,11 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.09 ~ 10",
     summary:
       "The AWS account was suspended and the service stopped. I rebuilt the infrastructure in a new account with Terraform and resumed operations.",
+    stat: { value: "About 1 week", label: "from detecting the suspension to service back" },
+    key: "Back in about 1 week",
+    problem: "The AWS account was suspended for a security issue, and DNS, servers and monitoring all went down at once.",
+    solution: "Moved DNS to Cloudflare and rebuilt the whole infrastructure in a new account with Terraform.",
+    result: "Service resumed in about 1 week, with uptime checks running outside the account and 17 Grafana alerts added.",
     bullets: [
       "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
       "Switched S3 access from a fixed app key to an instance role",
@@ -283,6 +298,11 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "CI took anywhere from 8 to 17 minutes, and every deployment cut the service for up to 30 seconds. I found the causes, shortened CI, and made deployment zero-downtime.",
+    stat: { value: "510s → 132s", label: "deploy job time, downtime per deploy 30s → 0s" },
+    key: "Deploy 510s → 132s",
+    problem: "CI swung between 8 and 17 minutes, and every deploy took the service down for up to 30 seconds.",
+    solution: "Put the test DB on tmpfs and removed duplicate tests from the deploy job. Switched deploys to Blue/Green.",
+    result: "Deploy job 510s → 132s, downtime per deploy up to 30s → 0s.",
     bullets: [
       "Put MySQL on tmpfs, which fixed test DB time at 54 seconds (it had been 101 to 632 seconds)",
       "Kept only the documentation tests in the deploy job instead of a duplicate full test run, 510s → 132s",
@@ -328,6 +348,11 @@ export const projects: Project[] = [
     org: "Solo backend", period: "2025.11 ~ 2026.02",
     summary:
       "Every map move re-aggregated all posts. I aggregated in advance when a post is written, and made the map read only the aggregate table.",
+    stat: { value: "Not measured", label: "aggregation moved from read time to write time" },
+    key: "Aggregate on write, not read",
+    problem: "Every map move re-aggregated all posts.",
+    solution: "Posts are pre-aggregated per H3 cell when written, and the map reads only the aggregate rows.",
+    result: "The query structure changed, but I did not measure before and after, so there is no number for the gain.",
     bullets: [
       "Replaced the full post aggregation with a lookup on a per-H3-cell statistics table, with fallback to the old query on failure",
       "Prevented duplicates from concurrent updates to the same cell with a unique constraint, a pessimistic lock, and retries",
@@ -382,6 +407,11 @@ export const projects: Project[] = [
     title: "Pinta (Lo.ci Redesign)",
     org: "Personal", period: "2026.02 ~ 2026.04",
     summary: "Every request re-read the account status from the DB, and profile statistics were split across 3 queries. I reduced them with a 30-second cache and 1 aggregate query.",
+    stat: { value: "3 → 1", label: "profile statistics queries" },
+    key: "Stats queries 3 → 1",
+    problem: "Every request re-read the account status from the DB, and profile statistics were split across 3 queries.",
+    solution: "Account status moved to a 30-second cache, and profile statistics to 1 aggregate query.",
+    result: "Removed the per-request account lookup and cut the stats queries from 3 to 1 (time not measured).",
     bullets: [
       "Replaced the per-request account status DB lookup with a Caffeine cache (30 seconds)",
       "Merged 3 profile statistics queries into 1, and changed the N+1 in the feed image list to a batch lookup",
@@ -462,11 +492,17 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-channel-search.png", width: 1440, height: 800, alt: "Vling channel search screen", caption: "Channel search screen" },
+      { src: "/vling-video-search.png", width: 1190, height: 700, alt: "Vling video search screen", caption: "Video search. I built the curation sections and the results grid with teammates. Channel names are masked by the service." },
+      { src: "/vling-channel-search.png", width: 1190, height: 700, alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 qualitative filters. Channel names are masked by the service." },
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
     summary: "Adding a category filter made the channel recommendation section disappear entirely for some accounts. I found it before release and added a fallback, and shipped the video search and channel search screens with teammates.",
+    visual: true,
+    key: "2 search screens shipped",
+    problem: "Adding a category filter made the channel recommendation section disappear entirely for some accounts.",
+    solution: "Found the cause (0 candidates) before release and added a fallback that queries again without the category.",
+    result: "Shipped the video search and channel search redesigns with teammates.",
     bullets: [
       "Video search: 4 curation sections, results grid, related channel recommendations",
       "Channel search: channel cards, 11 qualitative filters, removal of channels unsuitable for ads, URL search, favorites folders",
@@ -516,6 +552,15 @@ export const projects: Project[] = [
     title: "Vling Search Page Performance Measurement and Improvement",
     org: "Buzz & Beyond internship", period: "2026.08 ~ 09",
     summary: "The search page was slow, and the layout shifted while loading. I narrowed the causes with a measurement script and fixed them. All numbers were measured in a sandbox environment.",
+    bars: [
+      { label: "Search screen CLS", before: 0.246, after: 0.003, unit: "" },
+      { label: "Sort change response", before: 2194, after: 40, unit: "ms" },
+      { label: "Thumbnail TTFB", before: 928, after: 154, unit: "ms" },
+    ],
+    key: "CLS 0.246 → 0.003",
+    problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
+    solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes moved to shallow routing with no server round trip.",
+    result: "CLS 0.246 → 0.003, sort response 2,194ms → 40ms (sandbox measurements).",
     bullets: [
       "Search page CLS 0.246 → 0.003 (changed the skeleton key to the grid slot number)",
       "Sort change response 2,194ms → 40ms (shallow routing)",
@@ -573,6 +618,11 @@ export const projects: Project[] = [
     org: "Personal", period: "2026.06 ~ present",
     summary:
       "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a server that collects work records every day and lets agents search them.",
+    stat: { value: "0.74 → 0.84", label: "top-10 recall on 43 questions" },
+    key: "Recall 0.74 → 0.84",
+    problem: "Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
+    solution: "Built a search server (MCP) that collects conversations, commits and documents daily and combines keyword and semantic search.",
+    result: "Top-10 recall on 43 questions went from 0.74 to 0.84.",
     bullets: [
       "Measured before and after adding semantic search on a gold set of 43 queries: top 10 recall 0.74 → 0.84",
       "Found the cause of the small effect on reworded questions (similarity clustering) and improved it 0.42 → 0.75",
@@ -626,6 +676,11 @@ export const projects: Project[] = [
     org: "Personal", period: "2026.06 ~ present",
     summary:
       "In a web app that puts 3 bots and Claude Code on one screen, in-progress work did not show on the kanban board and Claude responses were slow. I fixed it with automatic status sync from Notion and a fix to when a response is marked complete.",
+    stat: { value: "About 0.9s", label: "saved per reply, 1 measurement" },
+    key: "About 0.9s faster replies",
+    problem: "I use 3 bots and Claude Code on one screen, but work in progress did not show on the kanban and replies were slow.",
+    solution: "Notion status now flows to the kanban automatically, and a reply is marked done as soon as the CLI returns its result.",
+    result: "About 0.9 seconds saved per message (1 measurement), and it became the tool I use every day.",
     bullets: [
       "Fixed in-progress work missing from the kanban board with automatic Notion status sync and automatic archiving 3 days after completion",
       "Did not apply the reasoning effort and priority processing options, because measuring showed no confirmed gain",
@@ -696,6 +751,12 @@ export const projectGroups: ProjectGroup[] = [
 
 export const ui = {
   lang: "en",
+  glanceTitle: "At a glance",
+  labelProblem: "Problem",
+  labelSolution: "Solution",
+  labelResult: "Result",
+  more: "Read more",
+  less: "Close",
   projectsTitle: "Projects",
   langLinkLabel: "한국어",
   langLinkHref: "/",

@@ -133,6 +133,15 @@ export type Project = {
   metric?: string;
   images?: { src: string; width: number; height: number; alt: string; caption: string }[];
   summary: string;
+  // 접힌 상태에서 보이는 세 줄과 한눈에 보기용 핵심 결과
+  // 백엔드는 큰 수치(stat), 프론트엔드는 화면(visual: 이미지를 접힌 상태에서 보여 줌)이나 전후 막대(bars)
+  stat?: { value: string; label: string };
+  visual?: boolean;
+  bars?: { label: string; before: number; after: number; unit: string }[];
+  key?: string;
+  problem?: string;
+  solution?: string;
+  result?: string;
   bullets: string[];
   tags: string[];
   links?: { label: string; href: string }[];
@@ -157,6 +166,11 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "같은 문구의 응원톡이 몰려 팀 순위가 흔들렸습니다. 정상 사용자는 막히지 않는 선에서 도배를 막았습니다.",
+    stat: { value: "7,617건 / 8분", label: "한 경기에 쌓인 같은 문구 응원톡, 이후 차단" },
+    key: "도배 차단, 시상 기준 재검토",
+    problem: "아직 시작하지 않은 경기에 같은 문구의 응원톡 7,617건이 8분 만에 쌓여 팀 순위가 흔들렸습니다.",
+    solution: "방문자 쿠키마다 60초에 120건, 3초 안 같은 문구는 4번째부터 막는 슬라이딩 창 제한을 넣었습니다.",
+    result: "정상 사용자는 막지 않고 도배만 걸러 냅니다. 응원톡의 99%가 프리셋 버튼이라는 점도 찾아 시상 기준을 팀에 다시 제기했습니다.",
     bullets: [
       "방문자(쿠키)당 60초에 120건, 3초 안에 같은 문구는 4번째부터 차단(Caffeine)",
       "응원 수를 부풀리려던 봇 요청(분당 57회)은 입력 범위 검증에서 모두 거절",
@@ -210,6 +224,11 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "욕설을 가리는 LLM이 가린 문장 대신 설명을 돌려줘 그대로 화면에 나갔습니다. 출력을 코드로 검사해 막고, LLM 호출 수도 줄였습니다.",
+    stat: { value: "88.6% → 100%", label: "욕설 마스킹 정확도, 모델 9개 비교" },
+    key: "정확도 88.6% → 100%",
+    problem: "욕설을 가리는 LLM이 가린 문장 대신 설명문을 돌려줬고, 그 설명이 그대로 화면에 나갔습니다.",
+    solution: "모델 출력을 코드로 검사해 이상하면 원문을 쓰게 했고, 정적 필터와 5분 캐시로 LLM 호출 자체를 줄였습니다.",
+    result: "같은 문장으로 모델 9개를 비교해(평가 비용 0.17달러), 정확도 88.6%이던 모델을 100% 모델로 바꿨습니다.",
     bullets: [
       "정적 필터와 결과 캐시를 LLM 앞단에 두어 호출 수 감소",
       "공급자를 인터페이스로 분리해 설정만으로 Gemini와 OpenRouter 전환",
@@ -259,6 +278,11 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.09 ~ 10",
     summary:
       "AWS 계정이 정지돼 서비스가 멈췄습니다. 새 계정에 인프라를 Terraform으로 다시 세워 운영을 재개했습니다.",
+    stat: { value: "약 1주", label: "계정 정지 탐지부터 운영 재개까지" },
+    key: "약 1주 만에 운영 재개",
+    problem: "AWS 계정이 보안 문제로 정지돼 DNS, 서버, 모니터링이 한꺼번에 멈췄습니다.",
+    solution: "DNS를 Cloudflare로 옮기고, 인프라 전체를 Terraform으로 새 계정에 다시 세웠습니다.",
+    result: "약 1주 만에 운영을 재개했고, 계정 밖에서 도는 가동 점검과 Grafana 알림 17종을 더했습니다.",
     bullets: [
       "VPC, EC2, S3와 CloudFront, SSM을 Terraform으로 재구성하고 DNS는 Cloudflare로 이전",
       "S3 접근은 앱 고정 키 대신 인스턴스 역할로 전환",
@@ -309,6 +333,11 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "CI가 8~17분을 오갔고, 배포 때마다 서비스가 최대 30초 끊겼습니다. 원인을 찾아 CI를 줄이고 배포를 무중단으로 바꿨습니다.",
+    stat: { value: "510초 → 132초", label: "배포 잡 시간, 배포 중 끊김 30초 → 0초" },
+    key: "배포 510초 → 132초",
+    problem: "CI가 8~17분을 오갔고, 배포할 때마다 서비스가 최대 30초 끊겼습니다.",
+    solution: "테스트 DB를 tmpfs에 올리고 배포 잡의 중복 테스트를 걷어냈습니다. 배포는 Blue/Green으로 바꿨습니다.",
+    result: "배포 잡 510초 → 132초, 배포 중 끊김 최대 30초 → 0초.",
     bullets: [
       "MySQL을 tmpfs에 올려 테스트 DB 시간을 101~632초에서 54초로 고정",
       "배포 잡의 중복 전체 테스트를 문서 테스트만 남겨 510초 → 132초",
@@ -354,6 +383,11 @@ export const projects: Project[] = [
     org: "백엔드 1인", period: "2025.11 ~ 2026.02",
     summary:
       "지도를 움직일 때마다 게시물 전체를 다시 집계했습니다. 글을 쓸 때 미리 집계해 두고, 지도는 집계 테이블만 읽게 바꿨습니다.",
+    stat: { value: "측정 기록 없음", label: "조회 시 집계에서 저장 시 집계로 구조 변경" },
+    key: "조회 시 집계 → 저장 시 집계",
+    problem: "지도를 움직일 때마다 게시물 전체를 다시 집계했습니다.",
+    solution: "글을 쓸 때 H3 셀 단위로 미리 집계해 두고, 지도는 집계 행만 읽게 바꿨습니다.",
+    result: "조회 구조는 바꿨지만 전후 시간을 재 두지 않아 개선 폭은 숫자로 적지 않습니다.",
     bullets: [
       "게시물 전체 집계를 H3 셀 단위 통계 테이블 조회로 바꾸고 실패 시 옛 쿼리로 복귀",
       "같은 셀의 동시 갱신 중복을 유니크 제약, 비관적 락, 재시도로 방지",
@@ -408,6 +442,11 @@ export const projects: Project[] = [
     title: "Pinta (Lo.ci 재설계)",
     org: "개인", period: "2026.02 ~ 2026.04",
     summary: "요청마다 계정 상태를 DB에서 다시 읽었고, 프로필 통계는 쿼리 3개로 나뉘어 있었습니다. 30초 캐시와 집계 쿼리 1개로 줄였습니다.",
+    stat: { value: "3개 → 1개", label: "프로필 통계 쿼리 수" },
+    key: "통계 쿼리 3개 → 1개",
+    problem: "요청마다 계정 상태를 DB에서 다시 읽었고, 프로필 통계는 쿼리 3개로 나뉘어 있었습니다.",
+    solution: "계정 상태는 30초 캐시로, 프로필 통계는 집계 쿼리 1개로 바꿨습니다.",
+    result: "요청마다 하던 계정 조회를 없애고 통계 쿼리를 3개에서 1개로 줄였습니다(시간은 재지 않음).",
     bullets: [
       "요청마다 하던 계정 상태 DB 조회를 Caffeine 캐시(30초)로 대체",
       "프로필 통계 쿼리 3개를 1개로 합치고 피드 이미지 목록의 N+1을 배치 조회로 변경",
@@ -488,11 +527,17 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-channel-search.png", width: 1440, height: 800, alt: "Vling 채널 검색 화면", caption: "채널 검색 화면" },
+      { src: "/vling-video-search.png", width: 1190, height: 700, alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태입니다." },
+      { src: "/vling-channel-search.png", width: 1190, height: 700, alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 정성 필터 11종을 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태입니다." },
     ],
     title: "Vling 영상 검색과 채널 검색 개편",
     org: "버즈앤비 현장실습", period: "2026.07 ~ 09",
     summary: "카테고리 필터를 넣으면 일부 계정에서 채널 추천 섹션이 통째로 사라졌습니다. 배포 전에 찾아 폴백을 넣고, 영상 검색과 채널 검색 화면을 팀원과 함께 출시했습니다.",
+    visual: true,
+    key: "검색 화면 2개 출시",
+    problem: "카테고리 필터를 넣자 일부 계정에서 채널 추천 섹션이 통째로 사라졌습니다.",
+    solution: "배포 전에 원인(후보 0개)을 찾아, 카테고리로 못 찾으면 카테고리 없이 다시 조회하는 폴백을 넣었습니다.",
+    result: "영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
     bullets: [
       "영상 검색: 큐레이션 섹션 4개, 결과 그리드, 관련 채널 추천",
       "채널 검색: 채널 카드, 정성 필터 11종, 광고 부적합 채널 제거, URL 검색, 즐겨찾기 폴더",
@@ -542,6 +587,15 @@ export const projects: Project[] = [
     title: "Vling 검색 화면 성능 측정과 개선",
     org: "버즈앤비 현장실습", period: "2026.08 ~ 09",
     summary: "검색 화면이 느리고, 로딩 중 레이아웃이 흔들렸습니다. 측정 스크립트로 원인을 좁혀 고쳤습니다. 수치는 모두 샌드박스에서 잰 값입니다.",
+    bars: [
+      { label: "검색 화면 CLS", before: 0.246, after: 0.003, unit: "" },
+      { label: "정렬 변경 응답", before: 2194, after: 40, unit: "ms" },
+      { label: "썸네일 TTFB", before: 928, after: 154, unit: "ms" },
+    ],
+    key: "CLS 0.246 → 0.003",
+    problem: "검색 화면만 로딩 중 레이아웃이 크게 흔들렸고(CLS 0.246), 정렬을 바꾸면 2초 넘게 옛 결과에 멈춰 있었습니다.",
+    solution: "측정 스크립트로 원인을 스켈레톤 key로 좁혀 고쳤고, 정렬 변경은 서버 왕복 없는 shallow 라우팅으로 바꿨습니다.",
+    result: "CLS 0.246 → 0.003, 정렬 응답 2,194ms → 40ms (샌드박스 측정).",
     bullets: [
       "검색 화면 CLS 0.246 → 0.003(스켈레톤 key를 그리드 슬롯 번호로 변경)",
       "정렬 변경 응답 2,194ms → 40ms(shallow 라우팅)",
@@ -599,6 +653,11 @@ export const projects: Project[] = [
     org: "개인", period: "2026.06 ~ 현재",
     summary:
       "Claude Code가 30일 지난 대화를 지워, 지난 결정과 이유를 다시 찾을 수 없었습니다. 작업 기록을 매일 모아 에이전트가 검색하는 서버를 만들었습니다.",
+    stat: { value: "0.74 → 0.84", label: "상위 10건 재현율, 질문 43개" },
+    key: "재현율 0.74 → 0.84",
+    problem: "Claude Code가 30일 지난 대화를 지워, 지난 결정과 이유를 다시 찾을 수 없었습니다.",
+    solution: "대화, 커밋, 문서를 매일 모아 낱말 검색과 의미 검색을 합친 검색 서버(MCP)를 만들었습니다.",
+    result: "질문 43개로 잰 상위 10건 재현율이 0.74 → 0.84로 올랐습니다.",
     bullets: [
       "골드셋 43개 질의로 의미 검색 도입 전후를 재 상위 10건 재현율 0.74 → 0.84",
       "말 바꾼 질문에서 효과가 작던 원인(유사도 쏠림)을 찾아 0.42 → 0.75로 개선",
@@ -652,6 +711,11 @@ export const projects: Project[] = [
     org: "개인", period: "2026.06 ~ 현재",
     summary:
       "봇 3개와 Claude Code를 한 화면에서 쓰는 웹앱에서, 진행 중인 일이 칸반에 안 보이고 Claude 응답이 느렸습니다. 노션 상태 자동 반영과 완료 처리 시점 수정으로 풀었습니다.",
+    stat: { value: "약 0.9초", label: "메시지당 응답 단축, 1회 측정" },
+    key: "응답 약 0.9초 단축",
+    problem: "봇 3개와 Claude Code를 한 화면에서 쓰는데, 진행 중인 일이 칸반에 보이지 않고 응답이 느렸습니다.",
+    solution: "노션 상태를 칸반에 자동으로 반영하고, CLI가 결과를 내는 즉시 완료로 처리하게 바꿨습니다.",
+    result: "메시지당 약 0.9초를 줄였고(1회 측정), 매일 쓰는 작업 도구가 됐습니다.",
     bullets: [
       "칸반에 안 보이던 진행 중인 일을 노션 상태 자동 반영과 완료 3일 뒤 자동 보관으로 해결",
       "추론 강도와 우선 처리 옵션은 재 봐도 이득이 확인되지 않아 적용하지 않음",
@@ -724,6 +788,12 @@ export const projectGroups: ProjectGroup[] = [
 
 export const ui = {
   lang: "ko",
+  glanceTitle: "한눈에 보기",
+  labelProblem: "문제",
+  labelSolution: "해결",
+  labelResult: "결과",
+  more: "자세히 보기",
+  less: "접기",
   projectsTitle: "프로젝트",
   langLinkLabel: "English",
   langLinkHref: "/en/",
