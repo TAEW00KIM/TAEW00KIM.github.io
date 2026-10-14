@@ -47,7 +47,8 @@ ul, ol { list-style: none; }
 /* header */
 .masthead h1 { font-size: 15px; font-weight: 600; }
 .role { margin-left: 10px; font-weight: 400; color: var(--sub); }
-.intro { margin-top: 20px; color: var(--body); max-width: 34em; }
+.school { margin-top: 4px; font-size: 13.5px; color: var(--sub); }
+.intro { margin-top: 16px; color: var(--body); max-width: 34em; }
 .links { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 14px; color: var(--sub); }
 .links a:hover { color: var(--ink); }
 

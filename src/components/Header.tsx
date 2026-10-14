@@ -8,6 +8,7 @@ export default function Header() {
         {ui.lang === "en" ? site.nameEn : site.nameKo}
         <span className="role">{site.role}</span>
       </h1>
+      <p className="school">{site.school}</p>
       <p className="intro">{hero.tagline.join(" ")}</p>
       <p className="links">
         <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub</a>

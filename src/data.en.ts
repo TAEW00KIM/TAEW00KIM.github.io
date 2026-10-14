@@ -5,6 +5,7 @@ export const site = {
   nameEn: "Kim Taewoo",
   nameKo: "김태우",
   role: "Software Engineer",
+  school: "Hankuk University of Foreign Studies, Computer Engineering, graduating February 2027",
   github: "https://github.com/TAEW00KIM",
   githubLabel: "github.com/TAEW00KIM",
   email: "twkk0819@gmail.com",
@@ -78,7 +79,7 @@ export const experience: { tabs: ExpTab[] } = {
           ],
         },
         {
-          title: "Undergraduate Teaching Assistant, Introduction to Deep Learning",
+          title: "Undergraduate Teaching Assistant, Deep Learning Basics",
           org: "Hankuk University of Foreign Studies (HUFS)",
           period: "2025.09 ~ 2025.12",
           bullets: ["I supported labs and assignments for the Deep Learning Basics course and built a system that grades assignments automatically (Spring, React, FastAPI)."],
@@ -184,13 +185,13 @@ export const projects: Project[] = [
   },
   {
     id: "llm-masking",
-    title: "LLM Profanity Masking Pipeline",
+    title: "LLM Profanity Masking Improvements",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and also reduced the number of LLM calls.",
     key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
-    solution: "The model output is now checked in code and the original text is used when it looks wrong. A static filter and a 5-minute cache cut the LLM calls themselves.",
+    solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache that cut the LLM calls themselves.",
     result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy 88.6% → 100%, 22 sentences twice); the effect in production is not measured yet.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to reduce calls",
@@ -226,7 +227,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["As the backend developer, I handled the masking pipeline and the model comparison."],
+        paras: ["A teammate built the masking feature and the Gemini client right before I joined (January 2026). On top of it I added the output check, the first-stage filter and cache, the provider split (Gemini, OpenRouter), API key rotation and retries, and the model comparison."],
       },
       {
         heading: "Tech stack",
@@ -256,7 +257,7 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paras: [
-          "On September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a team mailbox nobody read.",
+          "Deploys were normal through September 26; on September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a team mailbox nobody read.",
           "DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
           "Monitoring stopped too, so no alerts came, and I could not log in to the old account, so there was no way to take out the database. I could not confirm how the key leaked.",
         ],
@@ -275,7 +276,7 @@ export const projects: Project[] = [
         heading: "Result",
         paras: [
           "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
-          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. The keys and the account mailbox were not managed by me. In the rebuild I removed fixed keys so that nobody has to manage them, and made anomalies inside and outside the account arrive as alerts.",
+          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. In the rebuild I removed fixed keys so that nobody has to manage them, and made anomalies inside and outside the account arrive as alerts.",
           "Some risk remains. The old data is still waiting for the account to be recovered, and an off-account DB backup was designed but not turned on.",
         ],
       },
@@ -326,7 +327,7 @@ export const projects: Project[] = [
       {
         heading: "Result",
         paras: [
-          "Test DB time was fixed at 54 seconds from 101 to 632 seconds. The deploy job went from 510 seconds to 132 seconds. The downtime of up to 30 seconds per deployment is gone.",
+          "Test DB time, which swung between 101 and 632 seconds, now stays at 54 seconds. The deploy job went from 510 seconds to 132 seconds. The downtime of up to 30 seconds per deployment is gone.",
         ],
       },
       {
@@ -581,7 +582,7 @@ export const projects: Project[] = [
           "Collecting the source nodes of layout-shift entries locally, all of them were video card skeletons.",
           "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The screen stayed frozen on the old results meanwhile.",
           "Thumbnails are videos seen for the first time in each search result, so the image optimization cache was always empty. Cards stayed blank while the server fetched the original and re-encoded it.",
-          "Keyword search had problems too. A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1.33 million, and a search for 'vlog' took 8.6 seconds.",
+          "Keyword search had problems too. A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1,330K, and a search for 'vlog' took 8.6 seconds.",
         ],
       },
       {
@@ -598,7 +599,7 @@ export const projects: Project[] = [
         heading: "Result",
         paras: [
           "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed.",
-          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms. Keyword search candidates went from 1.33 million to 22,000, and the 'vlog' search from 8.6s to 2.4s.",
+          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
           "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
         ],
       },
