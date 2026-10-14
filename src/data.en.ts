@@ -117,7 +117,7 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views.",
+  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views.",
 ];
 
 export const projects: Project[] = [
