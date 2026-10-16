@@ -34,7 +34,7 @@ export const experience: { tabs: ExpTab[] } = {
           period: "2026.07 ~ present",
           bullets: [
             "Vling is a YouTube channel and video data SaaS. Since July I have worked on the frontend and shipped the video search and channel search redesigns with teammates.",
-            "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations.",
+            "In the video search redesign, I split the work with a teammate and built 4 curation sections, the results grid, and related channel recommendations.",
             "In the channel search redesign, I built channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
             "A performance measurement script showed that only the search page had a high CLS. I narrowed the cause to the skeleton key and reduced CLS from 0.246 → 0.003.",
           ],
@@ -47,7 +47,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
             "I built a read-only dashboard for sending status and an unsubscribe ledger.",
-            "I wrote the email copy and operating documents with Claude Code and cross-checked them with Codex.",
+            "I automated finding US companies similar to our contracted customers with public-web research agents, grading them, and identifying the right contacts.",
           ],
           tags: ["Claude Code", "Codex"],
         },
@@ -89,10 +89,10 @@ export const experience: { tabs: ExpTab[] } = {
           title: "VitaCheck Booth Operation",
           org: "2025 Seoul Job Fair (Seoul Metropolitan Government and Industrial Bank of Korea)",
           period: "2025.11",
-          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and 100 real users a day used it."],
+          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and 100 people tried it in person in one day."],
         },
         {
-          title: "Senior KATUSA, 1st Platoon",
+          title: "Senior KATUSA, 1st Platoon (later in service)",
           org: "KATUSA, 557th MP Company",
           period: "2023.04 ~ 2024.10",
           bullets: ["Led about 20 KATUSA soldiers in the platoon, reporting directly to the ROK Army support NCO and the US platoon leader (SSG). Coordinated work and schedules between the US side and the ROK staff, and interpreted in person."],
@@ -118,7 +118,7 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. As of June 2026 (GA), it has about 4,800 active users and 130,000 total views.",
+  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. As of June 2026 (GA), the whole service has about 4,800 active users and 130,000 total views, with up to about 1,500 users a day during tournaments.",
 ];
 
 export const projects: Project[] = [
@@ -243,9 +243,9 @@ export const projects: Project[] = [
       "The AWS account was suspended and the service stopped. I rebuilt the infrastructure in a new account with Terraform and resumed operations.",
     stat: { value: "About 1 week", label: "from detecting the suspension to service back" },
     key: "Back in about 1 week",
-    problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a team mailbox nobody read.",
+    problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a shared mailbox that was not used for operational alerts.",
     solution: "Rebuilt the infrastructure in a new account with Terraform, removed the fixed access keys in favor of an instance role, and moved DNS outside the account (Cloudflare).",
-    result: "Service resumed in about 1 week. The leaked key and the warning mailbox were not mine to manage, but to keep this from happening again I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. A daily off-account DB copy is now pulled and was test-restored. The old data is not recovered yet.",
+    result: "Service resumed in about 1 week. To keep this from happening again, I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. A daily off-account DB copy is now pulled and was test-restored. The old data is not recovered yet.",
     bullets: [
       "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
       "Switched S3 access from a fixed app key to an instance role",
@@ -257,7 +257,7 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paras: [
-          "Deploys were normal through September 26; on September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a team mailbox nobody read.",
+          "Deploys were normal through September 26; on September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a shared mailbox that was not used for operational alerts.",
           "DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
           "Monitoring stopped too, so no alerts came, and I could not log in to the old account, so there was no way to take out the database. I could not confirm how the key leaked.",
         ],
@@ -468,7 +468,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "VitaCheck is a supplement recommendation service. I worked on the backend in a team of 5. In November 2025, we ran a booth at the Seoul Job Fair, with 100 real users per day.",
+          "VitaCheck is a supplement recommendation service. I worked on the backend in a team of 5. In November 2025, we ran a booth at the Seoul Job Fair, where 100 people tried it in person in one day.",
         ],
       },
       {
@@ -528,7 +528,7 @@ export const projects: Project[] = [
         heading: "Solution",
         paras: [
           "I added a fallback: if no channel is found with the category, it queries again without the category.",
-          "In the video search redesign, I built 4 curation sections, the results grid, and related channel recommendations.",
+          "In the video search redesign, I split the work with a teammate and built 4 curation sections, the results grid, and related channel recommendations.",
           "In the channel search redesign, I built channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, and favorites folders.",
         ],
       },
@@ -552,18 +552,18 @@ export const projects: Project[] = [
     summary: "The search page was slow, and the layout shifted while loading. I narrowed the causes with a measurement script and fixed them. All numbers were measured in a sandbox environment.",
     bars: [
       { label: "Search screen CLS", before: 0.246, after: 0.003, unit: "" },
-      { label: "Sort change response", before: 2194, after: 40, unit: "ms" },
+      { label: "Skeleton shown after a sort change", before: 2194, after: 40, unit: "ms" },
       { label: "Thumbnail TTFB", before: 928, after: 154, unit: "ms" },
       { label: "'Vlog' search time", before: 8.6, after: 2.4, unit: "s" },
       { label: "Keyword search candidates", before: 1330, after: 22, unit: "K" },
     ],
     key: "CLS 0.246 → 0.003",
     problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
-    solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes moved to shallow routing with no server round trip.",
-    result: "CLS 0.246 → 0.003, sort response 2,194ms → 40ms, 'vlog' search 8.6s → 2.4s (sandbox measurements).",
+    solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes no longer refetch server-rendered data unrelated to the results, thanks to shallow routing.",
+    result: "CLS 0.246 → 0.003, skeleton after a sort change 2,194ms → 40ms, 'vlog' search 8.6s → 2.4s (sandbox measurements).",
     bullets: [
       "Search page CLS 0.246 → 0.003 (changed the skeleton key to the grid slot number)",
-      "Sort change response 2,194ms → 40ms (shallow routing)",
+      "Skeleton shown after a sort change 2,194ms → 40ms (shallow routing)",
       "Thumbnail TTFB 928ms → 154ms (bypassed the image optimizer for thumbnails only)",
     ],
     tags: ["Next.js", "React", "Web Vitals", "Playwright"],
@@ -659,12 +659,12 @@ export const projects: Project[] = [
         paras: [
           "After adding the 2-character index and semantic search, overall recall went from 0.74 to 0.84. Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
           "The benchmark did change a decision. After I added new decision records, the exact keyword search metric dropped and was flagged as a regression. On checking, the problem was in the answer rules, so I fixed the rules.",
-          "There are limits. I made the gold set myself and there is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
+          "There are limits. There is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
         ],
       },
       {
         heading: "Role",
-        paras: ["I handled design, implementation, writing the evaluation set, and operation alone."],
+        paras: ["I decided what to solve and how to measure it, verified the results, and run it."],
       },
       {
         heading: "Tech stack",
@@ -732,14 +732,14 @@ export const resume = {
   title: "Skills",
   pdfLabel: "Resume (PDF, Korean)",
   skills: [
-    { group: "Server", items: ["Java", "Spring Boot", "JPA", "QueryDSL"] },
+    { group: "Server", items: ["Java", "Spring Boot", "JPA", "QueryDSL", "Python"] },
     { group: "Data", items: ["MySQL", "Redis"] },
     {
       group: "Infrastructure",
       items: ["AWS", "Docker", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
     },
     { group: "Web", items: ["TypeScript", "React", "Next.js"] },
-    { group: "AI", items: ["Claude Code", "Codex", "MCP"] },
+    { group: "AI", items: ["Claude Code", "Codex", "MCP", "Embedding search (e5, RRF)", "LLM output validation"] },
   ],
 };
 
