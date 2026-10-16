@@ -626,7 +626,7 @@ export const projects: Project[] = [
     solution: "Built a search server (MCP) that collects conversations, commits and documents daily and combines keyword and semantic search.",
     result: "Top-10 recall on 43 questions went from 0.74 to 0.84.",
     bullets: [
-      "Measured before and after adding semantic search on a gold set of 43 queries: top 10 recall 0.74 → 0.84",
+      "Measured before and after adding a 2-character index and semantic search on a gold set of 43 queries: top 10 recall 0.74 → 0.84",
       "Found the cause of the small effect on reworded questions (similarity clustering) and improved it 0.42 → 0.75",
       "Run a regression gate that runs the same queries before every release",
     ],
@@ -649,7 +649,7 @@ export const projects: Project[] = [
       {
         heading: "Solution",
         paras: [
-          "I merged the two rankings, keyword search and semantic search (e5-small), with RRF.",
+          "I added a 2-character index so short words with particles attached are found, and merged the two rankings, keyword search and semantic search (e5-small), with RRF.",
           "Before adding it, I fixed the correct answers for 43 questions by rules from the real DB, and measured the rate at which the answer is in the top 10. I saved the baseline and run the same benchmark every time I change search.",
           "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
         ],
@@ -657,7 +657,7 @@ export const projects: Project[] = [
       {
         heading: "Result",
         paras: [
-          "After adding semantic search, overall recall went from 0.74 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
+          "After adding the 2-character index and semantic search, overall recall went from 0.74 to 0.84. Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
           "The benchmark did change a decision. After I added new decision records, the exact keyword search metric dropped and was flagged as a regression. On checking, the problem was in the answer rules, so I fixed the rules.",
           "There are limits. I made the gold set myself and there is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
         ],
