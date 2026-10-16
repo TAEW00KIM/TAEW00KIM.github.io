@@ -599,7 +599,7 @@ export const projects: Project[] = [
         heading: "Result",
         paras: [
           "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed.",
-          "The sort change response was 2,194ms → 40ms, and thumbnail TTFB was 928ms → 154ms. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
+          "Showing the skeleton after a sort change went from 2,194ms to 40ms, and thumbnail TTFB was 928ms → 154ms. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
           "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
         ],
       },
@@ -718,7 +718,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Role",
-        paras: ["I handle design, implementation, and operation alone."],
+        paras: ["I design and run it on my own."],
       },
       {
         heading: "Tech stack",
