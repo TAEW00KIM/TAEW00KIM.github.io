@@ -92,10 +92,10 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and 100 real users a day used it."],
         },
         {
-          title: "Senior KATUSA, Acting Platoon Leader",
-          org: "KATUSA",
+          title: "Senior KATUSA, 1st Platoon",
+          org: "KATUSA, 557th MP Company",
           period: "2023.04 ~ 2024.10",
-          bullets: [],
+          bullets: ["Led about 20 KATUSA soldiers in the platoon, reporting directly to the ROK Army support NCO and the US platoon leader (SSG). Coordinated work and schedules between the US side and the ROK staff, and interpreted in person."],
         },
       ],
     },

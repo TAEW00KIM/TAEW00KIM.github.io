@@ -102,10 +102,10 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: ["박람회의 UMC 프로젝트 데모존에서 팀 프로젝트인 영양제 추천 서비스 VitaCheck를 선보였고, 하루 실사용자 100명이 이용했습니다."],
         },
         {
-          title: "Senior KATUSA, 소대장 대행",
-          org: "KATUSA",
+          title: "1소대 Senior KATUSA",
+          org: "KATUSA, 557th MP Company",
           period: "2023.04 ~ 2024.10",
-          bullets: [],
+          bullets: ["한국군 지원대장(상사)과 미군 소대장(SSG) 직속으로 소대의 카투사 20여 명을 통솔했고, 미군과 지원대장 사이의 업무 조율, 일정 관리, 통역을 맡았습니다."],
         },
       ],
     },
