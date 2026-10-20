@@ -18,7 +18,7 @@ export const site = {
 export const hero = {
   tagline: [
     "I like finding and fixing the problems that come up when running a service.",
-    "I handle the backend and infrastructure of Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
+    "I handle live cheering (WebSocket), push notifications, deployment and incident response for Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
   ],
 };
 
@@ -571,7 +571,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "With an AI agent, I built a post-deploy smoke script and a performance measurement script that verify 3 apps in 26 seconds. The CLS defect below was found the first time I ran this script.",
+          "I built a post-deploy smoke script that checks 3 apps at once and a performance measurement script. The CLS defect below was found the first time I ran the performance script.",
           "All numbers were measured in a sandbox or locally, and are not production numbers.",
         ],
       },
@@ -619,16 +619,16 @@ export const projects: Project[] = [
     title: "Work History Search Server (MCP)",
     org: "Personal", period: "2026.06 ~ present",
     summary:
-      "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a server that collects work records every day and lets agents search them.",
+      "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a server that collects work records and lets agents search them.",
     stat: { value: "0.74 → 0.84", label: "top-10 recall on 43 questions" },
     key: "Recall 0.74 → 0.84",
     problem: "Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
-    solution: "Built a search server (MCP) that collects conversations, commits and documents daily and combines keyword and semantic search.",
+    solution: "Built a search server (MCP) that collects conversations, commits and documents automatically when I start or end a work session on my MacBook and combines keyword and semantic search.",
     result: "Top-10 recall on 43 questions went from 0.74 to 0.84.",
     bullets: [
       "Measured before and after adding a 2-character index and semantic search on a gold set of 43 queries: top 10 recall 0.74 → 0.84",
-      "Found the cause of the small effect on reworded questions (similarity clustering) and improved it 0.42 → 0.75",
-      "Run a regression gate that runs the same queries before every release",
+      "Found the cause of the small effect on reworded questions (similarity clustering) and improved it 0.42 → 0.75 (tuned and evaluated on the same 43 queries)",
+      "Rerun the same queries whenever search changes to catch regressions (run by hand)",
     ],
     tags: ["TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
     sections: [
@@ -659,7 +659,7 @@ export const projects: Project[] = [
         paras: [
           "After adding the 2-character index and semantic search, overall recall went from 0.74 to 0.84. Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
           "The benchmark did change a decision. After I added new decision records, the exact keyword search metric dropped and was flagged as a regression. On checking, the problem was in the answer rules, so I fixed the rules.",
-          "There are limits. There is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. The benchmark is a manual step before release and is not connected to CI.",
+          "There are limits. There is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
         ],
       },
       {
@@ -674,25 +674,25 @@ export const projects: Project[] = [
   },
   {
     id: "agent-env",
-    title: "Agent Mobile Web App and Working Rules",
+    title: "Agent Assistant App and Working Rules",
     org: "Personal", period: "2026.06 ~ present",
     summary:
-      "In a web app that puts 3 bots and Claude Code on one screen, in-progress work did not show on the kanban board and Claude responses were slow. I fixed it with automatic status sync from Notion and a fix to when a response is marked complete.",
-    key: "Kanban auto-sync, reply delay removed",
-    problem: "I use 3 bots and Claude Code on one screen, but work in progress did not show on the kanban and replies were slow.",
-    solution: "Notion status now flows to the kanban automatically, and a reply is marked done as soon as the CLI returns its result.",
-    result: "About 0.9 seconds saved per message (1 measurement), and it became the tool I use every day.",
+      "In a web app that puts my AI assistant bots and Claude Code on one screen, in-progress work did not show on the kanban board and Claude responses were slow. I fixed it with a cleanup job that moves cards linked to in-progress Notion tasks into the in-progress column and a fix to when a response is marked complete.",
+    key: "Kanban auto-cleanup, reply marked done 0.9s sooner",
+    problem: "In the web app I used for AI assistant bots and Claude Code on one screen, work in progress did not show on the kanban and replies were slow.",
+    solution: "Cards linked to in-progress Notion tasks now move into the in-progress column automatically, and a reply is marked done as soon as the CLI returns its result.",
+    result: "About 0.9 seconds saved per message (1 measurement). In October I moved it to native iOS and Mac apps on the same server.",
     bullets: [
-      "Fixed in-progress work missing from the kanban board with automatic Notion status sync and automatic archiving 3 days after completion",
+      "Fixed in-progress work missing from the kanban board with a Notion-linked cleanup job and automatic archiving 3 days after completion",
       "Did not apply the reasoning effort and priority processing options, because measuring showed no confirmed gain",
-      "Delegate implementation to sub-agents and re-run the verification myself",
+      "Accept agent output only after I re-run and check it myself",
     ],
     tags: ["React", "PWA", "TypeScript", "Node.js", "MCP"],
     sections: [
       {
         heading: "Overview",
         paras: [
-          "This is a PWA that moved the 3 bots I used through Discord to a dedicated screen and added a Claude Code channel. The server holds the bot API keys and proxies requests, and only devices on the same Tailscale account can connect. I use it myself and fix what bothers me.",
+          "This is a PWA that moved the AI assistant bots I used through Discord to a dedicated screen and added a Claude Code channel. The server holds the bot API keys and proxies requests, and only devices on the same Tailscale account can connect. I use it myself and fix what bothers me.",
         ],
       },
       {
@@ -706,14 +706,14 @@ export const projects: Project[] = [
         paras: [
           "For the kanban board, I used a cleanup job that automatically moves cards linked to in-progress tasks in Notion. Cards are archived 3 days after they finish.",
           "For response speed, I changed it to mark the response complete as soon as the result event arrives. This saved about 0.9 seconds per message (1 measurement). I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
-          "I also set and use rules for working with agents. I delegate implementation to sub-agents, and accept only the results I have re-run and confirmed myself. When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
+          "I also set and use rules for working with agents. I accept agent results only after I have re-run and confirmed them myself. When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
           "Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved. I limited concurrent sub-agents to 2. I set that rule after 12 ran at once in late September and work could not be tracked.",
         ],
       },
       {
         heading: "Result",
         paras: [
-          "I use the PWA every day. The rules run as a set. I have not measured numerically how often the rules are followed or their effect.",
+          "In October I replaced the PWA with native apps; the server and the kanban cleanup job are still in use. The rules run as a set. I have not measured numerically how often the rules are followed or their effect.",
         ],
       },
       {
@@ -732,8 +732,9 @@ export const resume = {
   title: "Skills",
   pdfLabel: "Resume (PDF, Korean)",
   skills: [
-    { group: "Server", items: ["Java", "Spring Boot", "JPA", "QueryDSL", "Python"] },
-    { group: "Data", items: ["MySQL", "Redis"] },
+    { group: "Server", items: ["Java", "Spring Boot", "JPA", "QueryDSL", "Node.js", "Python"] },
+    { group: "Realtime", items: ["WebSocket (STOMP)", "FCM push"] },
+    { group: "Data", items: ["MySQL", "Redis", "SQLite"] },
     {
       group: "Infrastructure",
       items: ["AWS", "Docker", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
