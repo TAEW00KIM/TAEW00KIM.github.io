@@ -18,7 +18,7 @@ export const site = {
 export const hero = {
   tagline: [
     "운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
-    "대학 스포츠 응원 서비스 Hufscheer에서는 실시간 응원(WebSocket), 푸시 알림, 배포와 장애 대응을, 버즈앤비에서는 Vling의 프론트엔드를 맡고 있습니다. AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
+    "대학 스포츠 응원 서비스 Hufscheer에서는 실시간 응원(WebSocket), 배포와 장애 대응을, 버즈앤비에서는 Vling의 프론트엔드를 맡고 있습니다. AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
   ],
 };
 
@@ -41,7 +41,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "프론트엔드 개발 (현장실습)",
           org: "버즈앤비 / Vling",
-          period: "2026.07 ~ 현재",
+          period: "2026.07 ~ 2026.12",
           bullets: [
             "유튜브 채널과 영상 데이터 SaaS입니다. 7월부터 프론트엔드 개발을 맡아 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
             "영상 검색 개편에서는 팀원과 나눠 큐레이션 섹션 4개, 결과 그리드, 관련 채널 추천을 구현했습니다.",
@@ -53,7 +53,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "미국 시장 리드 발굴",
           org: "버즈앤비 / Vling",
-          period: "2026.09 ~ 현재",
+          period: "2026.09 ~ 2026.12",
           bullets: [
             "킥오프에서 정한 타깃을 받아 리드 추출과 세그먼트 분류, 영문 메일 시퀀스, 발송 도메인 워밍업까지 콜드메일 채널을 구축했습니다.",
             "계약 고객과 비슷한 미국 회사를 공개 웹 조사 에이전트로 찾아 등급을 매기고 담당자를 확인하는 과정을 자동화했습니다.",
@@ -154,6 +154,7 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 const hufscheerOverview = [
   "Hufscheer는 교내 축구와 농구 대회의 점수, 타임라인, 라인업을 실시간으로 보여 주는 대학 스포츠 라이브 응원 서비스입니다. 응원톡으로 함께 응원할 수도 있습니다.",
   "2023년부터 운영되던 서비스에 2026년 2월 백엔드로 합류했습니다. 팀은 보통 PM 1명, 디자이너 1명, 프론트엔드 2명, 백엔드 2명으로 꾸려지고, 구성은 학기마다 바뀝니다. 2026년 6월 GA 기준 서비스 전체 활성 사용자는 약 4,800명, 누적 조회는 13만이고, 대회 기간에는 하루 최대 약 1,500명이 씁니다.",
+  "여러 학교가 한 서비스를 함께 쓰게 되면서 팀과 선수에는 소속 학교가 없어, 어느 학교 매니저든 수정할 수 있는 구조였습니다. 기존 데이터에 영향이 없도록 팀과 선수에 nullable 학교 FK를 먼저 넣고(Flyway), 이어서 팀과 선수의 수정과 삭제 API 7개에 같은 학교 매니저만 허용하는 권한 검증을 붙였습니다(PR #527, #543). 팀과 선수를 만들 때는 매니저의 학교가 자동으로 붙습니다.",
 ];
 
 export const projects: Project[] = [
@@ -255,7 +256,7 @@ export const projects: Project[] = [
       {
         heading: "결과",
         paras: [
-          "계정 이전 뒤 모델을 다시 골랐습니다. 가려야 할 문장 10개와 남겨야 할 문장 12개를 운영 요청과 같은 형식으로 두 번씩 보내 9개 모델을 비교했습니다. 평가 비용은 0.17달러였습니다.",
+          "모델을 다시 골랐습니다. 가려야 할 문장 10개와 남겨야 할 문장 12개를 운영 요청과 같은 형식으로 두 번씩 보내 9개 모델을 비교했습니다. 평가 비용은 0.17달러였습니다.",
           "기존 모델은 정확도 88.6%였습니다. 선택한 gemma-4-31b는 100%에 응답 중앙값 0.5초, 1천 건당 0.18달러였습니다. 추론형 모델 몇 개는 다른 기능에서 빈 응답을 냈고, 통과율은 높은데 실제 출력이 깨진 모델도 있었습니다. 통과율만 보지 않고 출력을 직접 읽고 골랐습니다.",
           "교체한 모델이 배포된 앱에서 실제로 호출되는지는 아직 확인하지 못했습니다. 응답을 JSON 형식으로 강제하는 방법도 후속 과제로 남아 있습니다.",
         ],
@@ -267,61 +268,6 @@ export const projects: Project[] = [
       {
         heading: "기술 스택",
         paras: ["Java 17, Spring Boot 3, Caffeine, Gemini, OpenRouter"],
-      },
-    ],
-  },
-  {
-    id: "infra-rebuild",
-    title: "클라우드 계정 정지 뒤 인프라 재구축",
-    org: "Hufscheer, 백엔드", period: "2026.09 ~ 10",
-    summary:
-      "AWS 계정이 정지돼 서비스가 멈췄습니다. 새 계정에 인프라를 Terraform으로 다시 세워 운영을 재개했습니다.",
-    stat: { value: "약 1주", label: "계정 정지 탐지부터 운영 재개까지" },
-    key: "약 1주 만에 운영 재개",
-    problem: "팀 계정의 IAM 액세스 키가 유출돼 AWS가 계정을 정지했고, DNS, 서버, 모니터링이 한꺼번에 멈췄습니다. 유출을 알린 경고 메일은 운영 알림을 받지 않는 공용 메일함으로 가고 있었습니다.",
-    solution: "새 계정에 인프라를 Terraform으로 다시 세우면서 고정 액세스 키를 없애고 인스턴스 역할로 바꿨습니다. DNS는 계정 밖(Cloudflare)으로 옮겼습니다.",
-    result: "약 1주 만에 운영을 재개했습니다. 같은 일이 다시 생기지 않도록 고정 키 자체를 없애고 계정 밖 가동 점검, GuardDuty, 비용 이상 알림을 더했습니다. 옛 데이터는 아직 복구하지 못했습니다.",
-    bullets: [
-      "VPC, EC2, S3와 CloudFront, SSM을 Terraform으로 재구성하고 DNS는 Cloudflare로 이전",
-      "S3 접근은 앱 고정 키 대신 인스턴스 역할로 전환",
-      "계정 밖 가동 점검, Grafana 알림 17종, GuardDuty, 비용 이상 알림 추가",
-    ],
-    tags: ["Terraform", "AWS", "Cloudflare", "Grafana", "Docker"],
-    links: [hufscheerRepo],
-    sections: [
-      {
-        heading: "문제",
-        paras: [
-          "9월 26일 배포까지는 정상이었고, 9월 29일 배포가 서버 접속 시간 초과로 실패했습니다. 확인해 보니 AWS 계정이 정지돼 있었습니다. 팀 계정의 IAM 사용자 액세스 키가 유출됐고, 누군가 그 키로 8월 25일과 30일에 AI 모델 구독을 수락했습니다. AWS는 키 유출 경고와 정지 예고를 보냈지만, 그 메일은 운영 알림을 받지 않는 공용 메일함으로 가고 있었습니다.",
-          "DNS와 서버, 모니터링이 모두 같은 계정에 있어 한꺼번에 멈췄습니다.",
-          "모니터링도 같이 멈춰 알림이 오지 않았고, 옛 계정에는 들어갈 수 없어 데이터베이스를 꺼낼 방법도 없었습니다. 유출 경로는 확인하지 못했습니다.",
-        ],
-      },
-      {
-        heading: "해결",
-        paras: [
-          "DNS를 Cloudflare로 옮겼습니다. 계정을 잃어도 도메인과 메일은 살아 있어야 복구 연락을 받을 수 있기 때문입니다. 인프라 전체는 같은 일이 다시 생겨도 코드로 다시 세울 수 있도록 Terraform으로 새로 작성했습니다.",
-          "데이터베이스는 RDS 대신 서버 안 MySQL에 스왑 2GB를 더하는 쪽을 택했습니다. RDS는 인스턴스 요금만 월 약 18달러가 더 듭니다. 로컬에서 재 보니 MySQL 기본 409MB를 performance_schema 끄기와 버퍼 축소로 171MB까지 줄일 수 있었습니다(에뮬레이션 측정).",
-          "트래픽이 작아(초당 7~11 요청, CPU 1~7%) 개발 서버와 모니터링은 한 대로 합쳤습니다.",
-          "앱이 S3에 쓰던 고정 액세스 키는 없애고 EC2 인스턴스 역할로 바꿨습니다(IMDSv2 필수). 이미지에 함께 구워지던 비밀값은 SSM 파라미터로 옮겨 실행할 때 주입합니다.",
-          "계정 밖에서 도는 가동 점검(Cloudflare Worker), Grafana 알림 17종, GuardDuty, 비용 이상 알림을 추가했습니다. DB 덤프와 EBS 스냅샷은 매일 받도록 구성했습니다.",
-        ],
-      },
-      {
-        heading: "결과",
-        paras: [
-          "9월 29일 탐지 후 약 1주 만인 10월 6일 새 계정에서 운영 배포를 재개했습니다. 새 구성의 월 비용은 AWS 요금 API로 54~56달러로 추정했습니다(추정치).",
-          "원인은 두 가지였습니다. 오래 쓰던 고정 액세스 키가 있었고, 그 키가 유출됐다는 경고를 아무도 받지 못했습니다. 다시 세우면서 사람이 키를 관리하지 않아도 되도록 고정 키를 없앴고, 계정 안팎의 이상은 알림으로 받게 했습니다.",
-          "남은 위험은 옛 데이터가 아직 계정 복구를 기다리고 있다는 것입니다.",
-        ],
-      },
-      {
-        heading: "역할",
-        paras: ["백엔드 담당으로 새 계정에 인프라를 Terraform으로 다시 세우고 운영을 재개했습니다."],
-      },
-      {
-        heading: "기술 스택",
-        paras: ["Terraform, AWS(VPC, EC2, S3, CloudFront, SSM, GuardDuty), Cloudflare, Grafana, Docker, MySQL"],
       },
     ],
   },
@@ -651,27 +597,28 @@ export const projects: Project[] = [
   {
     id: "history-mcp",
     metric: "상위 10건 재현율 0.74 → 0.84",
-    title: "작업 기록 검색 서버 (MCP)",
-    org: "개인", period: "2026.06 ~ 현재",
+    title: "History 개인 작업 기록 파이프라인",
+    org: "개인", period: "2026.10 ~ 현재",
     summary:
-      "Claude Code가 30일 지난 대화를 지워, 지난 결정과 이유를 다시 찾을 수 없었습니다. 작업 기록을 모아 에이전트가 검색하는 서버를 만들었습니다.",
+      "Claude Code가 30일 지난 대화를 지워, 지난 결정과 이유를 다시 찾을 수 없었습니다. 대화와 커밋, 문서를 작업 세션마다 자동으로 색인하고 그날의 결정과 이유를 뽑는 파이프라인을 만들었습니다.",
     stat: { value: "0.74 → 0.84", label: "상위 10건 재현율, 질문 43개" },
     key: "재현율 0.74 → 0.84",
     problem: "Claude Code가 30일 지난 대화를 지워, 지난 결정과 이유를 다시 찾을 수 없었습니다.",
-    solution: "대화, 커밋, 문서를 맥북에서 작업 세션을 열고 닫을 때 자동으로 모아 낱말 검색과 의미 검색을 합친 검색 서버(MCP)를 만들었습니다.",
-    result: "질문 43개로 잰 상위 10건 재현율이 0.74 → 0.84로 올랐습니다.",
+    solution: "작업 세션이 열리고 끝날 때 대화와 커밋, 문서를 자동으로 모아 색인하고, 그날의 결정과 이유를 근거 기록과 함께 뽑아 낱말 검색과 의미 검색을 합친 검색 서버(MCP)로 제공합니다.",
+    result: "2026년 10월 26일 기준 약 35만 건을 색인했고, 쌓인 결정 기록 약 1,180건은 개인 비서 봇의 주간 결정 요약에 쓰입니다. 질문 43개로 잰 상위 10건 재현율은 0.74 → 0.84로 올랐습니다.",
     bullets: [
-      "골드셋 43개 질의로 2글자 색인과 의미 검색 도입 전후를 재 상위 10건 재현율 0.74 → 0.84",
-      "말 바꾼 질문에서 효과가 작던 원인(유사도 쏠림)을 찾아 0.42 → 0.75로 개선(조정과 평가에 같은 43개 질의 사용)",
-      "검색을 바꿀 때마다 같은 질의를 돌려 회귀를 확인(손으로 실행)",
+      "대화와 커밋, 문서 약 35만 건(2026년 10월 26일 기준)을 작업 세션마다 자동으로 색인하고 그날의 결정과 이유를 추출",
+      "쌓인 결정 기록 약 1,180건을 MCP 검색 서버로 제공해 개인 비서 봇의 주간 결정 요약에 사용",
+      "질문 43개 평가 기준으로 2글자 색인과 의미 검색 도입 전후를 재 상위 10건 재현율 0.74 → 0.84",
     ],
-    tags: ["TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
+    tags: ["Python", "TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
     sections: [
       {
         heading: "개요",
         paras: [
-          "Claude Code, Codex, 봇과 나눈 대화와 커밋, 문서를 한곳에 모아 에이전트가 검색해 쓰게 하는 서버입니다. 집 서버에서 돌고 MCP 도구로 제공됩니다.",
+          "작업 세션이 열리고 끝날 때 Claude Code, Codex, 봇과 나눈 대화와 커밋, 문서를 자동으로 모아 색인하고, 그날의 결정과 이유를 근거 기록과 함께 뽑는 개인 파이프라인입니다. 2026년 10월 26일 기준 약 35만 건이 쌓였고, 그중 결정 기록은 약 1,180건입니다.",
           "Claude Code가 30일 지난 대화를 지운다는 것을 알게 된 것이 시작이었습니다. 지난 결정과 이유를 에이전트가 짐작하지 않고 찾아 쓰게 하는 것이 목표입니다.",
+          "검색은 집 서버에서 MCP 도구로 제공하고, 개인 비서 봇이 이 결정 기록으로 매주 결정 요약을 만듭니다.",
         ],
       },
       {
@@ -685,7 +632,7 @@ export const projects: Project[] = [
         heading: "해결",
         paras: [
           "조사가 붙은 짧은 낱말도 찾도록 2글자 색인을 더하고, 낱말 검색과 의미 검색(e5-small)의 두 순위를 RRF로 합쳤습니다.",
-          "도입 전에 43개 질문의 정답을 실제 DB에서 규칙으로 정해 두고, 상위 10건 안에 정답이 드는 비율을 쟀습니다. 기준선을 저장해 검색을 바꿀 때마다 같은 벤치를 돌립니다.",
+          "평가는 질문 43개와, 실제 DB에서 규칙으로 정한 정답으로 된 평가 기준으로 했습니다. 상위 10건 안에 정답이 드는 비율을 재고, 기준선을 저장해 검색을 바꿀 때마다 같은 벤치를 돌립니다.",
           "유사도 쏠림은 코사인 상위 100개를 모은 뒤 문서류에 가산점을 더해 다시 줄 세우는 것으로 풀었습니다. 가중치 조정, 짧은 조각 제외, 더 큰 모델로의 교체도 시험했습니다. 하지만 효과가 작거나 없어 넣지 않았습니다.",
         ],
       },
@@ -703,7 +650,7 @@ export const projects: Project[] = [
       },
       {
         heading: "기술 스택",
-        paras: ["TypeScript, Node.js, SQLite FTS5, ONNX(multilingual-e5-small), MCP"],
+        paras: ["Python, TypeScript, Node.js, SQLite FTS5, ONNX(multilingual-e5-small), MCP"],
       },
     ],
   },
@@ -768,13 +715,13 @@ export const resume = {
   pdfLabel: "이력서 PDF",
   skills: [
     { group: "서버", items: ["Java", "Spring Boot", "JPA", "QueryDSL", "Node.js", "Python"] },
-    { group: "실시간", items: ["WebSocket(STOMP)", "FCM 푸시"] },
-    { group: "데이터", items: ["MySQL", "Redis", "SQLite"] },
+    { group: "실시간", items: ["WebSocket(STOMP)"] },
+    { group: "데이터", items: ["MySQL", "Flyway", "SQLite"] },
     {
       group: "인프라",
-      items: ["AWS", "Docker", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
+      items: ["AWS", "Docker", "nginx", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
     },
-    { group: "웹", items: ["TypeScript", "React", "Next.js"] },
+    { group: "웹", items: ["TypeScript", "React", "Next.js", "GraphQL"] },
     { group: "AI", items: ["Claude Code", "Codex", "MCP", "임베딩 검색(e5, RRF)", "LLM 출력 검증"] },
   ],
 };
@@ -783,7 +730,7 @@ export const resume = {
 export type ProjectGroup = { name: string; note?: string; about?: string[]; ids: string[]; showOrg?: boolean };
 
 export const projectGroups: ProjectGroup[] = [
-  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
+  { name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "ci-deploy"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
   { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
   { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },

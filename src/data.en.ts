@@ -18,7 +18,7 @@ export const site = {
 export const hero = {
   tagline: [
     "I like finding and fixing the problems that come up when running a service.",
-    "I handle live cheering (WebSocket), push notifications, deployment and incident response for Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
+    "I handle live cheering (WebSocket), deployment and incident response for Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
   ],
 };
 
@@ -31,7 +31,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "Frontend Developer (internship for academic credit)",
           org: "Buzz & Beyond / Vling",
-          period: "2026.07 ~ present",
+          period: "2026.07 ~ 2026.12",
           bullets: [
             "Vling is a YouTube channel and video data SaaS. Since July I have worked on the frontend and shipped the video search and channel search redesigns with teammates.",
             "In the video search redesign, I split the work with a teammate and built 4 curation sections, the results grid, and related channel recommendations.",
@@ -43,7 +43,7 @@ export const experience: { tabs: ExpTab[] } = {
         {
           title: "US Market Lead Generation",
           org: "Buzz & Beyond / Vling",
-          period: "2026.09 ~ present",
+          period: "2026.09 ~ 2026.12",
           bullets: [
             "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
             "I built a read-only dashboard for sending status and an unsubscribe ledger.",
@@ -119,6 +119,7 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
   "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. As of June 2026 (GA), the whole service has about 4,800 active users and 130,000 total views, with up to about 1,500 users a day during tournaments.",
+  "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them. I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway), then added a permission check to 7 update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543). When a team or player is created, the manager's school is attached automatically.",
 ];
 
 export const projects: Project[] = [
@@ -220,7 +221,7 @@ export const projects: Project[] = [
       {
         heading: "Result",
         paras: [
-          "After the account migration, I chose the model again. I sent 10 sentences to be masked and 12 sentences to be left alone, twice each, in the same format as production requests, and compared 9 models. The evaluation cost $0.17.",
+          "I chose the model again. I sent 10 sentences to be masked and 12 sentences to be left alone, twice each, in the same format as production requests, and compared 9 models. The evaluation cost $0.17.",
           "The previous model had 88.6% accuracy. The one I chose, gemma-4-31b, had 100% with a median response of 0.5 seconds and $0.18 per 1,000 requests. Some reasoning models returned empty responses in other features, and some had a high pass rate but broken actual output. So I chose by reading the outputs directly instead of looking only at the pass rate.",
           "I have not yet confirmed that the replaced model is actually called in the deployed app. Forcing the response into JSON format also remains as follow-up work.",
         ],
@@ -232,61 +233,6 @@ export const projects: Project[] = [
       {
         heading: "Tech stack",
         paras: ["Java 17, Spring Boot 3, Caffeine, Gemini, OpenRouter"],
-      },
-    ],
-  },
-  {
-    id: "infra-rebuild",
-    title: "Infrastructure Rebuild After a Cloud Account Suspension",
-    org: "Hufscheer, backend", period: "2026.09 ~ 10",
-    summary:
-      "The AWS account was suspended and the service stopped. I rebuilt the infrastructure in a new account with Terraform and resumed operations.",
-    stat: { value: "About 1 week", label: "from detecting the suspension to service back" },
-    key: "Back in about 1 week",
-    problem: "An IAM access key of the team account leaked, AWS suspended the account, and DNS, servers and monitoring all went down at once. The warning emails about the leak went to a shared mailbox that was not used for operational alerts.",
-    solution: "Rebuilt the infrastructure in a new account with Terraform, removed the fixed access keys in favor of an instance role, and moved DNS outside the account (Cloudflare).",
-    result: "Service resumed in about 1 week. To keep this from happening again, I removed fixed keys altogether and added an uptime check outside the account, GuardDuty and a cost anomaly alert. The old data is not recovered yet.",
-    bullets: [
-      "Rebuilt VPC, EC2, S3 with CloudFront, and SSM with Terraform, and moved DNS to Cloudflare",
-      "Switched S3 access from a fixed app key to an instance role",
-      "Added an uptime check outside the account, 17 Grafana alerts, GuardDuty, and a cost anomaly alert",
-    ],
-    tags: ["Terraform", "AWS", "Cloudflare", "Grafana", "Docker"],
-    links: [hufscheerRepo],
-    sections: [
-      {
-        heading: "Problem",
-        paras: [
-          "Deploys were normal through September 26; on September 29, 2026, a deployment failed with a server connection timeout. I found that the AWS account had been suspended. An IAM user access key of the team account had leaked, and someone used it to accept AI model subscriptions on August 25 and 30. AWS sent a key-leak warning and a suspension notice, but they went to a shared mailbox that was not used for operational alerts.",
-          "DNS, servers, and monitoring were all in the same account, so everything stopped at once.",
-          "Monitoring stopped too, so no alerts came, and I could not log in to the old account, so there was no way to take out the database. I could not confirm how the key leaked.",
-        ],
-      },
-      {
-        heading: "Solution",
-        paras: [
-          "I moved DNS to Cloudflare. Even if an account is lost, the domain and email must stay alive so that recovery notices can be received. I wrote the whole infrastructure again in Terraform, so that it can be rebuilt from code if the same thing happens again.",
-          "For the database, I chose to add 2GB of swap to MySQL on the server instead of using RDS. RDS would cost about $18 more per month for the instance alone. Measuring locally, I could reduce MySQL's default 409MB to 171MB by turning off performance_schema and shrinking buffers (measured with emulation).",
-          "Traffic is small (7 to 11 requests per second, CPU 1 to 7%), so I combined the dev server and monitoring on one machine.",
-          "I removed the fixed access key the app used for S3 and switched to an EC2 instance role (IMDSv2 required). Secrets that used to be baked into the image moved to SSM parameters and are injected at runtime.",
-          "I added an uptime check that runs outside the account (Cloudflare Worker), 17 Grafana alerts, GuardDuty, and a cost anomaly alert. I also set up daily DB dumps and EBS snapshots.",
-        ],
-      },
-      {
-        heading: "Result",
-        paras: [
-          "On October 6, about 1 week after detection on September 29, production deployment resumed in the new account. I estimated the monthly cost of the new setup at $54 to $56 using the AWS pricing API (an estimate).",
-          "There were two causes. A long-lived fixed access key existed, and nobody received the warning that it had leaked. In the rebuild I removed fixed keys so that nobody has to manage them, and made anomalies inside and outside the account arrive as alerts.",
-          "The remaining risk is that the old data is still waiting for the account to be recovered.",
-        ],
-      },
-      {
-        heading: "Role",
-        paras: ["As the backend developer, I rebuilt the infrastructure in the new account with Terraform and resumed operations."],
-      },
-      {
-        heading: "Tech stack",
-        paras: ["Terraform, AWS (VPC, EC2, S3, CloudFront, SSM, GuardDuty), Cloudflare, Grafana, Docker, MySQL"],
       },
     ],
   },
@@ -616,27 +562,28 @@ export const projects: Project[] = [
   {
     id: "history-mcp",
     metric: "Top 10 recall 0.74 → 0.84",
-    title: "Work History Search Server (MCP)",
-    org: "Personal", period: "2026.06 ~ present",
+    title: "History: Personal Work Record Pipeline",
+    org: "Personal", period: "2026.10 ~ present",
     summary:
-      "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a server that collects work records and lets agents search them.",
+      "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a pipeline that indexes conversations, commits and documents automatically at every work session and extracts each day's decisions and their reasons.",
     stat: { value: "0.74 → 0.84", label: "top-10 recall on 43 questions" },
     key: "Recall 0.74 → 0.84",
     problem: "Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
-    solution: "Built a search server (MCP) that collects conversations, commits and documents automatically when I start or end a work session on my MacBook and combines keyword and semantic search.",
-    result: "Top-10 recall on 43 questions went from 0.74 to 0.84.",
+    solution: "Conversations, commits and documents are collected and indexed automatically when a work session starts or ends, and each day's decisions and reasons are extracted with their source records and served through a search server (MCP) that combines keyword and semantic search.",
+    result: "About 350,000 records indexed as of October 26, 2026, and the roughly 1,180 decision records feed my assistant bot's weekly decision summary. Top-10 recall on 43 questions went from 0.74 to 0.84.",
     bullets: [
-      "Measured before and after adding a 2-character index and semantic search on a gold set of 43 queries: top 10 recall 0.74 → 0.84",
-      "Found the cause of the small effect on reworded questions (similarity clustering) and improved it 0.42 → 0.75 (tuned and evaluated on the same 43 queries)",
-      "Rerun the same queries whenever search changes to catch regressions (run by hand)",
+      "Indexes about 350,000 conversations, commits and documents (as of October 26, 2026) automatically at every work session and extracts each day's decisions and reasons",
+      "Serves about 1,180 decision records through an MCP search server, used by my assistant bot for a weekly decision summary",
+      "Measured adding a 2-character index and semantic search against a 43-question evaluation set: top 10 recall 0.74 → 0.84",
     ],
-    tags: ["TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
+    tags: ["Python", "TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
     sections: [
       {
         heading: "Overview",
         paras: [
-          "This server collects conversations with Claude Code, Codex, and bots, plus commits and documents in one place, so that agents can search and use them. It runs on a home server and is provided as MCP tools.",
+          "A personal pipeline that collects conversations with Claude Code, Codex, and bots, plus commits and documents, automatically when a work session starts or ends, indexes them, and extracts each day's decisions and reasons with their source records. As of October 26, 2026 it holds about 350,000 records, including about 1,180 decision records.",
           "It started when I learned that Claude Code deletes conversations older than 30 days. The goal is for agents to find past decisions and their reasons instead of guessing.",
+          "Search runs on a home server as MCP tools, and my assistant bot builds a weekly decision summary from the decision records.",
         ],
       },
       {
@@ -650,7 +597,7 @@ export const projects: Project[] = [
         heading: "Solution",
         paras: [
           "I added a 2-character index so short words with particles attached are found, and merged the two rankings, keyword search and semantic search (e5-small), with RRF.",
-          "Before adding it, I fixed the correct answers for 43 questions by rules from the real DB, and measured the rate at which the answer is in the top 10. I saved the baseline and run the same benchmark every time I change search.",
+          "Evaluation uses 43 questions with answers fixed by rules from the real DB. I measured the rate at which the answer is in the top 10, saved the baseline, and run the same benchmark every time I change search.",
           "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
         ],
       },
@@ -668,7 +615,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Tech stack",
-        paras: ["TypeScript, Node.js, SQLite FTS5, ONNX (multilingual-e5-small), MCP"],
+        paras: ["Python, TypeScript, Node.js, SQLite FTS5, ONNX (multilingual-e5-small), MCP"],
       },
     ],
   },
@@ -733,19 +680,19 @@ export const resume = {
   pdfLabel: "Resume (PDF, Korean)",
   skills: [
     { group: "Server", items: ["Java", "Spring Boot", "JPA", "QueryDSL", "Node.js", "Python"] },
-    { group: "Realtime", items: ["WebSocket (STOMP)", "FCM push"] },
-    { group: "Data", items: ["MySQL", "Redis", "SQLite"] },
+    { group: "Realtime", items: ["WebSocket (STOMP)"] },
+    { group: "Data", items: ["MySQL", "Flyway", "SQLite"] },
     {
       group: "Infrastructure",
-      items: ["AWS", "Docker", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
+      items: ["AWS", "Docker", "nginx", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
     },
-    { group: "Web", items: ["TypeScript", "React", "Next.js"] },
+    { group: "Web", items: ["TypeScript", "React", "Next.js", "GraphQL"] },
     { group: "AI", items: ["Claude Code", "Codex", "MCP", "Embedding search (e5, RRF)", "LLM output validation"] },
   ],
 };
 
 export const projectGroups: ProjectGroup[] = [
-  { name: "Hufscheer", note: "live cheering service for university sports, backend", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "infra-rebuild", "ci-deploy"] },
+  { name: "Hufscheer", note: "live cheering service for university sports, backend", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "ci-deploy"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
   { name: "AI Work Environment", note: "personal", ids: ["history-mcp", "agent-env"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
