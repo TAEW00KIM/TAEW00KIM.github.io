@@ -110,27 +110,41 @@ function Item({ p, n, showOrg, wide, open, onToggle, order }: ItemProps) {
 function Detail({ p, open, order }: { p: Project; open: boolean; order: number }) {
   return (
     <li id={`proj-${p.id}`} className="detail" hidden={!open} style={{ "--o": order } as CSSProperties}>
+      {/* 넓은 화면: 왼쪽은 글, 오른쪽은 그 프로젝트의 화면, 수치, 기술, 링크 */}
       <div className="detail-in">
-        <p className="stack">{p.tags.join(", ")}</p>
-        {p.sections.map((s) => (
-          <section key={s.heading}>
-            <h4>{s.heading}</h4>
-            {s.paras.map((t) => (
-              <p key={t.slice(0, 24)}>{t}</p>
-            ))}
-          </section>
-        ))}
-        {p.images && !p.visual && <Figures images={p.images} />}
-        {p.links && (
-          <p className="plinks">
-            {p.links.map((l, i) => (
-              <span key={l.href}>
-                {i > 0 && " / "}
-                <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
-              </span>
-            ))}
-          </p>
-        )}
+        <div className="detail-text">
+          {p.sections.map((s) => (
+            <section key={s.heading}>
+              <h4>{s.heading}</h4>
+              {s.paras.map((t) => (
+                <p key={t.slice(0, 24)}>{t}</p>
+              ))}
+            </section>
+          ))}
+        </div>
+        <div className="detail-side">
+          {p.images && !p.visual ? (
+            <Figures images={p.images} />
+          ) : (
+            !p.visual && !p.bars && p.stat && (
+              <p className="pstat">
+                <span className="pstat-value">{p.stat.value}</span>
+                <span className="pstat-label">{p.stat.label}</span>
+              </p>
+            )
+          )}
+          <p className="stack">{p.tags.join(", ")}</p>
+          {p.links && (
+            <p className="plinks">
+              {p.links.map((l, i) => (
+                <span key={l.href}>
+                  {i > 0 && " / "}
+                  <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
       </div>
     </li>
   );
