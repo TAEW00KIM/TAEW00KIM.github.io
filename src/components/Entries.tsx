@@ -2,7 +2,7 @@ import type { ExpItem } from "../data";
 
 export default function Entries({ id, title, items }: { id: string; title: string; items: ExpItem[] }) {
   return (
-    <section className="section" aria-labelledby={`${id}-h`}>
+    <section className="section" id={id} aria-labelledby={`${id}-h`}>
       <h2 id={`${id}-h`}>{title}</h2>
       <ul className="rows">
         {items.map((it) => (

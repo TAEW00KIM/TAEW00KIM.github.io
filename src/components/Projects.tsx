@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Project } from "../data";
 import { useData } from "../i18n";
 
@@ -40,7 +40,7 @@ function Bars({ bars }: { bars: NonNullable<Project["bars"]> }) {
   );
 }
 
-function Item({ p, n, showOrg }: { p: Project; n: number; showOrg: boolean }) {
+function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean; wide: boolean }) {
   const { ui } = useData();
   const [open, setOpen] = useState(false);
   const panel = `proj-${p.id}`;
@@ -50,14 +50,12 @@ function Item({ p, n, showOrg }: { p: Project; n: number; showOrg: boolean }) {
     [ui.labelResult, p.result],
   ].filter((l): l is [string, string] => !!l[1]);
   return (
-    <li className={open ? "project is-open" : "project"} id={`p-${p.id}`}>
-      <div className="row-head">
-        <h3 className="ptitle">
-          <span className="pnum mono">{num(n)}</span>
-          {p.title}
-        </h3>
-        <span className="date mono">{p.period}</span>
+    <li className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`}>
+      <div className="pmeta mono">
+        <span>{num(n)}</span>
+        <span>{p.period}</span>
       </div>
+      <h3 className="ptitle">{p.title}</h3>
       {showOrg && <p className="org">{p.org}</p>}
       {p.visual && p.images && <div className="pvisual"><Figures images={p.images} /></div>}
       {p.bars && <div className="pvisual"><Bars bars={p.bars} /></div>}
@@ -116,72 +114,34 @@ function Item({ p, n, showOrg }: { p: Project; n: number; showOrg: boolean }) {
 }
 
 // 화면에 나오는 순서대로 01, 02 ... 번호를 매긴다
-function useOrder() {
+export function useOrder() {
   const { projects, projectGroups: groups } = useData();
   const byId = new Map(projects.map((p) => [p.id, p]));
   const order = groups.flatMap((g) => g.ids.filter((id) => byId.has(id)));
   return { byId, order, groups, numOf: (id: string) => order.indexOf(id) + 1 };
 }
 
-// 넓은 화면에서 지금 보고 있는 프로젝트를 왼쪽 목차에 표시한다
-function useCurrent(ids: string[], enabled: boolean) {
-  const [current, setCurrent] = useState<string | null>(null);
-  useEffect(() => {
-    if (!enabled) return;
-    const els = ids.map((id) => document.getElementById(`p-${id}`)).filter((e): e is HTMLElement => !!e);
-    const io = new IntersectionObserver(
-      (entries) => {
-        const seen = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (seen[0]) setCurrent(seen[0].target.id.slice(2));
-      },
-      { rootMargin: "-30% 0px -60% 0px" },
-    );
-    els.forEach((e) => io.observe(e));
-    return () => io.disconnect();
-  }, [ids.join(","), enabled]);
-  return current;
-}
-
-export function Glance({ side = false }: { side?: boolean }) {
-  const { ui } = useData();
-  const { byId, order, groups, numOf } = useOrder();
-  const current = useCurrent(order, side);
-  return (
-    <nav className={side ? "glance glance-side" : "glance glance-inline"} aria-label={ui.glanceTitle}>
-      <p className="glance-title">{ui.glanceTitle}</p>
-      {groups.map((g) => {
-        const ids = g.ids.filter((id) => byId.has(id));
-        return (
-          <div className="glance-group" key={g.name}>
-            <p className="glance-gname">{g.name}</p>
-            <ol>
-              {ids.map((id) => {
-                const p = byId.get(id)!;
-                return (
-                  <li key={id} className={current === id ? "is-current" : undefined}>
-                    <a href={`#p-${id}`} aria-current={current === id ? "true" : undefined}>
-                      <span className="pnum mono">{num(numOf(id))}</span>
-                      <span className="gtitle">{p.title}</span>
-                      <span className="gkey">{p.key ?? p.metric ?? ""}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        );
-      })}
-    </nav>
-  );
+// 2열 격자에서 시각 자료가 있는 항목은 두 칸을 쓰고, 혼자 남는 마지막 칸도 두 칸으로 채운다
+function wides(ps: Project[]): [Project, boolean][] {
+  let col = 0;
+  return ps.map((p, i) => {
+    let wide = !!(p.visual || p.bars);
+    if (!wide && col === 0 && i === ps.length - 1) wide = true;
+    if (wide) {
+      col = 0;
+    } else {
+      col = (col + 1) % 2;
+    }
+    return [p, wide];
+  });
 }
 
 export default function Projects() {
   const { ui } = useData();
   const { byId, groups, numOf } = useOrder();
   return (
-    <section className="section section-projects" aria-labelledby="proj-h">
+    <section className="section" id="projects" aria-labelledby="proj-h">
       <h2 id="proj-h">{ui.projectsTitle}</h2>
-      <Glance />
       {groups.map((g) => (
         <div className="pgroup" key={g.name}>
           <p className="gname">
@@ -197,10 +157,9 @@ export default function Projects() {
             </div>
           )}
           <ul className="projects">
-            {g.ids.map((id) => {
-              const p = byId.get(id);
-              return p ? <Item key={id} p={p} n={numOf(id)} showOrg={!!g.showOrg} /> : null;
-            })}
+            {wides(g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)!)).map(([p, wide]) => (
+              <Item key={p.id} p={p} n={numOf(p.id)} showOrg={!!g.showOrg} wide={wide} />
+            ))}
           </ul>
         </div>
       ))}

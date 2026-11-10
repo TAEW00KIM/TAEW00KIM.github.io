@@ -1,6 +1,8 @@
-import Header from "./components/Header";
+import TopBar from "./components/TopBar";
+import Hero from "./components/Hero";
 import Entries from "./components/Entries";
-import Projects, { Glance } from "./components/Projects";
+import Projects from "./components/Projects";
+import { Numbers } from "./components/Highlights";
 import Skills from "./components/Skills";
 import { useData } from "./i18n";
 
@@ -12,26 +14,25 @@ export default function App() {
   const edu = tab("edu");
   const award = tab("award");
   return (
-    <div className="layout">
-      <aside className="side">
-        <Header />
-        <Glance side />
-      </aside>
-      <div className="content">
-      <main>
-        <Projects />
-        {work && <Entries id="work" title={work.label} items={work.items} />}
-        {activity && <Entries id="activity" title={activity.label} items={activity.items} />}
-        {edu && <Entries id="edu" title={edu.label} items={edu.items} />}
-        {award && <Entries id="award" title={award.label} items={award.items} />}
-        <Skills />
-      </main>
-      <footer className="footer">
-        <p>
-          {site.footer} / <a href={site.resumePdf} download={ui.resumeFilename}>{resume.pdfLabel}</a>
-        </p>
-      </footer>
+    <>
+      <TopBar />
+      <div className="wrap page">
+        <Hero />
+        <Numbers />
+        <main>
+          <Projects />
+          {work && <Entries id="work" title={work.label} items={work.items} />}
+          {activity && <Entries id="activity" title={activity.label} items={activity.items} />}
+          {edu && <Entries id="edu" title={edu.label} items={edu.items} />}
+          {award && <Entries id="award" title={award.label} items={award.items} />}
+          <Skills />
+        </main>
+        <footer className="footer">
+          <p>
+            {site.footer} / <a href={site.resumePdf} download={ui.resumeFilename}>{resume.pdfLabel}</a>
+          </p>
+        </footer>
       </div>
-    </div>
+    </>
   );
 }
