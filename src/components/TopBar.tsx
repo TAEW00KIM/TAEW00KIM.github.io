@@ -16,8 +16,15 @@ export default function TopBar() {
   useEffect(() => {
     const els = links.map(([id]) => document.getElementById(id)).filter((e): e is HTMLElement => !!e);
     let raf = 0;
+    let pinned: { id: string; y: number | null } | null = null;
+    let settle = 0;
     const update = () => {
       raf = 0;
+      if (pinned && (pinned.y === null || Math.abs(window.scrollY - pinned.y) < 40)) {
+        setActive(pinned.id);
+        return;
+      }
+      pinned = null;
       const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       let cur: string | null = null;
       for (const e of els) if (e.getBoundingClientRect().top <= 120) cur = e.id;
@@ -25,15 +32,30 @@ export default function TopBar() {
       setActive(cur);
     };
     const onScroll = () => {
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        if (pinned && pinned.y === null) pinned.y = window.scrollY;
+      }, 150);
       if (!raf) raf = requestAnimationFrame(update);
     };
+    // A jump to a section near the page end cannot scroll it to the top, so remember the clicked target.
+    const onHash = () => {
+      const id = location.hash.slice(1);
+      if (!els.some((e) => e.id === id)) return;
+      // y stays null while smooth scrolling runs; it is fixed once scrolling stops.
+      pinned = { id, y: null };
+      setActive(id);
+    };
     update();
+    window.addEventListener("hashchange", onHash);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      window.removeEventListener("hashchange", onHash);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
+      window.clearTimeout(settle);
     };
   }, []);
   return (
