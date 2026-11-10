@@ -47,6 +47,7 @@ export const experience: { tabs: ExpTab[] } = {
             "유튜브 채널과 영상 데이터 SaaS입니다. 7월부터 프론트엔드 개발을 맡아 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
+          related: ["vling-search", "vling-perf"],
         },
         {
           title: "미국 시장 리드 발굴",

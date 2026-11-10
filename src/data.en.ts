@@ -36,6 +36,7 @@ export const experience: { tabs: ExpTab[] } = {
             "Vling is a YouTube channel and video data SaaS. Since July I have worked on the frontend and shipped the video search and channel search redesigns with teammates.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
+          related: ["vling-search", "vling-perf"],
         },
         {
           title: "US Market Lead Generation",
