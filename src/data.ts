@@ -132,7 +132,7 @@ export type Project = {
   org: string;
   period: string;
   metric?: string;
-  images?: { src: string; width: number; height: number; alt: string; caption: string }[];
+  images?: { src: string; width: number; height: number; alt: string; caption: string; live?: string }[];
   summary: string;
   // 접힌 상태에서 보이는 세 줄과 한눈에 보기용 핵심 결과
   // 백엔드는 큰 수치(stat), 프론트엔드는 화면(visual: 이미지를 접힌 상태에서 보여 줌)이나 전후 막대(bars)
@@ -471,8 +471,8 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-video-search.webp", width: 1110, height: 674, alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
-      { src: "/vling-channel-search.webp", width: 1110, height: 607, alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 채널 성격 필터 11종을 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
+      { src: "/vling-video-search.webp", width: 1110, height: 674, live: "https://vling.net/algorithm-score?na=KR", alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
+      { src: "/vling-channel-search.webp", width: 1110, height: 607, live: "https://vling.net/search?na=KR&sort=trendsScorePercentile", alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 채널 성격 필터 11종을 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
     ],
     title: "Vling 영상 검색과 채널 검색 개편",
     org: "버즈앤비 현장실습", period: "2026.07 ~ 09",
@@ -742,6 +742,7 @@ export const ui = {
   labelProblem: "문제",
   labelSolution: "해결",
   labelResult: "결과",
+  liveLink: "실제 화면 보기",
   more: "자세히 보기",
   less: "접기",
   projectsTitle: "프로젝트",

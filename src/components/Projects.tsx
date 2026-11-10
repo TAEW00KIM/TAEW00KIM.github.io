@@ -7,6 +7,7 @@ const range = (ns: number[]) => (ns.length > 1 ? `${num(ns[0])}~${num(ns[ns.leng
 
 // zoom: wide screenshots link to the full-size file so small screens can open them at full size
 function Figures({ images, zoom = false }: { images: NonNullable<Project["images"]>; zoom?: boolean }) {
+  const { ui } = useData();
   return (
     <div className="figures">
       {images.map((im) => (
@@ -18,7 +19,18 @@ function Figures({ images, zoom = false }: { images: NonNullable<Project["images
           ) : (
             <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
           )}
-          <figcaption>{im.caption}</figcaption>
+          <figcaption>
+            {im.caption}
+            {im.live && (
+              <>
+                {" "}
+                <a className="figlive" href={im.live} target="_blank" rel="noopener noreferrer">
+                  {ui.liveLink}
+                  <span aria-hidden="true"> ↗</span>
+                </a>
+              </>
+            )}
+          </figcaption>
         </figure>
       ))}
     </div>
