@@ -1,4 +1,5 @@
 import { useData } from "../i18n";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const { hero, resume, site, ui } = useData();
@@ -15,6 +16,7 @@ export default function Header() {
         <a href={`mailto:${site.email}`}>{site.email}</a>
         <a href={site.resumePdf} download={ui.resumeFilename}>{resume.pdfLabel}</a>
         <a href={ui.langLinkHref} hrefLang={ui.lang === "en" ? "ko" : "en"}>{ui.langLinkLabel}</a>
+        <ThemeToggle />
       </p>
     </header>
   );

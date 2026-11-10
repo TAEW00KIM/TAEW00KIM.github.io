@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="소프트웨어 개발자 김태우의 포트폴리오. 운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다." />
-    <meta name="theme-color" content="#fbfaf7" />
+    <meta name="theme-color" content="#fcfcfb" />
+    <script>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || t === "light") {
+          document.documentElement.setAttribute("data-theme", t);
+          if (t === "dark") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#111111");
+        }
+      } catch (e) {}
+    </script>
     <title>Kim Taewoo | Software Engineer</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />

@@ -745,6 +745,8 @@ export const ui = {
   more: "자세히 보기",
   less: "접기",
   projectsTitle: "프로젝트",
+  themeToLight: "라이트 모드",
+  themeToDark: "다크 모드",
   langLinkLabel: "English",
   langLinkHref: "/en/",
   resumeFilename: "김태우_이력서.pdf",

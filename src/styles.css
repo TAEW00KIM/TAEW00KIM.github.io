@@ -11,14 +11,24 @@
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #111111;
     --ink: #ededed;
     --body: #c7c7c7;
     --sub: #8f8f8f;
     --faint: #666666;
     --rule: #262626;
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --paper: #111111;
+  --ink: #ededed;
+  --body: #c7c7c7;
+  --sub: #8f8f8f;
+  --faint: #666666;
+  --rule: #262626;
+  color-scheme: dark;
 }
 html[lang="en"] { --ind: 76px; }
 * { box-sizing: border-box; }
@@ -45,16 +55,23 @@ ul, ol { list-style: none; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 
 /* header */
-.masthead h1 { font-size: 15px; font-weight: 600; }
-.role { margin-left: 10px; font-weight: 400; color: var(--sub); }
-.school { margin-top: 4px; font-size: 13.5px; color: var(--sub); }
-.intro { margin-top: 16px; color: var(--body); max-width: 34em; }
+.masthead h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+.role { display: block; margin: 6px 0 0; font-size: 15px; font-weight: 400; letter-spacing: -0.005em; color: var(--sub); }
+.school { margin-top: 12px; font-size: 13.5px; color: var(--sub); }
+.intro { margin-top: 16px; font-size: 16px; line-height: 1.75; color: var(--body); max-width: 34em; }
 .links { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 14px; color: var(--sub); }
 .links a:hover { color: var(--ink); }
+.theme-toggle {
+  all: unset; cursor: pointer; color: var(--sub); text-decoration: underline; text-decoration-color: var(--faint);
+  text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.theme-toggle:hover { color: var(--ink); text-decoration-color: var(--ink); }
+.theme-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+.theme-toggle[data-pending] { visibility: hidden; }
 
 /* sections */
-.section { margin-top: 64px; }
-.section h2 { font-size: 13px; font-weight: 500; color: var(--sub); margin-bottom: 12px; }
+.section { margin-top: 96px; }
+.section h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.3; color: var(--ink); margin-bottom: 16px; }
 
 .rows > li, .project { border-top: 1px solid var(--rule); }
 .rows > li:last-child, .project:last-child { border-bottom: 1px solid var(--rule); }
@@ -64,6 +81,8 @@ ul, ol { list-style: none; }
 .org { display: block; font-size: 14px; color: var(--sub); }
 
 .entry { padding: 16px 0; }
+.entry-grid { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 0 24px; }
+.entry-grid > .date { white-space: normal; padding-top: 3px; line-height: 1.5; }
 .entry h3 { font-size: 15px; font-weight: 500; }
 .dash { margin-top: 8px; font-size: 14px; color: var(--body); }
 .dash li { position: relative; padding-left: 16px; margin-top: 3px; }
@@ -149,9 +168,11 @@ figcaption { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height:
 
 @media (max-width: 640px) {
   #root { padding: 64px 20px 56px; }
-  .masthead h1 .role { display: block; margin: 2px 0 0; }
+  .masthead h1 { font-size: 28px; }
   .row-head { flex-direction: column; gap: 2px; }
-  .section { margin-top: 64px; }
+  .section { margin-top: 72px; }
+  .entry-grid { grid-template-columns: 1fr; gap: 2px; }
+  .entry-grid > .date { padding-top: 0; }
   .skills > div { grid-template-columns: 1fr; }
   .glance a { grid-template-columns: 24px 1fr; }
   .gkey { grid-column: 2; text-align: left; margin-top: -4px; }
@@ -162,6 +183,14 @@ figcaption { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height:
   .psr > div { grid-template-columns: 1fr; gap: 0; }
   .psr dt { padding-top: 6px; }
   figure:has(img[height="900"]) { width: calc(50% - 8px); }
+}
+
+@media (min-width: 641px) and (max-width: 1099px) {
+  .glance-inline ol { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; border-top: 0; }
+  .glance-inline li { border-bottom: 0; border-top: 1px solid var(--rule); }
+  .glance-inline ol { border-bottom: 1px solid var(--rule); }
+  .glance-inline a { grid-template-columns: 24px 1fr; gap: 8px; }
+  .glance-inline .gkey { grid-column: 2; text-align: left; margin-top: -4px; }
 }
 
 @media (min-width: 1100px) {

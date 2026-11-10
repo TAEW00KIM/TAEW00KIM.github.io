@@ -707,6 +707,8 @@ export const ui = {
   more: "Read more",
   less: "Close",
   projectsTitle: "Projects",
+  themeToLight: "Light mode",
+  themeToDark: "Dark mode",
   langLinkLabel: "한국어",
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
