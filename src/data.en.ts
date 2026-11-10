@@ -118,7 +118,7 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. From January to June 2026 (GA), the service had about 4,800 active users and 130,000 views, and each fall-term tournament still drew about 900 active users.",
+  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. From January to November 9, 2026 (GA), the service had about 7,600 active users and about 200,000 views, with up to 672 active users a day during tournaments.",
   "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them. I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway), then added a permission check to 7 update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543). When a team or player is created, the manager's school is attached automatically.",
 ];
 
