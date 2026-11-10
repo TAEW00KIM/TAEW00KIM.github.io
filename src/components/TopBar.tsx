@@ -72,6 +72,13 @@ export default function TopBar() {
           <ThemeToggle />
         </nav>
       </div>
+      <nav className="topnav-m wrap" aria-label={ui.lang === "en" ? "Sections" : "섹션"}>
+        {links.map(([id, text]) =>
+          text ? (
+            <a key={id} className={active === id ? "is-active" : undefined} href={`#${id}`} aria-current={active === id ? "true" : undefined}>{text}</a>
+          ) : null,
+        )}
+      </nav>
     </div>
   );
 }

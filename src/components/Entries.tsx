@@ -4,7 +4,7 @@ import { useOrder } from "./Projects";
 
 export default function Entries({ id, title, items }: { id: string; title: string; items: ExpItem[] }) {
   const { ui } = useData();
-  const { numOf } = useOrder();
+  const { byId, numOf } = useOrder();
   return (
     <section className="section" id={id} aria-labelledby={`${id}-h`}>
       <h2 id={`${id}-h`}>{title}</h2>
@@ -24,18 +24,27 @@ export default function Entries({ id, title, items }: { id: string; title: strin
                     ))}
                   </ul>
                 )}
-                {it.related && it.related.length > 0 && (
-                  <p className="related">
-                    <span>{ui.relatedProjects}</span>
-                    {it.related.map((rid, i) => (
-                      <span className="rel-item" key={rid}>
-                        <a href={`#p-${rid}`}>{String(numOf(rid)).padStart(2, "0")}</a>
-                        {i < it.related!.length - 1 ? "," : ""}
-                      </span>
-                    ))}
-                  </p>
-                )}
               </div>
+              {((it.tags && it.tags.length > 0) || (it.related && it.related.length > 0)) && (
+                <div className="entry-side">
+                  {it.tags && it.tags.length > 0 && <p className="stack">{it.tags.join(", ")}</p>}
+                  {it.related && it.related.length > 0 && (
+                    <div className="related">
+                      <p className="rel-label">{ui.relatedProjects}</p>
+                      <ul>
+                        {it.related.map((rid) => (
+                          <li key={rid}>
+                            <a href={`#p-${rid}`}>
+                              <span className="mono">{String(numOf(rid)).padStart(2, "0")}</span>
+                              <span>{byId.get(rid)?.title ?? rid}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </li>
         ))}

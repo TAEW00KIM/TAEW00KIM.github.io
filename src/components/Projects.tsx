@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import type { Project } from "../data";
 import { useData } from "../i18n";
 
@@ -59,18 +59,48 @@ function Bars({ bars }: { bars: NonNullable<Project["bars"]> }) {
   );
 }
 
-type ItemProps = { p: Project; n: number; showOrg: boolean; wide: boolean; open: boolean; onToggle: () => void; order: number };
+type ItemProps = { p: Project; n: number; showOrg: boolean; wide: boolean; open: boolean; onToggle: () => void };
 
-function Item({ p, n, showOrg, wide, open, onToggle, order }: ItemProps) {
+// 자세히 보기: 누른 카드가 그 자리에서 행 전체 폭으로 넓어지고, 상세가 같은 카드 안에서 이어서 열린다.
+// 카드의 번호와 제목이 곧 출처다. 열거나 닫아 카드 위치가 바뀌면 카드 위끝이 보이게 스크롤한다.
+function Item({ p, n, showOrg, wide, open, onToggle }: ItemProps) {
   const { ui } = useData();
   const panel = `proj-${p.id}`;
+  const ref = useRef<HTMLLIElement>(null);
+  const before = useRef<number | null>(null);
+  const toggle = () => {
+    before.current = ref.current ? ref.current.getBoundingClientRect().top : null;
+    onToggle();
+  };
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const was = before.current;
+    before.current = null;
+    if (!el || was === null) return;
+    const bar = document.querySelector(".topbar")?.getBoundingClientRect().bottom ?? 0;
+    const top = el.getBoundingClientRect().top;
+    const detail = open ? document.getElementById(panel)?.getBoundingClientRect().top ?? null : null;
+    let to: number | null = null;
+    if (Math.abs(top - was) > 2) {
+      // 카드가 다른 줄로 옮겨졌다(오른쪽 카드를 펼치거나 접을 때): 카드 위끝을 상단 바 바로 아래로
+      to = window.scrollY + top - bar - 16;
+    } else if (detail !== null && detail > window.innerHeight - 160) {
+      // 제자리에서 펼쳤지만 상세가 화면 아래에 있다: 상세 시작이 화면 가운데쯤 오게, 카드 위끝은 바 아래까지만
+      let by = detail - window.innerHeight / 2;
+      if (top > bar) by = Math.min(by, top - bar - 16);
+      to = window.scrollY + by;
+    }
+    if (to === null) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: Math.max(0, to), behavior: reduce ? "auto" : "smooth" });
+  }, [open, panel]);
   const lines = [
     [ui.labelProblem, p.problem],
     [ui.labelSolution, p.solution],
     [ui.labelResult, p.result],
   ].filter((l): l is [string, string] => !!l[1]);
   return (
-    <li className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`} style={{ "--o": order } as CSSProperties}>
+    <li ref={ref} className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`}>
       <div className="pmeta mono">
         <span>{num(n)}</span>
         <span>{p.period}</span>
@@ -98,23 +128,19 @@ function Item({ p, n, showOrg, wide, open, onToggle, order }: ItemProps) {
       ) : (
         <p className="lead">{p.summary}</p>
       )}
-      <button type="button" className="more" aria-expanded={open} aria-controls={panel} onClick={onToggle}>
+      <button type="button" className="more" aria-expanded={open} aria-controls={panel} onClick={toggle}>
         {open ? ui.less : ui.more}
         <span aria-hidden="true">{open ? " −" : " +"}</span>
       </button>
+      <Detail p={p} open={open} />
     </li>
   );
 }
 
-// 자세히 보기 패널: 격자의 한 줄 전체를 쓰는 별도 li. 닫혀 있어도 DOM에 남긴다.
-// from: 패널을 연 카드의 자리(2열의 왼쪽, 오른쪽, 두 칸 전체). 위 테두리에 그 칸을 표시한다.
-function Detail({ p, n, open, order, from }: { p: Project; n: number; open: boolean; order: number; from: "left" | "right" | "full" }) {
+// 자세히 보기 내용. 닫혀 있어도 DOM에 남긴다(JS 없이도 읽히게, 인쇄 때 펼침).
+function Detail({ p, open }: { p: Project; open: boolean }) {
   return (
-    <li id={`proj-${p.id}`} className={`detail from-${from}`} hidden={!open} style={{ "--o": order } as CSSProperties}>
-      {/* 2열 화면에서 어느 카드의 패널인지 보이게 번호와 제목을 다시 단다(1000px 미만은 카드 바로 아래라 숨김) */}
-      <p className="dhead">
-        <span className="mono">{num(n)}</span> {p.title}
-      </p>
+    <div id={`proj-${p.id}`} className="detail" hidden={!open}>
       {/* 넓은 화면: 왼쪽은 글, 오른쪽은 그 프로젝트의 화면, 기술, 링크 */}
       <div className="detail-in">
         <div className="detail-text">
@@ -142,7 +168,7 @@ function Detail({ p, n, open, order, from }: { p: Project; n: number; open: bool
           )}
         </div>
       </div>
-    </li>
+    </div>
   );
 }
 
@@ -154,67 +180,29 @@ export function useOrder() {
   return { byId, order, groups, numOf: (id: string) => order.indexOf(id) + 1 };
 }
 
-// 2열 격자에서 시각 자료가 있는 항목은 두 칸을 쓰고, 혼자 남는 마지막 칸도 두 칸으로 채운다
-function wides(ps: Project[]): [Project, boolean][] {
-  let col = 0;
-  return ps.map((p, i) => {
-    let wide = !!(p.visual || p.bars);
-    if (!wide && col === 0 && i === ps.length - 1) wide = true;
-    if (wide) {
-      col = 0;
-    } else {
-      col = (col + 1) % 2;
-    }
-    return [p, wide];
-  });
+// 2열 격자에서 두 칸을 쓰는 카드: 시각 자료가 있는 카드, 펼친 카드, 짝 없이 혼자 남는 카드.
+// 펼친 카드가 두 칸을 쓰면 짝이던 카드는 순서를 지킨 채 앞 줄이나 다음 줄로 옮겨 다시 짝을 짓는다.
+function wides(ps: Project[], openIds: string[]): [Project, boolean][] {
+  const full = ps.map((p) => !!(p.visual || p.bars) || openIds.includes(p.id));
+  const wide = [...full];
+  let run: number[] = [];
+  const flush = () => {
+    if (run.length % 2 === 1) wide[run[run.length - 1]] = true;
+    run = [];
+  };
+  ps.forEach((_, i) => (full[i] ? flush() : run.push(i)));
+  flush();
+  return ps.map((p, i) => [p, wide[i]]);
 }
-
-const Row = ({ children }: { children: ReactNode }) => <>{children}</>;
 
 function Grid({ ps, showOrg, numOf }: { ps: Project[]; showOrg: boolean; numOf: (id: string) => number }) {
   const [openIds, setOpenIds] = useState<string[]>([]);
-  // 2열 화면에서는 한 줄에 패널을 하나만 연다: 같은 줄의 다른 카드를 열면 먼저 열린 패널은 닫힌다.
-  // 1열(1000px 미만)은 패널이 각 카드 바로 아래라 그대로 둔다(위 패널이 닫히며 화면이 튀지 않게).
-  const toggle = (id: string, rowIds: string[]) => {
-    const oneOpen = window.matchMedia("(min-width: 1000px)").matches;
-    setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o.filter((x) => !(oneOpen && rowIds.includes(x))), id]));
-  };
-  const items = wides(ps);
-  // 2열에서 한 줄을 이루는 카드 묶음(넓은 카드는 혼자 한 줄). 패널은 줄의 마지막 카드 뒤에 둔다.
-  const rows: number[][] = [];
-  let cur: number[] = [];
-  items.forEach(([, wide], i) => {
-    if (wide) {
-      if (cur.length) rows.push(cur);
-      cur = [];
-      rows.push([i]);
-    } else {
-      cur.push(i);
-      if (cur.length === 2) {
-        rows.push(cur);
-        cur = [];
-      }
-    }
-  });
-  if (cur.length) rows.push(cur);
+  const toggle = (id: string) => setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o, id]));
   return (
     <ul className="projects">
-      {rows.map((row) => {
-        const rowIds = row.map((i) => items[i][0].id);
-        return (
-          <Row key={rowIds[0]}>
-            {row.map((i) => {
-              const [p, wide] = items[i];
-              return <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id, rowIds)} order={i * 2} />;
-            })}
-            {row.map((i, k) => {
-              const [p, wide] = items[i];
-              const from = wide ? "full" : k === 0 ? "left" : "right";
-              return <Detail key={`d-${p.id}`} p={p} n={numOf(p.id)} open={openIds.includes(p.id)} order={i * 2 + 1} from={from} />;
-            })}
-          </Row>
-        );
-      })}
+      {wides(ps, openIds).map(([p, wide]) => (
+        <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id)} />
+      ))}
     </ul>
   );
 }

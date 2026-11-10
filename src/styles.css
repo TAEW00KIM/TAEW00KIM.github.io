@@ -91,9 +91,13 @@ ul, ol { list-style: none; }
 .date { font-size: var(--fs-xs); line-height: 1.6; color: var(--sub); padding-top: 4px; }
 .entry h3 { font-size: var(--fs-md); font-weight: 700; line-height: 1.5; }
 .summary { max-width: var(--prose); margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
-.related { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: var(--fs-xs); color: var(--sub); }
-.related .rel-item { display: inline-flex; align-items: center; }
-.related a { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.entry-side { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.related { font-size: var(--fs-xs); color: var(--sub); }
+.related .rel-label { margin-bottom: 2px; }
+.related a { display: flex; gap: 8px; text-decoration: none; color: var(--ink); line-height: 1.6; }
+.related a:hover { text-decoration: underline; }
+.related a .mono { color: var(--sub); flex: none; }
+.topnav-m { display: none; }
 .dash { max-width: var(--prose); margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
 .dash li { position: relative; padding-left: 16px; margin-top: 3px; }
 .dash li::before { content: "\2013"; position: absolute; left: 0; color: var(--faint); }
@@ -142,9 +146,9 @@ ul, ol { list-style: none; }
 }
 .more:hover, .is-open .more { color: var(--ink); text-decoration-color: var(--faint); }
 .more:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-.detail { grid-column: 1 / -1; min-width: 0; font-size: var(--fs-sm); color: var(--body); }
-.detail-in { padding: 12px 0 28px; }
-.dhead { display: none; }
+/* 자세히 보기: 카드 안에서 버튼 아래로 이어서 열린다 */
+.detail { min-width: 0; margin-top: 8px; font-size: var(--fs-sm); color: var(--body); }
+.detail-in { padding: 0; }
 .detail-text { max-width: var(--prose); }
 .detail-side { margin-top: 24px; }
 .detail-side > * + * { margin-top: 16px; }
@@ -170,21 +174,11 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
 .footer { margin-top: 96px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: var(--fs-xs); color: var(--sub); }
 .footer a { text-decoration-color: var(--sub); }
 
-@media (max-width: 999px) {
-  .projects > li { order: var(--o); }
-}
 @media (min-width: 1000px) {
-  .detail { position: relative; border-top: 1px solid var(--rule); }
-  /* 패널을 연 카드 표시: 위 테두리 중 그 카드 칸만 굵게, 카드의 접기 버튼 쪽으로 작은 삼각형 */
-  .detail::before { content: ""; position: absolute; top: -2px; left: 0; width: 100%; height: 2px; background: var(--ink); }
-  .detail.from-left::before { width: calc(50% - 20px); }
-  .detail.from-right::before { left: calc(50% + 20px); width: calc(50% - 20px); }
-  .detail::after { content: ""; position: absolute; top: -9px; left: 12px; border: 7px solid transparent; border-top: 0; border-bottom-color: var(--ink); }
-  .detail.from-right::after { left: calc(50% + 20px + 12px); }
-  .dhead { display: block; padding-top: 16px; font-size: var(--fs-sm); font-weight: 600; color: var(--ink); }
-  .dhead .mono { color: var(--sub); font-weight: 400; margin-right: 6px; }
-  /* 오른쪽 카드에서 연 패널은 머리줄과 글을 오른쪽 열 시작선에서 시작한다(왼쪽 카드 것으로 보이지 않게) */
-  .from-right .dhead, .from-right .detail-in { padding-left: calc(50% + 20px); }
+  /* 펼친 카드는 행 전체 폭을 쓰고(wides), 위 테두리를 굵게 해 열린 카드임을 보인다. 상세는 카드 앞면과 가는 선으로 나눈다. */
+  .project.is-open { border-top: 2px solid var(--ink); padding-top: 15px; }
+  .detail { margin-top: 20px; border-top: 1px solid var(--rule); }
+  .detail-in { padding-top: 12px; }
   .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project.is-wide { grid-column: 1 / -1; }
 }
@@ -195,17 +189,26 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .hero-intro { margin-top: 0; max-width: none; }
   .detail-in { display: grid; grid-template-columns: minmax(0, var(--prose)) minmax(0, 1fr); gap: 0 64px; align-items: start; }
   .detail-side { margin-top: 24px; padding-left: 32px; border-left: 1px solid var(--rule); }
-  .from-right .detail-in { display: block; }
-  .from-right .detail-side { padding-left: 0; border-left: 0; }
   .gabout { max-width: calc(2 * var(--prose) + 64px); columns: 2; column-gap: 64px; }
   .gabout p { break-inside: avoid; margin-bottom: 6px; }
   .gabout p + p { margin-top: 0; }
+}
+@media (min-width: 1100px) {
+  .entry-grid { grid-template-columns: 120px minmax(0, 32em) minmax(0, 1fr); gap: 0 32px; }
+  .entry-side { margin-top: 0; padding-top: 4px; padding-left: 32px; border-left: 1px solid var(--rule); }
 }
 @media (max-width: 899px) {
   .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 759px) {
   .navlink { display: none; }
+  .topnav-m { display: flex; gap: 0 20px; overflow-x: auto; scrollbar-width: none; font-size: var(--fs-xs); color: var(--sub); border-top: 1px solid var(--rule); }
+  .topnav-m::-webkit-scrollbar { display: none; }
+  .topnav-m a { flex: none; display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; white-space: nowrap; }
+  .topnav-m .is-active { color: var(--ink); font-weight: 600; }
+  .hero { scroll-margin-top: 110px; }
+  .section { scroll-margin-top: 110px; }
+  .project { scroll-margin-top: 126px; }
   .numbers { grid-template-columns: minmax(0, 1fr); }
   .numbers li { display: block; grid-row: auto; border-left: 0; padding: 20px 0; }
   .num-value, .num-label { display: block; }
@@ -214,7 +217,7 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .num-title { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; }
   .brand { display: inline-flex; align-items: center; min-height: 44px; }
   .more { display: inline-flex; align-items: center; min-height: 44px; margin-top: 0; }
-  .related a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
+  .related a { align-items: center; min-height: 44px; }
   .plinks a { display: inline-flex; align-items: center; min-height: 44px; }
   .topnav { gap: 0 4px; }
   .topnav a:not(.navlink), .theme-toggle { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }

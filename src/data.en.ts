@@ -134,6 +134,7 @@ export const projects: Project[] = [
     summary:
       "Floods of identical cheer chat messages shifted the team rankings. I blocked the spam without blocking normal users.",
     stat: { value: "~600 / min", label: "peak rate of identical cheer messages on a match not yet started" },
+    statIsScale: true,
     key: "Spam blocked, award rule rethought",
     problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 in under two hours and skewing the team ranking.",
     solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
@@ -147,21 +148,23 @@ export const projects: Project[] = [
     links: [hufscheerRepo],
     sections: [
       {
-        heading: "Problem",
-        paras: ["I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database."],
-      },
-      {
-        heading: "Solution",
+        heading: "Decisions and reasoning",
         paras: [
+          "I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database.",
           "At first I blocked by IP. A teammate pointed out that students on a school network share one IP and would be blocked together. After discussing it with the team, we decided to issue a visitor cookie. This lets us tell individuals apart even in a service without login.",
           "A fixed window lets through up to twice the limit if requests are sent right before and right after the boundary. So I implemented a sliding window that keeps request timestamps.",
           "Production runs on one server, so I kept the window in a Caffeine local cache instead of adding Redis. It can be swapped for a Redis implementation if the service moves to multiple servers.",
         ],
       },
       {
-        heading: "Result",
+        heading: "Measurements",
         paras: [
           "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400. But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed. Since then I check block results by the stage that blocked, not by the response code.",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
           "One limitation remains. A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
         ],
       },
@@ -186,22 +189,22 @@ export const projects: Project[] = [
     links: [hufscheerRepo],
     sections: [
       {
-        heading: "Problem",
+        heading: "Decisions and reasoning",
         paras: [
           "Model responses vary in format even for the same input. That was the key constraint.",
-        ],
-      },
-      {
-        heading: "Solution",
-        paras: [
           "A regex profanity dictionary is fast and cheap but often masks normal sentences. So I left the judgment to the LLM and set the principle to not mask when in doubt.",
           "I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is. It rejects responses whose length grew abnormally, responses with the model's explanation mixed in, responses where the sentence changed without a mask marker, and responses where the consonant-only cheers of the original disappeared.",
         ],
       },
       {
-        heading: "Result",
+        heading: "Measurements",
         paras: [
           "The one I chose, gemma-4-31b, had 100% with a median response of 0.5 seconds and $0.18 per 1,000 requests. Some reasoning models returned empty responses in other features, and some had a high pass rate but broken actual output. So I chose by reading the outputs directly instead of looking only at the pass rate.",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
           "I have not yet confirmed that the replaced model is actually called in the deployed app. Forcing the response into JSON format also remains as follow-up work.",
         ],
       },
@@ -228,7 +231,7 @@ export const projects: Project[] = [
     links: [hufscheerRepo],
     sections: [
       {
-        heading: "Solution",
+        heading: "Decisions and reasoning",
         paras: [
           "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
           "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%.",
@@ -236,8 +239,10 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Result",
-        paras: ["Test DB time, which swung between 101 and 632 seconds, now stays at 54 seconds."],
+        heading: "Measurements",
+        paras: [
+          "Test DB time, which swung between 101 and 632 seconds, now stays at 54 seconds.",
+        ],
       },
     ],
   },
@@ -260,21 +265,16 @@ export const projects: Project[] = [
     tags: ["Java", "Spring Boot", "MySQL", "Redis", "Uber H3"],
     sections: [
       {
-        heading: "Problem",
+        heading: "Decisions and reasoning",
         paras: [
           "The post table also had no latitude and longitude index.",
-        ],
-      },
-      {
-        heading: "Solution",
-        paras: [
           "What the map needs is not each post. It needs how many friend posts are in a cell and what the latest thumbnail is.",
           "In case the new query was wrong, I made it switchable with the old query through a configuration flag. If the new query throws an exception, it falls back to the old query.",
           "If the same user posted to the same cell almost at the same time, two aggregate rows could be created or a count could be lost. I added a unique constraint and took a pessimistic lock on the row when updating. If creating the first row at the same time hits the constraint, it retries.",
         ],
       },
       {
-        heading: "Result",
+        heading: "Limits",
         paras: [
           "The only test was context loading, and I could not verify the concurrent update handling with a load test. Because the aggregate update is async, the aggregate can drift if even the retry fails. The IN list also grows as the number of friends grows.",
           "Since this experience, I measure before changing in Hufscheer and Vling, and keep the measurement conditions together.",
@@ -300,13 +300,13 @@ export const projects: Project[] = [
     tags: ["Java", "Spring Boot", "MySQL", "Caffeine", "CloudFront", "Lambda@Edge", "imgproxy", "Flyway"],
     sections: [
       {
-        heading: "Solution",
+        heading: "Decisions and reasoning",
         paras: [
           "For images, I built on-demand resizing behind CloudFront with Lambda@Edge, then replaced it with imgproxy (EC2).",
         ],
       },
       {
-        heading: "Result",
+        heading: "Limits",
         paras: [
           "Because of the cache, an account that has left or been deleted can still pass for up to 30 seconds. I did not build the invalidation logic to fix this.",
         ],
@@ -366,7 +366,7 @@ export const projects: Project[] = [
     ],
     sections: [
       {
-        heading: "Problem",
+        heading: "Decisions and reasoning",
         paras: [
           "For accounts whose personalized category is Other, there were 0 candidates.",
         ],
@@ -404,7 +404,7 @@ export const projects: Project[] = [
     tags: ["Next.js", "React", "Web Vitals", "Playwright"],
     sections: [
       {
-        heading: "Solution",
+        heading: "Decisions and reasoning",
         paras: [
           "The home page had a CLS of 0.002, but only the search page had 0.246. The cause of the CLS was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots. When several were settled at once they moved together, so a single shift exceeded 0.1. I changed the key to the absolute slot number in the grid.",
           "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing.",
@@ -413,9 +413,14 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Result",
+        heading: "Measurements",
         paras: [
           "With a one-line fix, CLS went from 0.161 → 0.001 in the local reproduction and 0.246 → 0.003 in the sandbox. Loading time and search time stayed the same, so this is an improvement in stability, not speed.",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
           "All numbers were measured in a sandbox or locally, and are not production numbers. The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios. I did not measure production numbers because of access rules.",
         ],
       },
@@ -441,22 +446,22 @@ export const projects: Project[] = [
     tags: ["Python", "TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
     sections: [
       {
-        heading: "Problem",
+        heading: "Decisions and reasoning",
         paras: [
           "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
-        ],
-      },
-      {
-        heading: "Solution",
-        paras: [
           "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
           "I measured the rate at which the answer is in the top 10, saved the baseline, and run the same benchmark every time I change search.",
         ],
       },
       {
-        heading: "Result",
+        heading: "Measurements",
         paras: [
           "Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
           "There is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
         ],
       },
@@ -480,21 +485,16 @@ export const projects: Project[] = [
     tags: ["React", "PWA", "TypeScript", "Node.js", "MCP"],
     sections: [
       {
-        heading: "Problem",
+        heading: "Decisions and reasoning",
         paras: [
           "Measuring each stage showed that the CLI stayed alive for 0.7 to 1 second after producing its result.",
-        ],
-      },
-      {
-        heading: "Solution",
-        paras: [
           "I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
           "When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
           "Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved. I limited concurrent sub-agents to 2. I set that rule after 12 ran at once in late September and work could not be tracked.",
         ],
       },
       {
-        heading: "Result",
+        heading: "Limits",
         paras: [
           "I have not measured numerically how often the rules are followed or their effect.",
         ],
