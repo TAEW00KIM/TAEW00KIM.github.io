@@ -436,8 +436,8 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-video-search.webp", width: 1110, height: 674, alt: "Vling video search screen", caption: "Video search. I built the curation sections and the results grid with teammates. Channel names are masked by the service." },
-      { src: "/vling-channel-search.webp", width: 1110, height: 607, alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 channel attribute filters. Channel names are masked by the service." },
+      { src: "/vling-video-search.webp", width: 1110, height: 674, alt: "Vling video search screen", caption: "Video search. I built the curation sections and the results grid with teammates. Channel names are masked by the service; thumbnails and profile photos are blurred." },
+      { src: "/vling-channel-search.webp", width: 1110, height: 607, alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 channel attribute filters. Channel names are masked by the service; thumbnails and profile photos are blurred." },
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",

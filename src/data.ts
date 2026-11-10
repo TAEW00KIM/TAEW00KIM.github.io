@@ -471,8 +471,8 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-video-search.webp", width: 1110, height: 674, alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태입니다." },
-      { src: "/vling-channel-search.webp", width: 1110, height: 607, alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 채널 성격 필터 11종을 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태입니다." },
+      { src: "/vling-video-search.webp", width: 1110, height: 674, alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
+      { src: "/vling-channel-search.webp", width: 1110, height: 607, alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 채널 성격 필터 11종을 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
     ],
     title: "Vling 영상 검색과 채널 검색 개편",
     org: "버즈앤비 현장실습", period: "2026.07 ~ 09",
