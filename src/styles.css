@@ -9,7 +9,7 @@
   --sans: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --fs-xs: 14px; --fs-sm: 16px; --fs-md: 18px; --fs-lg: 22px; --fs-xl: 28px; --fs-2xl: 44px; --fs-2xl-m: 34px;
-  --prose: 680px;
+  --prose: 30em;
   --page: 1180px;
   --gutter: clamp(24px, 6vw, 96px);
 }

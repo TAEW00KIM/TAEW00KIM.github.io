@@ -155,7 +155,8 @@ export const projects: Project[] = [
       {
         heading: "Result",
         paras: [
-          "But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed. Since then I check block results by the stage that blocked, not by the response code.",
+          "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400. But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed. Since then I check block results by the stage that blocked, not by the response code.",
+          "After blocking, I looked at the data again. 99% of 21,715 cheer chat messages were from 3 preset buttons, and messages typed by hand were a few dozen per team.",
           "One limitation remains. A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
         ],
       },
@@ -228,6 +229,10 @@ export const projects: Project[] = [
           "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%.",
           "CPU was 7.6% even on the day abnormal traffic flooded in. I decided not to do a load test, which would take 5 to 10 days.",
         ],
+      },
+      {
+        heading: "Result",
+        paras: ["Test DB time, which swung between 101 and 632 seconds, now stays at 54 seconds."],
       },
     ],
   },
@@ -396,10 +401,10 @@ export const projects: Project[] = [
       {
         heading: "Solution",
         paras: [
-          "The cause of the CLS was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots.",
-          "The response content for a sort change was the same even when the query changed, so a server round trip was not needed.",
+          "The home page had a CLS of 0.002, but only the search page had 0.246. The cause of the CLS was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots. I changed the key to the absolute slot number in the grid.",
+          "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing.",
           "With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB). Still, I chose to download 32KB more over delaying each grid card by 800ms. So I made only thumbnails skip optimization.",
-          "For keyword search, I removed the condition that let a candidate pass on a single matching word, and set the default search period to the last 6 months. A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1,330K, and a search for 'vlog' took 8.6 seconds. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
+          "A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1,330K, and a search for 'vlog' took 8.6 seconds. For keyword search, I removed the condition that let a candidate pass on a single matching word, and set the default search period to the last 6 months. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
         ],
       },
       {
