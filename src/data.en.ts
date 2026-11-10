@@ -133,7 +133,7 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "Floods of identical cheer chat messages shifted the team rankings. I blocked the spam without blocking normal users.",
-    stat: { value: "7,617 in 2 hours", label: "identical cheer messages on one match, now blocked" },
+    stat: { value: "~600 / min", label: "peak rate of identical cheer messages on a match not yet started" },
     key: "Spam blocked, award rule rethought",
     problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 in under two hours and skewing the team ranking.",
     solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
