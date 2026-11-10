@@ -35,6 +35,8 @@ function projectsInOrder(d) {
   return d.projectGroups.flatMap((g) => g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)));
 }
 const projSummary = (p) => (p.summary ? p.summary : [p.problem, p.result].filter(Boolean).join(" "));
+// JSON-LD describes only what is on screen: problem + result lines when the card shows them, otherwise the summary lead.
+const projOnScreen = (p) => (p.problem || p.solution || p.result ? [p.problem, p.result].filter(Boolean).join(" ") : p.summary);
 
 function buildLd(lang) {
   const d = datasets[lang];
@@ -48,12 +50,10 @@ function buildLd(lang) {
     alternateName: lang === "en" ? other.site.nameKo : other.site.nameEn,
     jobTitle: d.site.role,
     url: url(lang),
-    image: `${ORIGIN}/og.png`,
     email: `mailto:${d.site.email}`,
     sameAs: [d.site.github],
     ...(edu ? { alumniOf: { "@type": "CollegeOrUniversity", name: edu.org } } : {}),
     knowsAbout: d.resume.skills.flatMap((s) => s.items),
-    description: d.ui.description,
   };
   const prefix = lang === "en" ? `${ORIGIN}/en/` : `${ORIGIN}/`;
   const profile = {
@@ -62,19 +62,19 @@ function buildLd(lang) {
     inLanguage: d.ui.lang,
     dateModified: lastmod,
     url: url(lang),
+    description: d.ui.description,
     mainEntity: person,
   };
   const list = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    inLanguage: d.ui.lang,
     itemListElement: projectsInOrder(d).map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
       item: {
         "@type": "CreativeWork",
         name: p.title,
-        description: projSummary(p),
+        description: projOnScreen(p),
         url: `${prefix}#p-${p.id}`,
         author: { "@id": personId },
       },
