@@ -15,17 +15,26 @@ export default function TopBar() {
   const [active, setActive] = useState<string | null>(null);
   useEffect(() => {
     const els = links.map(([id]) => document.getElementById(id)).filter((e): e is HTMLElement => !!e);
-    const seen = new Set<string>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => (e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id)));
-        const first = els.find((e) => seen.has(e.id));
-        setActive(first ? first.id : null);
-      },
-      { rootMargin: "-56px 0px -60% 0px" },
-    );
-    els.forEach((e) => io.observe(e));
-    return () => io.disconnect();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      let cur: string | null = null;
+      for (const e of els) if (e.getBoundingClientRect().top <= 120) cur = e.id;
+      if (atEnd && els.length) cur = els[els.length - 1].id;
+      setActive(cur);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
   return (
     <div className="topbar">

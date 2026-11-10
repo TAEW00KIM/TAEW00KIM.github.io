@@ -56,6 +56,7 @@ function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean
         <span>{p.period}</span>
       </div>
       <h3 className="ptitle">{p.title}</h3>
+      {(p.key ?? p.metric) && <p className="pkey">{p.key ?? p.metric}</p>}
       {showOrg && <p className="org">{p.org}</p>}
       {p.visual && p.images && <div className="pvisual"><Figures images={p.images} /></div>}
       {p.bars && <div className="pvisual"><Bars bars={p.bars} /></div>}
