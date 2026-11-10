@@ -165,7 +165,7 @@ export const projects: Project[] = [
       {
         heading: "Limits",
         paras: [
-          "One limitation remains. A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
+          "A client that does not store cookies is counted as a new visitor on every request and can avoid this limit.",
         ],
       },
     ],
@@ -448,7 +448,6 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
           "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
           "I measured the rate at which the answer is in the top 10, saved the baseline, and run the same benchmark every time I change search.",
         ],
@@ -456,6 +455,7 @@ export const projects: Project[] = [
       {
         heading: "Measurements",
         paras: [
+          "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
           "Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
         ],
       },
@@ -487,10 +487,15 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "Measuring each stage showed that the CLI stayed alive for 0.7 to 1 second after producing its result.",
           "I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
           "When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
           "Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved. I limited concurrent sub-agents to 2. I set that rule after 12 ran at once in late September and work could not be tracked.",
+        ],
+      },
+      {
+        heading: "Measurements",
+        paras: [
+          "Measuring each stage showed that the CLI stayed alive for 0.7 to 1 second after producing its result.",
         ],
       },
       {
