@@ -10,6 +10,8 @@
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --fs-xs: 14px; --fs-sm: 16px; --fs-md: 18px; --fs-lg: 22px; --fs-xl: 28px; --fs-2xl: 44px; --fs-2xl-m: 34px;
   --prose: 680px;
+  --page: 1180px;
+  --gutter: clamp(24px, 6vw, 96px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -35,7 +37,8 @@ a:hover { text-decoration-color: var(--ink); }
 h1, h2, h3, h4, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
+@media (min-width: 1800px) { :root { --page: 1440px; } }
 .page { padding-bottom: 72px; }
 
 /* top bar */
@@ -191,7 +194,7 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .figlive { display: flex; width: fit-content; align-items: center; min-height: 44px; margin-top: 0; }
 }
 @media (max-width: 639px) {
-  .wrap { padding: 0 16px; }
+  :root { --gutter: 16px; }
   .hero { padding-top: 56px; }
   .hero h1 { font-size: var(--fs-2xl-m); }
   .hero-intro { font-size: var(--fs-md); }
