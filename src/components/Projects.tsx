@@ -5,12 +5,19 @@ import { useData } from "../i18n";
 const num = (n: number) => String(n).padStart(2, "0");
 const range = (ns: number[]) => (ns.length > 1 ? `${num(ns[0])}~${num(ns[ns.length - 1])}` : ns.length ? num(ns[0]) : "");
 
-function Figures({ images }: { images: NonNullable<Project["images"]> }) {
+// zoom: wide screenshots link to the full-size file so small screens can open them at full size
+function Figures({ images, zoom = false }: { images: NonNullable<Project["images"]>; zoom?: boolean }) {
   return (
     <div className="figures">
       {images.map((im) => (
         <figure key={im.src}>
-          <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
+          {zoom ? (
+            <a className="figlink" href={im.src} target="_blank" rel="noopener">
+              <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
+            </a>
+          ) : (
+            <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
+          )}
           <figcaption>{im.caption}</figcaption>
         </figure>
       ))}
@@ -58,7 +65,7 @@ function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean
       <h3 className="ptitle">{p.title}</h3>
       {(p.key ?? p.metric) && <p className="pkey">{p.key ?? p.metric}</p>}
       {showOrg && <p className="org">{p.org}</p>}
-      {p.visual && p.images && <div className="pvisual"><Figures images={p.images} /></div>}
+      {p.visual && p.images && <div className="pvisual"><Figures images={p.images} zoom /></div>}
       {p.bars && <div className="pvisual"><Bars bars={p.bars} /></div>}
       {!p.visual && !p.bars && p.stat && (
         <p className="pstat">

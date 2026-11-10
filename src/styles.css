@@ -104,7 +104,9 @@ ul, ol { list-style: none; }
 .pvisual { margin-top: 16px; }
 .pvisual .figures { margin-top: 0; }
 .pvisual figure { width: 100% !important; }
-.pvisual .figures { display: grid; grid-template-columns: 1fr; gap: 24px 40px; align-items: start; }
+.pvisual .figures { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
+.figlink { display: block; }
+.figlink:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .bars { display: grid; gap: 14px; max-width: 560px; }
 .bar-label { font-size: 13px; color: var(--sub); margin-bottom: 4px; }
 .bar-row { display: grid; grid-template-columns: 1fr 76px; gap: 10px; align-items: center; height: 18px; }
@@ -151,7 +153,6 @@ figcaption { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height:
 @media (min-width: 900px) {
   .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project.is-wide { grid-column: 1 / -1; }
-  .pvisual .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 899px) {
   .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
