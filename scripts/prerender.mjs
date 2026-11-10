@@ -83,8 +83,18 @@ function buildLd(lang) {
   return [profile, list];
 }
 
-const verification = ["google-site-verification", "naver-site-verification", "msvalidate.01"]
-  .map((n) => `    <!-- ${n}: add <meta name="${n}" content="..."> here after registering -->`)
+// Search engine ownership tokens. Empty value = not registered yet (a placeholder comment is written instead).
+const siteVerification = {
+  "google-site-verification": "",
+  "naver-site-verification": "93d9e4706b2c176f899e390a69865697f46c57bd",
+  "msvalidate.01": "",
+};
+const verification = Object.entries(siteVerification)
+  .map(([n, v]) =>
+    v
+      ? `    <meta name="${n}" content="${v}" />`
+      : `    <!-- ${n}: add <meta name="${n}" content="..."> here after registering -->`,
+  )
   .join("\n");
 
 function page(lang) {
