@@ -62,7 +62,9 @@ ul, ol { list-style: none; }
 .hero-role { margin-top: 10px; font-size: var(--fs-md); color: var(--sub); }
 .hero-school { margin-top: 4px; font-size: var(--fs-xs); color: var(--sub); }
 .hero-intro { margin-top: 28px; font-size: var(--fs-md); line-height: 1.7; color: var(--body); max-width: 44em; }
-.hero-intro span { display: block; text-wrap: balance; }
+/* 1100px 이상(hero 2열)은 문장이나 절마다 새 줄, 그보다 좁으면 이어 흘린다(짧은 줄이 들쭉날쭉해지지 않게) */
+.hero-intro span { display: inline; }
+@media (min-width: 1100px) { .hero-intro span { display: block; text-wrap: balance; } }
 .hero-links { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 4px 24px; font-size: var(--fs-sm); }
 
 /* key numbers */
