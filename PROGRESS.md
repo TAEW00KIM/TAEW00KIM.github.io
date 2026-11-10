@@ -37,7 +37,8 @@
 - 검색엔진 등록은 끝났다: Google Search Console(도메인 속성, Cloudflare DNS TXT)과 네이버 서치어드바이저(소유 확인과 sitemap 제출)는 태우님이 했다. Bing은 태우님 결정으로 하지 않는다("bing은 버려", 11/10).
 - 응원톡 99%는 97%로 정정했다(결정 15). 21,715건과 재집계 22,025건의 차이(310건)는 원인 미확인으로 남아 있고, 사이트에는 21,715를 쓰지 않는다.
 
-- `public/resume.pdf`는 풀스택 판이다(11/10, 원본 `~/Desktop/md/resume-2027/김태우_이력서.pdf`, sha256 앞자리 4cb1a212ee398625). 이전 백엔드 판 제출본은 `~/Desktop/md/resume-2027/*.bak-20261110-backend`와 저장소 이력(10cdf2d 이전 resume.pdf)에 있다.
+- `public/resume.pdf`는 풀스택 판이다(11/11 History 수치 교체본, 원본 `~/Desktop/md/resume-2027/김태우_이력서.pdf`, sha256 앞자리 c9e7d46d9cae13bf).
+- History 대표 수치는 조정에 쓰지 않은 질문 35개 기준 상위 10건 재현율 0.71 → 0.83이다(11/10 문서류 후보 채널, 근거 `~/Archive/ai-history/bench-dev/CRITERIA.md` 끝 "2026-11-10 23:50, 최종 판정"). 10월 수치(질문 43개, 0.74 → 0.84, 0.42 → 0.75, 0.93)는 상세의 측정과 한계에 조건을 밝힌 채 남겼다. 이전 백엔드 판 제출본은 `~/Desktop/md/resume-2027/*.bak-20261110-backend`와 저장소 이력(10cdf2d 이전 resume.pdf)에 있다.
 
 ## 되돌리는 법
 

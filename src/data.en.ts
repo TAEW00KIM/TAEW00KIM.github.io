@@ -428,20 +428,20 @@ export const projects: Project[] = [
   },
   {
     id: "history-mcp",
-    metric: "Top 10 recall 0.74 → 0.84",
+    metric: "Top 10 recall 0.71 → 0.83",
     title: "History: Personal Work Record Pipeline",
     org: "Personal", period: "2026.10 ~ present",
     summary:
       "Claude Code deletes conversations older than 30 days, so I could not find past decisions and their reasons. I built a pipeline that indexes conversations, commits and documents automatically at every work session and extracts each day's decisions and their reasons.",
-    stat: { value: "0.74 → 0.84", label: "top-10 recall on 43 questions" },
-    key: "Recall 0.74 → 0.84",
+    stat: { value: "0.71 → 0.83", label: "top-10 recall on 35 questions not used for tuning" },
+    key: "Recall 0.71 → 0.83",
     problem: "Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
     solution: "Conversations, commits and documents are collected and indexed automatically when a work session starts or ends, and each day's decisions and reasons are extracted with their source records and served through a search server (MCP) that combines keyword and semantic search.",
-    result: "About 350,000 records indexed as of October 26, 2026, and the roughly 1,180 decision records feed my assistant bot's weekly decision summary. Top-10 recall on 43 questions went from 0.74 to 0.84.",
+    result: "About 350,000 records indexed as of October 26, 2026, and the roughly 1,180 decision records feed my assistant bot's weekly decision summary. Documents losing out to conversation messages on reworded questions was fixed by pulling document candidates separately, and top-10 recall on 35 questions not used for tuning went from 0.71 to 0.83.",
     bullets: [
       "Indexes about 350,000 conversations, commits and documents (as of October 26, 2026) automatically at every work session and extracts each day's decisions and reasons",
       "Serves about 1,180 decision records through an MCP search server, used by my assistant bot for a weekly decision summary",
-      "Measured adding a 2-character index and semantic search against a 43-question evaluation set: top 10 recall 0.74 → 0.84",
+      "Found that documents lost out to conversation messages on reworded questions and pulled document candidates separately: top 10 recall 0.71 → 0.83 on 35 questions not used for tuning",
     ],
     tags: ["Python", "TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
     sections: [
@@ -450,19 +450,21 @@ export const projects: Project[] = [
         paras: [
           "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents. I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
           "I measured the rate at which the answer is in the top 10, saved the baseline, and run the same benchmark every time I change search.",
+          "In November, decision records and documents were still losing out to conversation messages on reworded questions. So I added a channel that pulls semantic search candidates from documents only and merges them in.",
         ],
       },
       {
         heading: "Measurements",
         paras: [
           "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12. Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found.",
-          "Most of that came from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
+          "The October top 10 recall gain on 43 questions, 0.74 → 0.84, came mostly from the 2-character index; semantic search alone moved it from 0.81 to 0.84. After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93. Other categories did not drop, and response time stayed at a p50 of 27ms.",
+          "The November document channel was measured on 35 questions not used for tuning. On the same day and database, top 10 recall went from 0.71 to 0.83 and MRR from 0.677 to 0.709 (same values in 2 runs), and reworded questions found among 30 unseen ones went from 8 to 13. The 0.71 already includes the 2-character index and semantic search, and response time did not increase.",
         ],
       },
       {
         heading: "Limits",
         paras: [
-          "There is no separate held-out evaluation set. So 0.93, tuned and evaluated on the same 43, may be overfitted. I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
+          "The October figures (0.84, 0.93) were tuned and evaluated on the same 43 questions and may be overfitted, so in November I measured on questions not used for tuning. The evaluation questions were written by an agent, and on reworded questions alone the targets were missed by 1 to 3 each. I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
         ],
       },
     ],
