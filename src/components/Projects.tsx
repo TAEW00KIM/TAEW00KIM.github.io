@@ -107,10 +107,15 @@ function Item({ p, n, showOrg, wide, open, onToggle, order }: ItemProps) {
 }
 
 // 자세히 보기 패널: 격자의 한 줄 전체를 쓰는 별도 li. 닫혀 있어도 DOM에 남긴다.
-function Detail({ p, open, order }: { p: Project; open: boolean; order: number }) {
+// from: 패널을 연 카드의 자리(2열의 왼쪽, 오른쪽, 두 칸 전체). 위 테두리에 그 칸을 표시한다.
+function Detail({ p, n, open, order, from }: { p: Project; n: number; open: boolean; order: number; from: "left" | "right" | "full" }) {
   return (
-    <li id={`proj-${p.id}`} className="detail" hidden={!open} style={{ "--o": order } as CSSProperties}>
-      {/* 넓은 화면: 왼쪽은 글, 오른쪽은 그 프로젝트의 화면, 수치, 기술, 링크 */}
+    <li id={`proj-${p.id}`} className={`detail from-${from}`} hidden={!open} style={{ "--o": order } as CSSProperties}>
+      {/* 2열 화면에서 어느 카드의 패널인지 보이게 번호와 제목을 다시 단다(1000px 미만은 카드 바로 아래라 숨김) */}
+      <p className="dhead">
+        <span className="mono">{num(n)}</span> {p.title}
+      </p>
+      {/* 넓은 화면: 왼쪽은 글, 오른쪽은 그 프로젝트의 화면, 기술, 링크 */}
       <div className="detail-in">
         <div className="detail-text">
           {p.sections.map((s) => (
@@ -168,7 +173,12 @@ const Row = ({ children }: { children: ReactNode }) => <>{children}</>;
 
 function Grid({ ps, showOrg, numOf }: { ps: Project[]; showOrg: boolean; numOf: (id: string) => number }) {
   const [openIds, setOpenIds] = useState<string[]>([]);
-  const toggle = (id: string) => setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o, id]));
+  // 2열 화면에서는 한 줄에 패널을 하나만 연다: 같은 줄의 다른 카드를 열면 먼저 열린 패널은 닫힌다.
+  // 1열(1000px 미만)은 패널이 각 카드 바로 아래라 그대로 둔다(위 패널이 닫히며 화면이 튀지 않게).
+  const toggle = (id: string, rowIds: string[]) => {
+    const oneOpen = window.matchMedia("(min-width: 1000px)").matches;
+    setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o.filter((x) => !(oneOpen && rowIds.includes(x))), id]));
+  };
   const items = wides(ps);
   // 2열에서 한 줄을 이루는 카드 묶음(넓은 카드는 혼자 한 줄). 패널은 줄의 마지막 카드 뒤에 둔다.
   const rows: number[][] = [];
@@ -189,18 +199,22 @@ function Grid({ ps, showOrg, numOf }: { ps: Project[]; showOrg: boolean; numOf: 
   if (cur.length) rows.push(cur);
   return (
     <ul className="projects">
-      {rows.map((row) => (
-        <Row key={ps[row[0]].id}>
-          {row.map((i) => {
-            const [p, wide] = items[i];
-            return <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id)} order={i * 2} />;
-          })}
-          {row.map((i) => {
-            const [p] = items[i];
-            return <Detail key={`d-${p.id}`} p={p} open={openIds.includes(p.id)} order={i * 2 + 1} />;
-          })}
-        </Row>
-      ))}
+      {rows.map((row) => {
+        const rowIds = row.map((i) => items[i][0].id);
+        return (
+          <Row key={rowIds[0]}>
+            {row.map((i) => {
+              const [p, wide] = items[i];
+              return <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id, rowIds)} order={i * 2} />;
+            })}
+            {row.map((i, k) => {
+              const [p, wide] = items[i];
+              const from = wide ? "full" : k === 0 ? "left" : "right";
+              return <Detail key={`d-${p.id}`} p={p} n={numOf(p.id)} open={openIds.includes(p.id)} order={i * 2 + 1} from={from} />;
+            })}
+          </Row>
+        );
+      })}
     </ul>
   );
 }
