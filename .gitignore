@@ -3,3 +3,4 @@ dist
 *.local
 *.tsbuildinfo
 _shots
+dist-server

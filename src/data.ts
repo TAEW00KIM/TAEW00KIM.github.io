@@ -748,6 +748,6 @@ export const ui = {
   langLinkLabel: "English",
   langLinkHref: "/en/",
   resumeFilename: "김태우_이력서.pdf",
-  docTitle: "Kim Taewoo | Software Engineer",
+  docTitle: "김태우 | 소프트웨어 개발자",
   description: "소프트웨어 개발자 김태우의 포트폴리오. 운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
 };
