@@ -86,7 +86,7 @@ function buildLd(lang) {
 // Search engine ownership tokens. Empty value = not registered yet (a placeholder comment is written instead).
 const siteVerification = {
   "google-site-verification": "",
-  "naver-site-verification": "93d9e4706b2c176f899e390a69865697f46c57bd",
+  "naver-site-verification": "d396bad56f5e85874c5ab485e4e33c9939361e4d",
   "msvalidate.01": "",
 };
 const verification = Object.entries(siteVerification)
