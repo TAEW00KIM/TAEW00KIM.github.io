@@ -133,9 +133,9 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "Floods of identical cheer chat messages shifted the team rankings. I blocked the spam without blocking normal users.",
-    stat: { value: "7,617 in 8 min", label: "identical cheer messages on one match, now blocked" },
+    stat: { value: "7,617 in 2 hours", label: "identical cheer messages on one match, now blocked" },
     key: "Spam blocked, award rule rethought",
-    problem: "7,617 identical cheer messages piled onto a match that had not started, in 8 minutes, and skewed the team ranking.",
+    problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 in under two hours and skewing the team ranking.",
     solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
     result: "Spam is filtered without blocking normal users. I also found that 99% of messages were the 3 preset buttons and raised the award rule with the team.",
     bullets: [
@@ -149,7 +149,7 @@ export const projects: Project[] = [
       {
         heading: "Problem",
         paras: [
-          "Starting at 2 a.m. on April 30, 2026, 7,617 identical cheer chat messages piled up on a single match that had not started yet, over 8 minutes. 5,652 of them went to one team.",
+          "Early on April 30, 2026, identical cheer chat messages piled up on a single match that had not started yet. At the peak, around 2 a.m., they came in at up to about 600 per minute, and the total reached 7,617 in under two hours.",
           "The service shows team cheer rankings, so this value changes the rankings directly. I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database.",
         ],
       },
