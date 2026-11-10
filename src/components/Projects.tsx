@@ -123,16 +123,7 @@ function Detail({ p, open, order }: { p: Project; open: boolean; order: number }
           ))}
         </div>
         <div className="detail-side">
-          {p.images && !p.visual ? (
-            <Figures images={p.images} />
-          ) : (
-            !p.visual && !p.bars && p.stat && (
-              <p className="pstat">
-                <span className="pstat-value">{p.stat.value}</span>
-                <span className="pstat-label">{p.stat.label}</span>
-              </p>
-            )
-          )}
+          {p.images && !p.visual && <Figures images={p.images} />}
           <p className="stack">{p.tags.join(", ")}</p>
           {p.links && (
             <p className="plinks">
