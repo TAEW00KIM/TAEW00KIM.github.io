@@ -37,6 +37,8 @@
 - 검색엔진 등록은 끝났다: Google Search Console(도메인 속성, Cloudflare DNS TXT)과 네이버 서치어드바이저(소유 확인과 sitemap 제출)는 태우님이 했다. Bing은 태우님 결정으로 하지 않는다("bing은 버려", 11/10).
 - 응원톡 99%는 97%로 정정했다(결정 15). 21,715건과 재집계 22,025건의 차이(310건)는 원인 미확인으로 남아 있고, 사이트에는 21,715를 쓰지 않는다.
 
+- `public/resume.pdf`는 풀스택 판이다(11/10, 원본 `~/Desktop/md/resume-2027/김태우_이력서.pdf`, sha256 앞자리 4cb1a212ee398625). 이전 백엔드 판 제출본은 `~/Desktop/md/resume-2027/*.bak-20261110-backend`와 저장소 이력(10cdf2d 이전 resume.pdf)에 있다.
+
 ## 되돌리는 법
 
 - 배포는 main 커밋 단위다. 되돌릴 범위의 커밋을 `git revert`하고 push하면 이전 빌드로 돌아간다.
