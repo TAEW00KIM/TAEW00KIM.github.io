@@ -6,8 +6,8 @@ export default function TopBar() {
   const { experience, resume, site, ui } = useData();
   const label = (id: string) => experience.tabs.find((t) => t.id === id)?.label;
   const links: [string, string | undefined][] = [
-    ["projects", ui.projectsTitle],
     ["work", label("work")],
+    ["projects", ui.projectsTitle],
     ["activity", label("activity")],
     ["award", label("award")],
     ["skills", resume.title],

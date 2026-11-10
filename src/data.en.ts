@@ -707,6 +707,7 @@ export const ui = {
   liveLink: "See the live page",
   more: "Read more",
   less: "Close",
+  relatedProjects: "Related projects",
   projectsTitle: "Projects",
   themeToLight: "Light mode",
   themeToDark: "Dark mode",

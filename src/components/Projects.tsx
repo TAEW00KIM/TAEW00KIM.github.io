@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import type { Project } from "../data";
 import { useData } from "../i18n";
 
@@ -59,9 +59,10 @@ function Bars({ bars }: { bars: NonNullable<Project["bars"]> }) {
   );
 }
 
-function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean; wide: boolean }) {
+type ItemProps = { p: Project; n: number; showOrg: boolean; wide: boolean; open: boolean; onToggle: () => void; order: number };
+
+function Item({ p, n, showOrg, wide, open, onToggle, order }: ItemProps) {
   const { ui } = useData();
-  const [open, setOpen] = useState(false);
   const panel = `proj-${p.id}`;
   const lines = [
     [ui.labelProblem, p.problem],
@@ -69,7 +70,7 @@ function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean
     [ui.labelResult, p.result],
   ].filter((l): l is [string, string] => !!l[1]);
   return (
-    <li className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`}>
+    <li className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`} style={{ "--o": order } as CSSProperties}>
       <div className="pmeta mono">
         <span>{num(n)}</span>
         <span>{p.period}</span>
@@ -97,17 +98,19 @@ function Item({ p, n, showOrg, wide }: { p: Project; n: number; showOrg: boolean
       ) : (
         <p className="lead">{p.summary}</p>
       )}
-      <button
-        type="button"
-        className="more"
-        aria-expanded={open}
-        aria-controls={panel}
-        onClick={() => setOpen(!open)}
-      >
+      <button type="button" className="more" aria-expanded={open} aria-controls={panel} onClick={onToggle}>
         {open ? ui.less : ui.more}
         <span aria-hidden="true">{open ? " −" : " +"}</span>
       </button>
-      <div id={panel} className="detail" hidden={!open}>
+    </li>
+  );
+}
+
+// 자세히 보기 패널: 격자의 한 줄 전체를 쓰는 별도 li. 닫혀 있어도 DOM에 남긴다.
+function Detail({ p, open, order }: { p: Project; open: boolean; order: number }) {
+  return (
+    <li id={`proj-${p.id}`} className="detail" hidden={!open} style={{ "--o": order } as CSSProperties}>
+      <div className="detail-in">
         <p className="stack">{p.tags.join(", ")}</p>
         {p.sections.map((s) => (
           <section key={s.heading}>
@@ -156,6 +159,47 @@ function wides(ps: Project[]): [Project, boolean][] {
   });
 }
 
+const Row = ({ children }: { children: ReactNode }) => <>{children}</>;
+
+function Grid({ ps, showOrg, numOf }: { ps: Project[]; showOrg: boolean; numOf: (id: string) => number }) {
+  const [openIds, setOpenIds] = useState<string[]>([]);
+  const toggle = (id: string) => setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o, id]));
+  const items = wides(ps);
+  // 2열에서 한 줄을 이루는 카드 묶음(넓은 카드는 혼자 한 줄). 패널은 줄의 마지막 카드 뒤에 둔다.
+  const rows: number[][] = [];
+  let cur: number[] = [];
+  items.forEach(([, wide], i) => {
+    if (wide) {
+      if (cur.length) rows.push(cur);
+      cur = [];
+      rows.push([i]);
+    } else {
+      cur.push(i);
+      if (cur.length === 2) {
+        rows.push(cur);
+        cur = [];
+      }
+    }
+  });
+  if (cur.length) rows.push(cur);
+  return (
+    <ul className="projects">
+      {rows.map((row) => (
+        <Row key={ps[row[0]].id}>
+          {row.map((i) => {
+            const [p, wide] = items[i];
+            return <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id)} order={i * 2} />;
+          })}
+          {row.map((i) => {
+            const [p] = items[i];
+            return <Detail key={`d-${p.id}`} p={p} open={openIds.includes(p.id)} order={i * 2 + 1} />;
+          })}
+        </Row>
+      ))}
+    </ul>
+  );
+}
+
 export default function Projects() {
   const { ui } = useData();
   const { byId, groups, numOf } = useOrder();
@@ -176,11 +220,7 @@ export default function Projects() {
               ))}
             </div>
           )}
-          <ul className="projects">
-            {wides(g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)!)).map(([p, wide]) => (
-              <Item key={p.id} p={p} n={numOf(p.id)} showOrg={!!g.showOrg} wide={wide} />
-            ))}
-          </ul>
+          <Grid ps={g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)!)} showOrg={!!g.showOrg} numOf={numOf} />
         </div>
       ))}
     </section>

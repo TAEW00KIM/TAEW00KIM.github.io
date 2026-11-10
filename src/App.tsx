@@ -20,8 +20,8 @@ export default function App() {
         <Hero />
         <Numbers />
         <main>
-          <Projects />
           {work && <Entries id="work" title={work.label} items={work.items} />}
+          <Projects />
           {activity && <Entries id="activity" title={activity.label} items={activity.items} />}
           {edu && <Entries id="edu" title={edu.label} items={edu.items} />}
           {award && <Entries id="award" title={award.label} items={award.items} />}

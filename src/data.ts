@@ -28,6 +28,7 @@ export type ExpItem = {
   period: string;
   bullets: string[];
   tags?: string[];
+  related?: string[];
 };
 
 export type ExpTab = { id: string; label: string; items: ExpItem[] };
@@ -745,6 +746,7 @@ export const ui = {
   liveLink: "실제 화면 보기",
   more: "자세히 보기",
   less: "접기",
+  relatedProjects: "관련 프로젝트",
   projectsTitle: "프로젝트",
   themeToLight: "라이트 모드",
   themeToDark: "다크 모드",
