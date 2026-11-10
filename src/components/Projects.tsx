@@ -13,8 +13,8 @@ function Figures({ images, zoom = false }: { images: NonNullable<Project["images
       {images.map((im) => (
         <figure key={im.src}>
           {zoom ? (
-            <a className="figlink" href={im.src} target="_blank" rel="noopener">
-              <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
+            <a className="figlink" href={im.src2x ?? im.src} target="_blank" rel="noopener">
+              <img src={im.src} srcSet={im.src2x ? `${im.src} 1x, ${im.src2x} 2x` : undefined} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
             </a>
           ) : (
             <img src={im.src} width={im.width} height={im.height} alt={im.alt} loading="lazy" />
