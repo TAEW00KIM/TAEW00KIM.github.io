@@ -4,7 +4,7 @@ import type { ExpTab, Project, ProjectGroup } from "./data";
 export const site = {
   nameEn: "Kim Taewoo",
   nameKo: "김태우",
-  role: "Software Engineer",
+  role: "Full-stack Engineer",
   school: "Hankuk University of Foreign Studies, Computer Engineering, graduating February 2027",
   github: "https://github.com/TAEW00KIM",
   githubLabel: "github.com/TAEW00KIM",
@@ -18,7 +18,9 @@ export const site = {
 export const hero = {
   tagline: [
     "I like finding and fixing the problems that come up when running a service.",
-    "I handle live cheering (WebSocket), deployment and incident response for Hufscheer, a live cheering service for university sports, and the frontend of Vling at Buzz & Beyond. I also build my own setup and rules for working with AI agents.",
+    "I handle live cheering (WebSocket), deployment and incident response for Hufscheer, a live cheering service for university sports,",
+    "and the frontend of Vling at Buzz & Beyond.",
+    "I also build my own setup and rules for working with AI agents.",
   ],
 };
 
@@ -135,11 +137,11 @@ export const projects: Project[] = [
     key: "Spam blocked, award rule rethought",
     problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 in under two hours and skewing the team ranking.",
     solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
-    result: "Spam is filtered without blocking normal users. I also found that 99% of messages were the 3 preset buttons and raised the award rule with the team.",
+    result: "Spam is filtered without blocking normal users. I also found that 97% of cheer messages after the preset buttons launched were one of the three presets, and raised the award rule with the team.",
     bullets: [
       "Block at 120 requests per 60 seconds per visitor (cookie), and from the 4th identical message within 3 seconds (Caffeine)",
       "Abnormal requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
-      "Found that 99% of 21,715 cheer chat messages came from 3 preset buttons, and raised the award criteria with the team",
+      "Found that 97% of cheer messages after the preset buttons launched were one of the three presets, and raised the award criteria with the team",
     ],
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "sliding window"],
     links: [hufscheerRepo],
@@ -540,6 +542,6 @@ export const ui = {
   langLinkLabel: "한국어",
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
-  docTitle: "Kim Taewoo | Software Engineer",
-  description: "Portfolio of Kim Taewoo, a software engineer. I like finding and fixing the problems that come up when running a service.",
+  docTitle: "Kim Taewoo | Full-stack Engineer",
+  description: "Portfolio of Kim Taewoo, a full-stack engineer. I like finding and fixing the problems that come up when running a service.",
 };

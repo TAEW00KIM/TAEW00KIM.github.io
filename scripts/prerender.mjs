@@ -107,11 +107,11 @@ function page(lang) {
     const swaps = [
       ['<html lang="ko">', '<html lang="en">'],
       [/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(d.ui.description)}" />`],
-      [/<meta property="og:title" content="[^"]*" \/>/, '<meta property="og:title" content="Kim Taewoo | Software Engineer" />'],
+      [/<meta property="og:title" content="[^"]*" \/>/, '<meta property="og:title" content="Kim Taewoo | Full-stack Engineer" />'],
       [/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${og.desc}" />`],
       [/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url("en")}" />`],
       [/<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${ORIGIN}/og-en.png" />`],
-      [/<meta property="og:image:alt" content="[^"]*" \/>/, '<meta property="og:image:alt" content="Kim Taewoo, Software Engineer" />'],
+      [/<meta property="og:image:alt" content="[^"]*" \/>/, '<meta property="og:image:alt" content="Kim Taewoo, Full-stack Engineer" />'],
       [/<meta property="og:locale" content="[^"]*" \/>/, '<meta property="og:locale" content="en_US" />'],
     ];
     for (const [from, to] of swaps) html = sub(html, from, to);

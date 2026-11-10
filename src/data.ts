@@ -4,7 +4,7 @@
 export const site = {
   nameEn: "Kim Taewoo",
   nameKo: "김태우",
-  role: "Software Engineer",
+  role: "Full-stack Engineer",
   school: "한국외국어대학교 컴퓨터공학부, 2027년 2월 졸업 예정",
   github: "https://github.com/TAEW00KIM",
   githubLabel: "github.com/TAEW00KIM",
@@ -18,7 +18,9 @@ export const site = {
 export const hero = {
   tagline: [
     "운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
-    "대학 스포츠 응원 서비스 Hufscheer에서는 실시간 응원(WebSocket), 배포와 장애 대응을, 버즈앤비에서는 Vling의 프론트엔드를 맡고 있습니다. AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
+    "대학 스포츠 응원 서비스 Hufscheer에서는 실시간 응원(WebSocket), 배포와 장애 대응을,",
+    "버즈앤비에서는 Vling의 프론트엔드를 맡고 있습니다.",
+    "AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
   ],
 };
 
@@ -171,11 +173,11 @@ export const projects: Project[] = [
     key: "도배 차단, 시상 기준 재검토",
     problem: "새벽 2시, 아직 시작하지 않은 경기에 같은 문구의 응원톡이 분당 최대 600여 건씩 쌓였고, 두 시간이 안 돼 7,617건이 되어 팀 순위가 흔들렸습니다.",
     solution: "방문자 쿠키마다 60초에 120건, 3초 안 같은 문구는 4번째부터 막는 슬라이딩 윈도우 제한을 넣었습니다.",
-    result: "정상 사용자는 막지 않고 도배만 걸러 냅니다. 응원톡의 99%가 프리셋 버튼이라는 점도 찾아 시상 기준을 팀에 다시 제기했습니다.",
+    result: "정상 사용자는 막지 않고 도배만 걸러 냅니다. 프리셋 버튼을 넣은 뒤 응원톡의 97%가 버튼 3종이라는 점도 찾아 시상 기준을 팀에 다시 제기했습니다.",
     bullets: [
       "방문자(쿠키)당 60초에 120건, 3초 안에 같은 문구는 4번째부터 차단(Caffeine)",
       "응원 수를 부풀리려던 비정상 요청(분당 57회)은 입력 범위 검증에서 모두 거절",
-      "응원톡 21,715건 중 99%가 프리셋 버튼 3종임을 확인하고 시상 기준을 팀에 제기",
+      "프리셋 버튼을 넣은 뒤 응원톡의 97%가 버튼 3종임을 확인하고 시상 기준을 팀에 제기",
     ],
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "슬라이딩 윈도우"],
     links: [hufscheerRepo],
@@ -579,6 +581,6 @@ export const ui = {
   langLinkLabel: "English",
   langLinkHref: "/en/",
   resumeFilename: "김태우_이력서.pdf",
-  docTitle: "김태우 | 소프트웨어 개발자",
-  description: "소프트웨어 개발자 김태우의 포트폴리오. 운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
+  docTitle: "김태우 | 풀스택 개발자",
+  description: "풀스택 개발자 김태우의 포트폴리오. 운영하면서 생기는 문제를 찾아 고치는 일을 좋아합니다.",
 };

@@ -35,6 +35,8 @@ a { color: inherit; text-decoration: underline; text-decoration-color: var(--fai
 a:hover { text-decoration-color: var(--ink); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
 h1, h2, h3, h4, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+/* 한국어 줄글: 낱말 안에서 끊지 않고(keep-all, body), 마지막 줄에 한두 글자만 남지 않게 */
+p, li, dd, figcaption { text-wrap: pretty; }
 ul, ol { list-style: none; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .wrap { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
@@ -59,7 +61,8 @@ ul, ol { list-style: none; }
 .hero h1 { font-size: var(--fs-2xl); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 .hero-role { margin-top: 10px; font-size: var(--fs-md); color: var(--sub); }
 .hero-school { margin-top: 4px; font-size: var(--fs-xs); color: var(--sub); }
-.hero-intro { margin-top: 28px; font-size: var(--fs-md); line-height: 1.7; color: var(--body); max-width: var(--prose); }
+.hero-intro { margin-top: 28px; font-size: var(--fs-md); line-height: 1.7; color: var(--body); max-width: 44em; }
+.hero-intro span { display: block; text-wrap: balance; }
 .hero-links { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 4px 24px; font-size: var(--fs-sm); }
 
 /* key numbers */
@@ -175,6 +178,10 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .project.is-wide { grid-column: 1 / -1; }
 }
 @media (min-width: 1100px) {
+  /* hero 2열: 이름과 직함은 왼쪽 한 칸, 소개와 링크는 핵심 수치 2번째 칸의 글 시작선에 맞춘다 */
+  .hero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+  .hero-about { grid-column: 2 / -1; padding-left: 20px; }
+  .hero-intro { margin-top: 0; max-width: none; }
   .detail-in { display: grid; grid-template-columns: minmax(0, var(--prose)) minmax(0, 1fr); gap: 0 64px; align-items: start; }
   .detail-side { margin-top: 24px; padding-left: 32px; border-left: 1px solid var(--rule); }
   .gabout { max-width: calc(2 * var(--prose) + 64px); columns: 2; column-gap: 64px; }
