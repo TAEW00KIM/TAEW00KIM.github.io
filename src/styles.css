@@ -37,6 +37,9 @@ a:hover { text-decoration-color: var(--ink); }
 h1, h2, h3, h4, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
 /* 한국어 줄글: 낱말 안에서 끊지 않고(keep-all, body), 마지막 줄에 한두 글자만 남지 않게 */
 p, li, dd, figcaption { text-wrap: pretty; }
+/* 줄글은 양쪽맞춤(11/11). 제목, 라벨, 수치, 짧은 캡션은 왼쪽 정렬 그대로.
+   좁은 화면은 낱말을 끊지 않아(keep-all) 양쪽맞춤하면 낱말 사이가 크게 벌어져 왼쪽 정렬로 둔다. */
+@media (min-width: 700px) { .hero-intro, .summary, .dash li, .gabout p, .psr dd, .lead, .detail section p { text-align: justify; } }
 ul, ol { list-style: none; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .wrap { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
@@ -64,8 +67,11 @@ ul, ol { list-style: none; }
 .hero-intro { margin-top: 28px; font-size: var(--fs-md); line-height: 1.7; color: var(--body); max-width: 44em; }
 /* 1100px 이상(hero 2열)은 문장이나 절마다 새 줄, 그보다 좁으면 이어 흘린다(짧은 줄이 들쭉날쭉해지지 않게) */
 .hero-intro span { display: inline; }
-@media (min-width: 1100px) { .hero-intro span { display: block; text-wrap: balance; } }
 .hero-links { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 4px 24px; font-size: var(--fs-sm); }
+.hero-links a { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+.hero-links a span { text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: 3px; text-decoration-thickness: 1px; transition: text-decoration-color 0.15s; }
+.hero-links a:hover span { text-decoration-color: var(--ink); }
+.hicon { flex: none; color: var(--ink); }
 
 /* key numbers */
 .numbers {
