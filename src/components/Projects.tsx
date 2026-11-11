@@ -147,9 +147,11 @@ function Detail({ p, open }: { p: Project; open: boolean }) {
           {p.sections.map((s) => (
             <section key={s.heading}>
               <h4>{s.heading}</h4>
-              {s.paras.map((t) => (
-                <p key={t.slice(0, 24)}>{t}</p>
-              ))}
+              <ul className="dash">
+                {s.paras.map((t) => (
+                  <li key={t.slice(0, 24)}>{t}</li>
+                ))}
+              </ul>
             </section>
           ))}
         </div>
@@ -249,11 +251,11 @@ export default function Projects() {
             </p>
           )}
           {g.about && (
-            <div className="gabout">
+            <ul className="gabout dash">
               {g.about.map((t) => (
-                <p key={t.slice(0, 24)}>{t}</p>
+                <li key={t.slice(0, 24)}>{t}</li>
               ))}
-            </div>
+            </ul>
           )}
           <Grid ps={g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)!)} showOrg={!!g.showOrg} numOf={numOf} />
         </div>

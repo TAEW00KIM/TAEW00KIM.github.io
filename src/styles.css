@@ -39,7 +39,7 @@ h1, h2, h3, h4, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
 p, li, dd, figcaption { text-wrap: pretty; }
 /* 줄글은 양쪽맞춤(11/11). 제목, 라벨, 수치, 짧은 캡션은 왼쪽 정렬 그대로.
    좁은 화면은 낱말을 끊지 않아(keep-all) 양쪽맞춤하면 낱말 사이가 크게 벌어져 왼쪽 정렬로 둔다. */
-@media (min-width: 700px) { .hero-intro, .summary, .dash li, .gabout p, .psr dd, .lead, .detail section p { text-align: justify; } }
+@media (min-width: 700px) { .hero-intro, .summary, .dash li, .psr dd, .lead { text-align: justify; } }
 ul, ol { list-style: none; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .wrap { max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
@@ -119,7 +119,7 @@ ul, ol { list-style: none; }
 .gnote { font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
 .grange { margin-left: auto; font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
 .gabout { margin: 10px 0 0; font-size: var(--fs-sm); color: var(--body); max-width: var(--prose); }
-.gabout p + p { margin-top: 6px; }
+.gabout li + li { margin-top: 6px; }
 .projects { margin-top: 16px; display: grid; grid-template-columns: 1fr; gap: 0 40px; align-items: start; }
 .project { border-top: 1px solid var(--rule); padding: 16px 0 28px; scroll-margin-top: 72px; min-width: 0; }
 .pmeta { display: flex; justify-content: space-between; font-size: var(--fs-xs); color: var(--sub); }
@@ -165,8 +165,8 @@ ul, ol { list-style: none; }
 .detail-side .figures { margin-top: 0; }
 .stack { font-size: var(--fs-xs); color: var(--sub); }
 .detail h4 { font-size: var(--fs-sm); font-weight: 600; color: var(--ink); margin-top: 24px; }
-.detail h4 + p { margin-top: 4px; }
-.detail section p + p { margin-top: 8px; }
+.detail h4 + .dash { margin-top: 4px; }
+.detail section li + li { margin-top: 8px; }
 .figures { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; align-items: flex-start; }
 figure { max-width: 100%; }
 figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; }
@@ -196,7 +196,7 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .project.is-wide { grid-column: 1 / -1; }
   /* 묶음 개요: 나누지 않고 페이지 폭 한 열로 이어서 읽게 한다. 좌우로 나누면 문단이 끊겨 보였다(11/11). */
   .gabout { max-width: none; }
-  .gabout p + p { margin-top: 10px; }
+  .gabout li + li { margin-top: 10px; }
 }
 @media (min-width: 1100px) {
   /* hero 2열: 이름과 직함은 왼쪽 한 칸, 소개와 링크는 핵심 수치 2번째 칸의 글 시작선에 맞춘다 */
