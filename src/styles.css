@@ -145,11 +145,16 @@ ul, ol { list-style: none; }
 .bar-fill.is-before { background: var(--rule); }
 .bar-val { font-size: var(--fs-xs); color: var(--sub); text-align: right; }
 .bar-val.is-after { color: var(--ink); }
-.psr { margin-top: 14px; font-size: var(--fs-sm); }
-.psr > div { padding: 5px 0; }
-.psr dt { font-size: var(--fs-xs); font-weight: 600; color: var(--body); }
+/* 문제, 해결, 결과: 라벨을 왼쪽 열에 굵게 두고 줄마다 연한 선으로 나눈다(11/11). */
+.psr { margin-top: 14px; font-size: var(--fs-sm); display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0 14px; }
+.psr > div { display: contents; }
+.psr dt, .psr dd { padding: 8px 0; border-top: 1px solid var(--rule); }
+.psr > div:first-child dt, .psr > div:first-child dd { border-top: 0; }
+.psr dt { font-size: var(--fs-sm); font-weight: 700; color: var(--ink); }
 .psr dd { color: var(--body); }
-.psr .is-result dd { color: var(--ink); font-weight: 500; }
+.psr .is-result dt { color: var(--ink); }
+.psr .is-result dd { color: var(--ink); font-weight: 600; }
+.gabout strong { color: var(--ink); font-weight: 700; }
 .lead { margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
 .more {
   all: unset; cursor: pointer; margin-top: 12px; font-size: var(--fs-xs); color: var(--sub);

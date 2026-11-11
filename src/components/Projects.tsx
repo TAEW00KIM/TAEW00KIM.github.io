@@ -2,6 +2,9 @@ import { useLayoutEffect, useRef, useState } from "react";
 import type { Project } from "../data";
 import { useData } from "../i18n";
 
+// **강조** 표시만 <strong>으로 바꾼다(개요 문단용).
+const emph = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part));
+
 const num = (n: number) => String(n).padStart(2, "0");
 const range = (ns: number[]) => (ns.length > 1 ? `${num(ns[0])}~${num(ns[ns.length - 1])}` : ns.length ? num(ns[0]) : "");
 
@@ -253,7 +256,7 @@ export default function Projects() {
           {g.about && (
             <ul className="gabout dash">
               {g.about.map((t) => (
-                <li key={t.slice(0, 24)}>{t}</li>
+                <li key={t.slice(0, 24)}>{emph(t)}</li>
               ))}
             </ul>
           )}

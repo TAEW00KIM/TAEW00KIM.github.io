@@ -159,7 +159,7 @@ const hufscheerWebRepo = { label: "GitHub (웹)", href: "https://github.com/hufs
 
 const hufscheerOverview = [
   "Hufscheer는 교내 축구와 농구 대회의 점수, 타임라인, 라인업을 실시간으로 보여 주는 대학 스포츠 라이브 응원 서비스입니다. 응원톡으로 함께 응원할 수도 있습니다.",
-  "2023년부터 운영되던 서비스에 2026년 2월 백엔드로 합류했습니다. 2026년 1월부터 11월 9일까지 GA 기준 활성 사용자는 약 7,600명, 조회는 약 21만이고, 대회 기간에는 하루 최대 672명이 찾았습니다.",
+  "2023년부터 운영되던 서비스에 2026년 2월 백엔드로 합류했습니다. 2026년 1월부터 11월 9일까지 GA 기준 활성 사용자는 약 7,600명, **조회는 약 21만**이고, 대회 기간에는 하루 최대 672명이 찾았습니다.",
   "조용한 경기에서 관객 WebSocket이 2분마다 끊겼습니다. Cloudflare를 거친 연결은 126초에 끊기고 서버 안에서 직접 붙은 연결은 240초 넘게 유지되는 차이를 실측해, 서버 STOMP 하트비트가 꺼져 있던 것(0,0)을 원인으로 찾았습니다. 하트비트를 10초로 켜고, 수정 전에는 실패하는 테스트를 남겼습니다(PR #753). 수정 뒤에는 개발 서버에서 Cloudflare를 거친 연결이 260초 넘게 유지되는 것을 확인했습니다.",
   "여러 학교가 한 서비스를 함께 쓰게 되면서 팀과 선수에는 소속 학교가 없어, 어느 학교 매니저든 수정할 수 있는 구조였습니다. 기존 데이터에 영향이 없도록 팀과 선수에 nullable 학교 FK를 먼저 넣고(Flyway), 이어서 팀과 선수의 수정과 삭제 API 7개에 같은 학교 매니저만 허용하는 권한 검증을 붙였습니다(PR #527, #543). 선수를 만들 때는 매니저의 학교가 자동으로 붙고, 팀의 학교는 뒤에 단과대를 거쳐 정해지도록 정리했습니다(PR #666).",
 ];
@@ -610,7 +610,7 @@ export type ProjectGroup = { id?: string; name: string; note?: string; about?: s
 export type Highlight = { value: string; label: string; href: string; linkText: string };
 
 export const highlights: Highlight[] = [
-  { value: "약 7,600명", label: "2026.01 ~ 11.09 Hufscheer 활성 사용자(GA)", href: "#g-hufscheer", linkText: "Hufscheer 대학 스포츠 응원 서비스" },
+  { value: "조회 약 21만", label: "2026.01 ~ 11.09 Hufscheer 조회수, 활성 사용자 약 7,600명(GA)", href: "#g-hufscheer", linkText: "Hufscheer 대학 스포츠 응원 서비스" },
   { value: "8.6초 → 2.4초", label: "Vling 영상 검색 시간, 테스트 서버 측정", href: "#p-vling-perf", linkText: "Vling 검색 화면 성능 측정과 개선" },
   { value: "126초", label: "2분마다 끊기던 실시간 연결의 원인(Cloudflare 경유 126초, 직접 연결 240초 넘게)을 찾아 수정", href: "#g-hufscheer", linkText: "Hufscheer 실시간 응원(WebSocket)" },
 ];

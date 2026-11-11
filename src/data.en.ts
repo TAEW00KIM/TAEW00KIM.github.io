@@ -121,7 +121,7 @@ const hufscheerWebRepo = { label: "GitHub (web)", href: "https://github.com/hufs
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. From January to November 9, 2026 (GA), the service had about 7,600 active users and about 210,000 views, with up to 672 active users a day during tournaments.",
+  "The service has run since 2023, and I joined its backend in February 2026. From January to November 9, 2026 (GA), the service had about 7,600 active users and **about 210,000 views**, with up to 672 active users a day during tournaments.",
   "In quiet matches, spectators' WebSocket connections dropped every 2 minutes. I measured that connections through Cloudflare closed at 126 seconds while direct connections inside the server stayed up past 240 seconds, and traced the cause to the server's STOMP heartbeat being off (0,0). I turned the heartbeat on at 10 seconds and left a test that fails without the fix (PR #753). After the fix, a connection through Cloudflare on the dev server stayed up past 260 seconds.",
   "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them. I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway), then added a permission check to 7 update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543). When a player is created, the manager's school is attached automatically, and a team's school was later set through its college unit instead (PR #666).",
 ];
@@ -566,7 +566,7 @@ export const resume = {
 };
 
 export const highlights: Highlight[] = [
-  { value: "~7,600", label: "Hufscheer active users, 2026.01 to 11.09 (GA)", href: "#g-hufscheer", linkText: "Hufscheer, live cheering for university sports" },
+  { value: "~210K views", label: "Hufscheer page views, 2026.01 to 11.09, with about 7,600 active users (GA)", href: "#g-hufscheer", linkText: "Hufscheer, live cheering for university sports" },
   { value: "8.6s → 2.4s", label: "Vling video search time, measured on a test server", href: "#p-vling-perf", linkText: "Vling search performance" },
   { value: "126s", label: "Found and fixed why live connections dropped every 2 minutes (126s via Cloudflare, over 240s direct)", href: "#g-hufscheer", linkText: "Hufscheer live cheering (WebSocket)" },
 ];
