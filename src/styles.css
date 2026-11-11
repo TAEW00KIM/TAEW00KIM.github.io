@@ -237,7 +237,8 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .figlive { display: flex; width: fit-content; align-items: center; min-height: 44px; margin-top: 0; }
 }
 @media (max-width: 639px) {
-  :root { --gutter: 16px; }
+  /* 모바일 글자 크기는 한 단계씩 작게(11/11) */
+  :root { --gutter: 16px; --fs-xs: 13px; --fs-sm: 15px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 24px; }
   .hero { padding-top: 56px; }
   .hero h1 { font-size: var(--fs-2xl-m); }
   .hero-intro { font-size: var(--fs-md); }
