@@ -35,7 +35,7 @@ export const experience: { tabs: ExpTab[] } = {
           org: "Buzz & Beyond / Vling",
           period: "2026.07 ~ 2026.12",
           bullets: [
-            "Vling is a YouTube channel and video data SaaS. Since July I have worked on the frontend and shipped the video search and channel search redesigns with teammates.",
+            "I work on the frontend of Vling, a SaaS for YouTube channel and video data, and shipped the video search and channel search redesigns with teammates. In the design system, I consolidated the filter popover and modal components.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
           related: ["vling-search", "vling-perf"],
@@ -50,7 +50,7 @@ export const experience: { tabs: ExpTab[] } = {
             "When rising bounces paused sending automatically, I traced them to policy-blocked recipients and a blacklisted sending domain, removed both, and resumed.",
             "I built and ran a sending status dashboard and an unsubscribe list.",
           ],
-          tags: ["Claude Code", "Codex"],
+          tags: ["Python", "Instantly", "Claude Code"],
         },
       ],
     },

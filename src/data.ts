@@ -46,7 +46,7 @@ export const experience: { tabs: ExpTab[] } = {
           org: "버즈앤비 / Vling",
           period: "2026.07 ~ 2026.12",
           bullets: [
-            "유튜브 채널과 영상 데이터 SaaS입니다. 7월부터 프론트엔드 개발을 맡아 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
+            "유튜브 채널과 영상 데이터를 다루는 SaaS인 Vling의 프론트엔드를 맡아, 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다. 디자인 시스템에서는 필터 팝오버와 모달 컴포넌트를 정리했습니다.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
           related: ["vling-search", "vling-perf"],
@@ -61,7 +61,7 @@ export const experience: { tabs: ExpTab[] } = {
             "발송 중 반송이 늘어 자동으로 멈추자, 정책에 막힌 수신자와 블랙리스트에 오른 발신 도메인을 원인으로 찾아 빼고 재개했습니다.",
             "발송 현황 대시보드와 수신거부 관리 목록을 만들어 운영했습니다.",
           ],
-          tags: ["Claude Code", "Codex"],
+          tags: ["Python", "Instantly", "Claude Code"],
         },
       ],
     },
