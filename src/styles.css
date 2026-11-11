@@ -185,6 +185,11 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .detail-in { padding-top: 12px; }
   .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project.is-wide { grid-column: 1 / -1; }
+  /* 묶음 개요: 문단을 두 개씩 한 줄에 나란히 두고(소개와 규모, 맡은 일 둘), 열은 아래 카드 2열과 맞춘다.
+     2단 컬럼은 짧은 문단끼리 한쪽에 몰려 반대쪽 아래가 비었다. */
+  .gabout { max-width: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 40px; }
+  .gabout p { max-width: var(--prose); }
+  .gabout p + p { margin-top: 0; }
 }
 @media (min-width: 1100px) {
   /* hero 2열: 이름과 직함은 왼쪽 한 칸, 소개와 링크는 핵심 수치 2번째 칸의 글 시작선에 맞춘다 */
@@ -193,9 +198,6 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .hero-intro { margin-top: 0; max-width: none; }
   .detail-in { display: grid; grid-template-columns: minmax(0, var(--prose)) minmax(0, 1fr); gap: 0 64px; align-items: start; }
   .detail-side { margin-top: 24px; padding-left: 32px; border-left: 1px solid var(--rule); }
-  .gabout { max-width: calc(2 * var(--prose) + 64px); columns: 2; column-gap: 64px; }
-  .gabout p { break-inside: avoid; margin-bottom: 6px; }
-  .gabout p + p { margin-top: 0; }
 }
 @media (min-width: 1100px) {
   .entry-grid { grid-template-columns: 120px minmax(0, 32em) minmax(0, 1fr); gap: 0 32px; }
