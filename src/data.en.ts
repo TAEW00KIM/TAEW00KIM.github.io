@@ -45,9 +45,10 @@ export const experience: { tabs: ExpTab[] } = {
           org: "Buzz & Beyond / Vling",
           period: "2026.09 ~ 2026.12",
           bullets: [
-            "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
-            "I built a read-only dashboard for sending status and an unsubscribe ledger.",
-            "I trialed, in one industry, finding US companies similar to our contracted customers through public-web research, grading them, and identifying the right contacts.",
+            "I built a cold email channel for finding US B2B customers from scratch, covering lead sourcing and segmentation, an English email sequence, and sending domain setup.",
+            "By hand-checking a sample of the lead list, I found that filtering by department alone left few actual marketers, so I added job title filters.",
+            "When rising bounces paused sending automatically, I traced them to policy-blocked recipients and a blacklisted sending domain, removed both, and resumed.",
+            "I built and ran a sending status dashboard and an unsubscribe list.",
           ],
           tags: ["Claude Code", "Codex"],
         },
