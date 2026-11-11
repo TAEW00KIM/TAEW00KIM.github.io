@@ -161,11 +161,14 @@ ul, ol { list-style: none; }
 .dash strong, .summary strong, .psr dd strong { color: var(--ink); font-weight: 700; }
 .psr .is-result dd strong { font-weight: 800; }
 .lead { margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
+/* 자세히 보기: 지나치지 않게 테두리 있는 버튼으로(11/11). 알약 모양은 쓰지 않는다. */
 .more {
-  all: unset; cursor: pointer; margin-top: 12px; font-size: var(--fs-xs); color: var(--sub);
-  text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px;
+  all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 16px; padding: 8px 14px; min-height: 40px; border: 1px solid var(--ink); border-radius: 4px;
+  font-size: var(--fs-sm); font-weight: 600; color: var(--ink); transition: background 0.15s, color 0.15s;
 }
-.more:hover, .is-open .more { color: var(--ink); text-decoration-color: var(--faint); }
+.more:hover { background: var(--ink); color: var(--paper); }
+.is-open .more { border-color: var(--faint); color: var(--sub); font-weight: 500; }
 .more:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 /* 자세히 보기: 카드 안에서 버튼 아래로 이어서 열린다 */
 .detail { min-width: 0; margin-top: 8px; font-size: var(--fs-sm); color: var(--body); }
@@ -240,7 +243,7 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .numbers li + li { border-top: 1px solid var(--rule); }
   .num-title { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; }
   .brand { display: inline-flex; align-items: center; min-height: 44px; }
-  .more { display: inline-flex; align-items: center; min-height: 44px; margin-top: 0; }
+  .more { min-height: 44px; margin-top: 12px; }
   .related a { align-items: center; min-height: 44px; }
   .plinks a { display: inline-flex; align-items: center; min-height: 44px; }
   .topnav { gap: 0 4px; }
