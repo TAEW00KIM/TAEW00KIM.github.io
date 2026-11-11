@@ -414,16 +414,16 @@ export const projects: Project[] = [
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
-    summary: "Adding a category filter made the channel recommendation section disappear entirely for some accounts. I found it before release and added a fallback, and shipped the video search and channel search screens with teammates.",
+    summary: "A field that needs permission was mixed into the list query, so some plans got no search results at all and others lost as many views as there were cards in one request. I moved that field to a per-channel query and shipped the video search and channel search redesigns with teammates.",
     visual: true,
     key: "2 search screens shipped",
-    problem: "Adding a category filter made the channel recommendation section disappear entirely for some accounts.",
-    solution: "Found the cause (0 candidates) before release and added a fallback that queries again without the category.",
-    result: "Shipped the video search and channel search redesigns with teammates.",
+    problem: "A field that needs permission was mixed into the list query, so some plans **got no search results at all** and others **lost as many views as there were cards at once**.",
+    solution: "The value is not drawn while locked, so I took it out of the list query and fetch it one channel at a time when the lock is lifted.",
+    result: "Shipped the video search (**Sep 8**) and channel search (**Sep 9**) redesigns to production with teammates.",
     bullets: [
-      "Video search: results grid, related channel recommendations (curation sections by a teammate)",
-      "Channel search: channel cards, part of the channel attribute filters, removal of channels unsuitable for ads, URL search, moving favorites folders",
-      "Found before release that adding the category filter made the section disappear entirely for some accounts, and added a fallback",
+      "Fixed autocomplete Enter running a channel jump and a search together",
+      "Restored search usage deductions that had silently stopped after a refactor",
+      "Handled shared URLs that failed on re-entry (unknown category, 115-character URL)",
     ],
     tags: ["TypeScript", "React", "Next.js", "Apollo Client", "Zustand"],
     links: [
@@ -434,13 +434,16 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "For accounts whose personalized category is Other, there were 0 candidates.",
+          "Picking a channel in autocomplete with the arrow keys and pressing Enter moved to the channel **and also ran a search**, charging a search the user never saw. Two key handlers on the same input ran one after the other, so the second now steps back when the first has handled Enter.",
+          "A refactor renamed the search query so it no longer matched the usage rules, and **search deductions silently stopped with no error**. I found it and restored it by matching the name.",
+          "On re-entry from a shared URL, an unknown category value made the query fail, and a **115-character** playlist URL was cut by the **100-character** input limit. Values are now validated and ignored, and the length limit applies on submit, not while typing.",
         ],
       },
       {
         heading: "Role",
         paras: [
-          "As a frontend intern, I developed the video search redesign with a teammate by splitting the work on one branch, and built the channel card from scratch.",
+          "As a frontend intern, I split the channel search (started July 20) and video search (started August 5) redesigns with teammates.",
+          "I built the channel cards, part of the channel attribute filters, URL search, and the favorites folders shared by videos and channels.",
         ],
       },
     ],
