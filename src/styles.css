@@ -138,12 +138,12 @@ ul, ol { list-style: none; }
 .bar-fill.is-before { background: var(--rule); }
 .bar-val { font-size: var(--fs-xs); color: var(--sub); text-align: right; }
 .bar-val.is-after { color: var(--ink); }
-.psr { max-width: var(--prose); margin-top: 14px; font-size: var(--fs-sm); }
+.psr { margin-top: 14px; font-size: var(--fs-sm); }
 .psr > div { padding: 5px 0; }
 .psr dt { font-size: var(--fs-xs); font-weight: 600; color: var(--body); }
 .psr dd { color: var(--body); }
 .psr .is-result dd { color: var(--ink); font-weight: 500; }
-.lead { max-width: var(--prose); margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
+.lead { margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
 .more {
   all: unset; cursor: pointer; margin-top: 12px; font-size: var(--fs-xs); color: var(--sub);
   text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px;
@@ -153,7 +153,6 @@ ul, ol { list-style: none; }
 /* 자세히 보기: 카드 안에서 버튼 아래로 이어서 열린다 */
 .detail { min-width: 0; margin-top: 8px; font-size: var(--fs-sm); color: var(--body); }
 .detail-in { padding: 0; }
-.detail-text { max-width: var(--prose); }
 .detail-side { margin-top: 24px; }
 .detail-side > * + * { margin-top: 16px; }
 .detail-side .figures { margin-top: 0; }
@@ -194,8 +193,8 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .hero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
   .hero-about { grid-column: 2 / -1; padding-left: 20px; }
   .hero-intro { margin-top: 0; max-width: none; }
-  .detail-in { display: grid; grid-template-columns: minmax(0, var(--prose)) minmax(0, 1fr); gap: 0 64px; align-items: start; }
-  .detail-side { margin-top: 24px; padding-left: 32px; border-left: 1px solid var(--rule); }
+  /* 자세히 보기: 글을 카드 폭 전체로 쓰고, 화면과 기술, 링크는 글 아래에 둔다(11/11). 왼쪽 30em만 쓰면 오른쪽이 비었다. */
+  .detail-side { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--rule); }
 }
 @media (min-width: 1100px) {
   .entry-grid { grid-template-columns: 120px minmax(0, 32em) minmax(0, 1fr); gap: 0 32px; }
