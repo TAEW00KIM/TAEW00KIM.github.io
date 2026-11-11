@@ -251,7 +251,7 @@ export const projects: Project[] = [
   {
     id: "ci-deploy",
     metric: "운영 배포 510초 → 132초",
-    title: "CI 시간 단축과 무중단 배포",
+    title: "CI 시간 단축과 Blue/Green 배포",
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "CI가 8~17분을 오갔고, 배포 때마다 컨테이너를 다시 만드느라 서비스가 끊겼습니다. 원인을 찾아 CI를 줄이고 배포를 Blue/Green으로 바꿨습니다.",

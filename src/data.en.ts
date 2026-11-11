@@ -213,7 +213,7 @@ export const projects: Project[] = [
   {
     id: "ci-deploy",
     metric: "Production deploy 510s → 132s",
-    title: "CI Speedup and Zero-Downtime Deployment",
+    title: "CI Speedup and Blue/Green Deployment",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "CI took anywhere from 8 to 17 minutes, and every deployment cut the service while the container was recreated. I found the causes, shortened CI, and switched deployment to Blue/Green.",
