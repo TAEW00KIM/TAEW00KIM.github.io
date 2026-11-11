@@ -12,7 +12,7 @@ export const site = {
   web: "https://taewoo.notion.site/portfolio",
   webLabel: "Notion resume (Korean)",
   resumePdf: "/resume.pdf",
-  footer: "Updated 2026.10",
+  footer: "Updated 2026.11",
 };
 
 export const hero = {
@@ -47,7 +47,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "I took the targets set at the kickoff and built a cold email channel: lead extraction, segment classification, an English email sequence, and sending domain warm-up.",
             "I built a read-only dashboard for sending status and an unsubscribe ledger.",
-            "I automated finding US companies similar to our contracted customers with public-web research agents, grading them, and identifying the right contacts.",
+            "I trialed, in one industry, finding US companies similar to our contracted customers through public-web research, grading them, and identifying the right contacts.",
           ],
           tags: ["Claude Code", "Codex"],
         },
@@ -74,7 +74,7 @@ export const experience: { tabs: ExpTab[] } = {
           org: "UMC HUFS",
           period: "2025.08 ~ 2026.08",
           bullets: [
-            "As president of the 9th cohort, I ran a developer community of more than 30 members and designed the Spring Boot study curriculum.",
+            "As president of the 9th cohort, I ran the developer community and designed the Spring Boot study curriculum.",
             "In the 10th cohort, I served as vice president and Node.js part lead.",
           ],
         },
@@ -89,10 +89,10 @@ export const experience: { tabs: ExpTab[] } = {
           title: "VitaCheck Booth Operation",
           org: "2025 Seoul Job Fair (Seoul Metropolitan Government and Industrial Bank of Korea)",
           period: "2025.11",
-          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and 100 people tried it in person in one day."],
+          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and demoed it to visitors in person to collect feedback."],
         },
         {
-          title: "Senior KATUSA, 1st Platoon (later in service)",
+          title: "Senior KATUSA, 1st Platoon",
           org: "KATUSA, 557th MP Company",
           period: "2023.04 ~ 2024.10",
           bullets: ["Led about 20 KATUSA soldiers in the platoon, reporting directly to the ROK Army support NCO and the US platoon leader (SSG). Coordinated work and schedules between the US side and the ROK staff, and interpreted in person."],
@@ -118,8 +118,8 @@ const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spe
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026. The team is usually 1 PM, 1 designer, 2 frontend and 2 backend developers, and its makeup changes from term to term. From January to November 9, 2026 (GA), the service had about 7,600 active users and about 200,000 views, with up to 672 active users a day during tournaments.",
-  "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them. I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway), then added a permission check to 7 update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543). When a team or player is created, the manager's school is attached automatically.",
+  "The service has run since 2023, and I joined its backend in February 2026. From January to November 9, 2026 (GA), the service had about 7,600 active users and about 210,000 views, with up to 672 active users a day during tournaments.",
+  "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them. I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway), then added a permission check to 7 update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543). When a player is created, the manager's school is attached automatically, and a team's school was later set through its college unit instead (PR #666).",
 ];
 
 export const projects: Project[] = [
@@ -132,17 +132,17 @@ export const projects: Project[] = [
     title: "Cheer Chat Spam Defense",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "Floods of identical cheer chat messages shifted the team rankings. I blocked the spam without blocking normal users.",
+      "Floods of identical cheer chat messages could distort the team rankings, which count cheer messages. I layered limits so students on a shared school network are not blocked together.",
     stat: { value: "~600 / min", label: "Problem scale: peak rate of identical cheer messages on a match not yet started" },
     statIsScale: true,
     key: "Spam blocked, award rule rethought",
-    problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 in under two hours and skewing the team ranking.",
-    solution: "Added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
-    result: "Spam is filtered without blocking normal users. I also found that 97% of cheer messages from the preset launch through May were one of the three presets, and raised the award rule with the team.",
+    problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at up to about 600 per minute, reaching 7,617 of the same message in under two hours, which could distort the team ranking based on cheer counts.",
+    solution: "Kept the IP limit loose enough for shared school IPs to stop only floods, and added a sliding-window limit per visitor cookie on top: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
+    result: "The PM set the limit values, and I have not yet measured how many requests were blocked afterwards. I also found that 97% of cheer messages from the preset launch to mid-May were one of the three presets (mostly on the one flooded match), and asked the team how the award should be decided.",
     bullets: [
       "Block at 120 requests per 60 seconds per visitor (cookie), and from the 4th identical message within 3 seconds (Caffeine)",
       "Abnormal requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
-      "Found that 97% of cheer messages from the preset launch through May were one of the three presets, and raised the award criteria with the team",
+      "Found that 97% of cheer messages from the preset launch to mid-May were one of the three presets, and asked the team about the award criteria",
     ],
     tags: ["Java", "Spring Boot", "Caffeine", "MySQL", "STOMP", "sliding window"],
     links: [hufscheerRepo],
@@ -151,7 +151,7 @@ export const projects: Project[] = [
         heading: "Decisions and reasoning",
         paras: [
           "I saw the cheer chat count jump from the 1,000s to the 8,000s and checked the pattern in the database.",
-          "At first I blocked by IP. A teammate pointed out that students on a school network share one IP and would be blocked together. After discussing it with the team, we decided to issue a visitor cookie. This lets us tell individuals apart even in a service without login.",
+          "At first I blocked by IP. A teammate pointed out that students on a school network share one IP and would be blocked together. After discussing it with the team, we decided to issue a visitor cookie. This lets us tell individuals apart even in a service without login. I raised the nginx IP limit to 6,000 per minute so it only stops floods.",
           "A fixed window lets through up to twice the limit if requests are sent right before and right after the boundary. So I implemented a sliding window that keeps request timestamps.",
           "Production runs on one server, so I kept the window in a Caffeine local cache instead of adding Redis. It can be swapped for a Redis implementation if the service moves to multiple servers.",
         ],
@@ -175,13 +175,13 @@ export const projects: Project[] = [
     title: "LLM Profanity Masking Improvements",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and also reduced the number of LLM calls.",
+      "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and added steps to cut LLM calls.",
     key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
-    solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache that cut the LLM calls themselves.",
+    solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache meant to cut LLM calls (the reduction was not measured).",
     result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy 88.6% → 100%, 22 sentences twice); the effect in production is not measured yet.",
     bullets: [
-      "Put a static filter and a result cache in front of the LLM to reduce calls",
+      "Put a static filter and a result cache in front of the LLM to cut calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
       "Block leaked explanations in two stages: output validation and the prompt",
     ],
@@ -216,16 +216,16 @@ export const projects: Project[] = [
     title: "CI Speedup and Zero-Downtime Deployment",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "CI took anywhere from 8 to 17 minutes, and every deployment cut the service for up to 30 seconds. I found the causes, shortened CI, and made deployment zero-downtime.",
-    stat: { value: "30s → 0s", label: "service downtime during a deploy" },
-    key: "Deploy downtime 30s → 0s",
-    problem: "CI swung between 8 and 17 minutes, and every deploy took the service down for up to 30 seconds.",
+      "CI took anywhere from 8 to 17 minutes, and every deployment cut the service while the container was recreated. I found the causes, shortened CI, and switched deployment to Blue/Green.",
+    stat: { value: "510s → 132s", label: "time for one production deploy" },
+    key: "Production deploy 510s → 132s",
+    problem: "CI swung between 8 and 17 minutes, and every deploy took the service down for 10 to 30 seconds while the container was recreated (a design-time estimate, not measured).",
     solution: "Put the test DB on tmpfs and removed duplicate tests from the deploy job. Switched deploys to Blue/Green.",
-    result: "Downtime during a deploy went from up to 30s to 0s. The deploy job went from 510s to 132s, mostly by removing the full test suite that ran twice in the deploy job.",
+    result: "nginx now switches to the new container only after it passes its health check. Real-time connections (WebSocket) drop at the switch and reconnect 5 seconds later. The deploy job went from 510s to 132s, mostly by removing the full test suite that ran twice in the deploy job.",
     bullets: [
-      "Put MySQL on tmpfs, which fixed test DB time at 54 seconds (it had been 101 to 632 seconds)",
+      "Put MySQL on tmpfs, which cut test DB time from 101 to 632 seconds down to 54 seconds",
       "Kept only the documentation tests in the deploy job instead of a duplicate full test run, 510s → 132s",
-      "Removed downtime with Blue/Green deployment based on an nginx router and graceful shutdown",
+      "Blue/Green deployment that swaps the nginx upstream after a health check (WebSocket reconnects after 5 seconds)",
     ],
     tags: ["GitHub Actions", "MySQL", "nginx", "Docker", "Prometheus"],
     links: [hufscheerRepo],
@@ -234,14 +234,14 @@ export const projects: Project[] = [
         heading: "Decisions and reasoning",
         paras: [
           "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
-          "Before a period when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%.",
-          "CPU was 7.6% even on the day abnormal traffic flooded in. I decided not to do a load test, which would take 5 to 10 days.",
+          "Before a day when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, CPU peaked at 32% and heap at 44%.",
+          "Even on May 6, when abnormal requests flooded in, CPU stayed in single digits (3.4 to 7.6%). I decided not to do a load test, which I estimated would take 5 to 10 days.",
         ],
       },
       {
         heading: "Measurements",
         paras: [
-          "Test DB time, which swung between 101 and 632 seconds, now stays at 54 seconds.",
+          "Test DB time went from 101 to 632 seconds down to 54 seconds (2 runs per setup in CI).",
         ],
       },
     ],
@@ -285,7 +285,7 @@ export const projects: Project[] = [
   {
     id: "pinta",
     title: "Pinta (Lo.ci Redesign)",
-    org: "Personal", period: "2026.02 ~ 2026.04",
+    org: "App team, solo backend", period: "2026.02 ~ 2026.04",
     summary: "Every request re-read the account status from the DB, and profile statistics were split across 3 queries. I reduced them with a 30-second cache and 1 aggregate query.",
     stat: { value: "3 → 1", label: "profile statistics queries" },
     key: "Stats queries 3 → 1",
@@ -295,14 +295,14 @@ export const projects: Project[] = [
     bullets: [
       "Replaced the per-request account status DB lookup with a Caffeine cache (30 seconds)",
       "Merged 3 profile statistics queries into 1, and changed the N+1 in the feed image list to a batch lookup",
-      "Built on-demand image resizing behind CloudFront with Lambda@Edge, then replaced it with imgproxy (EC2)",
+      "Moved on-demand image resizing behind CloudFront from Lambda@Edge to imgproxy on EC2",
     ],
     tags: ["Java", "Spring Boot", "MySQL", "Caffeine", "CloudFront", "Lambda@Edge", "imgproxy", "Flyway"],
     sections: [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "For images, I built on-demand resizing behind CloudFront with Lambda@Edge, then replaced it with imgproxy (EC2).",
+          "For images, I moved on-demand resizing behind CloudFront from Lambda@Edge to imgproxy on EC2.",
         ],
       },
       {
@@ -329,7 +329,7 @@ export const projects: Project[] = [
       {
         heading: "Overview",
         paras: [
-          "In November 2025, we ran a booth at the Seoul Job Fair, where 100 people tried it in person in one day.",
+          "In November 2025, we ran a booth at the Seoul Job Fair, where we demoed it to visitors in person.",
         ],
       },
       {
@@ -343,8 +343,8 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-video-search.webp", src2x: "/vling-video-search@2x.webp", width: 1110, height: 676, live: "https://vling.net/algorithm-score?na=KR", alt: "Vling video search screen", caption: "Video search. I built the curation sections and the results grid with teammates. Channel names are masked by the service; thumbnails and profile photos are blurred." },
-      { src: "/vling-channel-search.webp", src2x: "/vling-channel-search@2x.webp", width: 1110, height: 588, live: "https://vling.net/search?na=KR&sort=trendsScorePercentile", alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and the 11 channel attribute filters. Channel names are masked by the service; thumbnails and profile photos are blurred." },
+      { src: "/vling-video-search.webp", src2x: "/vling-video-search@2x.webp", width: 1110, height: 676, live: "https://vling.net/algorithm-score?na=KR", alt: "Vling video search screen", caption: "Video search. I built the results grid with teammates (the curation sections were a teammate's). Channel names are masked by the service; thumbnails and profile photos are blurred." },
+      { src: "/vling-channel-search.webp", src2x: "/vling-channel-search@2x.webp", width: 1110, height: 588, live: "https://vling.net/search?na=KR&sort=trendsScorePercentile", alt: "Vling channel search screen", caption: "Channel search. I built the channel cards and part of the channel attribute filters. Channel names are masked by the service; thumbnails and profile photos are blurred." },
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
@@ -355,8 +355,8 @@ export const projects: Project[] = [
     solution: "Found the cause (0 candidates) before release and added a fallback that queries again without the category.",
     result: "Shipped the video search and channel search redesigns with teammates.",
     bullets: [
-      "Video search: 4 curation sections, results grid, related channel recommendations",
-      "Channel search: channel cards, 11 channel attribute filters, removal of channels unsuitable for ads, URL search, favorites folders",
+      "Video search: results grid, related channel recommendations (curation sections by a teammate)",
+      "Channel search: channel cards, part of the channel attribute filters, removal of channels unsuitable for ads, URL search, moving favorites folders",
       "Found before release that adding the category filter made the section disappear entirely for some accounts, and added a fallback",
     ],
     tags: ["TypeScript", "React", "Next.js", "Apollo Client", "Zustand"],
@@ -390,7 +390,7 @@ export const projects: Project[] = [
       { label: "Skeleton shown after a sort change", before: 2194, after: 40, unit: "ms" },
       { label: "Thumbnail TTFB", before: 928, after: 154, unit: "ms" },
       { label: "'Vlog' search time", before: 8.6, after: 2.4, unit: "s" },
-      { label: "Keyword search candidates", before: 1330, after: 22, unit: "K" },
+      { label: "Candidates for one two-word query", before: 1330, after: 22, unit: "K" },
     ],
     key: "CLS 0.246 → 0.003",
     problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
@@ -409,7 +409,7 @@ export const projects: Project[] = [
           "The home page had a CLS of 0.002, but only the search page had 0.246. The cause of the CLS was that the skeleton key was the array index. Each time a card was settled, the remaining skeletons were pushed to later slots. When several were settled at once they moved together, so a single shift exceeded 0.1. I changed the key to the absolute slot number in the grid.",
           "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB. The response content for a sort change was the same even when the query changed, so a server round trip was not needed. So I changed 21 routing calls on the search page to shallow routing.",
           "With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB). Still, I chose to download 32KB more over delaying each grid card by 800ms. So I made only thumbnails skip optimization.",
-          "A condition split two-word keywords and let a candidate in if any one word matched, so candidates grew to 1,330K, and a search for 'vlog' took 8.6 seconds. For keyword search, I removed the condition that let a candidate pass on a single matching word, and set the default search period to the last 6 months. Keyword search candidates went from 1,330K to 22K, and the 'vlog' search from 8.6s to 2.4s.",
+          "A condition split two-word keywords and let a candidate in if any one word matched, so one two-word query ('convenience store new items') grew to 1,330K candidates. Removing that condition cut it to 22K. Separately, with no period condition the search scanned everything, so a search for 'vlog' took 8.6 seconds; setting the default period to the last 6 months brought it to 2.4s (candidates 1.2M to 130K).",
         ],
       },
       {
@@ -437,10 +437,10 @@ export const projects: Project[] = [
     key: "Recall 0.71 → 0.83",
     problem: "Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
     solution: "Conversations, commits and documents are collected and indexed automatically when a work session starts or ends, and each day's decisions and reasons are extracted with their source records and served through a search server (MCP) that combines keyword and semantic search.",
-    result: "About 350,000 records indexed as of October 26, 2026, and the roughly 1,180 decision records feed my assistant bot's weekly decision summary. Documents losing out to conversation messages on reworded questions was fixed by pulling document candidates separately, and top-10 recall on 35 questions not used for tuning went from 0.71 to 0.83.",
+    result: "About 480,000 records indexed as of November 11, 2026, with about 1,400 decision records. Documents losing out to conversation messages on reworded questions was fixed by pulling document candidates separately, and top-10 recall on 35 questions not used for tuning went from 0.71 to 0.83.",
     bullets: [
-      "Indexes about 350,000 conversations, commits and documents (as of October 26, 2026) automatically at every work session and extracts each day's decisions and reasons",
-      "Serves about 1,180 decision records through an MCP search server, used by my assistant bot for a weekly decision summary",
+      "Indexes about 480,000 conversations, commits and documents (as of November 11, 2026) automatically at every work session and extracts each day's decisions and reasons",
+      "Serves about 1,400 decision records through an MCP search server",
       "Found that documents lost out to conversation messages on reworded questions and pulled document candidates separately: top 10 recall 0.71 → 0.83 on 35 questions not used for tuning",
     ],
     tags: ["Python", "TypeScript", "Node.js", "SQLite FTS5", "MCP", "ONNX"],
