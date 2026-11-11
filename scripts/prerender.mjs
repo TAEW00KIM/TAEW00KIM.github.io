@@ -11,11 +11,16 @@ const { render, datasets } = await import(pathToFileURL(path.resolve("dist-serve
 
 const today = new Date().toISOString().slice(0, 10);
 let lastmod = today;
+// ProfilePage dateModified needs a full ISO 8601 datetime; the sitemap keeps the date.
+let modifiedAt = new Date().toISOString();
 try {
-  const out = execSync("git log -1 --format=%cs", { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(out)) lastmod = out;
+  const out = execSync("git log -1 --format=%cI", { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}([+-]\d{2}:\d{2}|Z)$/.test(out)) {
+    modifiedAt = out;
+    lastmod = out.slice(0, 10);
+  }
 } catch {
-  /* fall back to today */
+  /* fall back to now */
 }
 
 const base = readFileSync("dist/index.html", "utf8");
@@ -60,7 +65,7 @@ function buildLd(lang) {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     inLanguage: d.ui.lang,
-    dateModified: lastmod,
+    dateModified: modifiedAt,
     url: url(lang),
     description: d.ui.description,
     mainEntity: person,
