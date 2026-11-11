@@ -46,7 +46,8 @@ export const experience: { tabs: ExpTab[] } = {
           org: "버즈앤비 / Vling",
           period: "2026.07 ~ 2026.12",
           bullets: [
-            "유튜브 채널과 영상 데이터를 다루는 SaaS인 Vling의 프론트엔드를 맡아, 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다. 디자인 시스템에서는 필터 팝오버와 모달 컴포넌트를 정리했습니다.",
+            "유튜브 채널과 영상 데이터를 다루는 SaaS인 Vling의 프론트엔드를 맡아, 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
+            "디자인 시스템에서는 필터 팝오버와 모달 컴포넌트를 정리했습니다.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
           related: ["vling-search", "vling-perf"],

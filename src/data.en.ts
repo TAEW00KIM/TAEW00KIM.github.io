@@ -35,7 +35,8 @@ export const experience: { tabs: ExpTab[] } = {
           org: "Buzz & Beyond / Vling",
           period: "2026.07 ~ 2026.12",
           bullets: [
-            "I work on the frontend of Vling, a SaaS for YouTube channel and video data, and shipped the video search and channel search redesigns with teammates. In the design system, I consolidated the filter popover and modal components.",
+            "I work on the frontend of Vling, a SaaS for YouTube channel and video data, and shipped the video search and channel search redesigns with teammates.",
+            "In the design system, I consolidated the filter popover and modal components.",
           ],
           tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
           related: ["vling-search", "vling-perf"],
