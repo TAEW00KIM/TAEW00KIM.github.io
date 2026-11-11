@@ -53,3 +53,4 @@
 - 미리 렌더링을 빼려면 `package.json` build를 `tsc -b && vite build && node scripts/copy-en.mjs`로 되돌리고 `scripts/copy-en.mjs`를 718aefc에서 복원한다.
 23. 11/11 저녁: 묶음 이름을 본문보다 크게(fs-lg, 700) 키웠다. 국문 Hufscheer 묶음 이름은 "훕치치 (Hufscheer)", 설명은 "백엔드와 매니저 웹"이고, 묶음 머리에 공개 저장소 링크 2개(서버 hufscheer/spectator-server, 웹 hufscheer/web)를 단다(`ProjectGroup.links`). 영문 이름은 Hufscheer 그대로다. 04 카드 "대회 운영자용 PC 매니저 웹"(id manager-desktop)을 더해 Vling 이하 번호가 한 칸씩 밀렸다. 근거: hufscheer/web a0779856(9/24), 0661134f, fb0b095e(버그 5건), 369ce20e(#612, 모바일 화면 26개 비교, route group), 화면 19개는 운영 브랜치 wip-v2 기준(와이즈버즈 체크리스트 63행). 운영 첫 반영 PR #620은 팀원 것이라 카드 한계에 적었다. 화면 이미지는 매니저 로그인이 필요해 넣지 않았다.
 24. 11/11 저녁: 640px 미만에서는 글자 크기 단계를 한 칸씩 줄인다(xs 13, sm 15, md 16, lg 20, xl 24px; 태우님 "모바일에서는 글씨 크기도 조금 줄여야할 것 같네").
+25. 11/11 저녁: 경력 칸은 1100px 이상에서 날짜 120px, 글 3, 기술과 관련 프로젝트 1의 비율이다(반반이면 오른쪽이 비었다). 경력 불릿과 요약의 30em 폭 제한도 풀었다. 프로젝트 2열 카드는 짝 카드 높이를 맞추고 오른쪽 카드 왼쪽에 연한 세로선(var(--rule))을 긋는다(`rights()`가 오른쪽 칸 카드를 고른다, 두 칸 카드에는 선 없음).

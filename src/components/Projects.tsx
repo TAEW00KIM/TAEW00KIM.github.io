@@ -59,11 +59,11 @@ function Bars({ bars }: { bars: NonNullable<Project["bars"]> }) {
   );
 }
 
-type ItemProps = { p: Project; n: number; showOrg: boolean; wide: boolean; open: boolean; onToggle: () => void };
+type ItemProps = { p: Project; n: number; showOrg: boolean; wide: boolean; right: boolean; open: boolean; onToggle: () => void };
 
 // 자세히 보기: 누른 카드가 그 자리에서 행 전체 폭으로 넓어지고, 상세가 같은 카드 안에서 이어서 열린다.
 // 카드의 번호와 제목이 곧 출처다. 열거나 닫아 카드 위치가 바뀌면 카드 위끝이 보이게 스크롤한다.
-function Item({ p, n, showOrg, wide, open, onToggle }: ItemProps) {
+function Item({ p, n, showOrg, wide, right, open, onToggle }: ItemProps) {
   const { ui } = useData();
   const panel = `proj-${p.id}`;
   const ref = useRef<HTMLLIElement>(null);
@@ -100,7 +100,7 @@ function Item({ p, n, showOrg, wide, open, onToggle }: ItemProps) {
     [ui.labelResult, p.result],
   ].filter((l): l is [string, string] => !!l[1]);
   return (
-    <li ref={ref} className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}`} id={`p-${p.id}`}>
+    <li ref={ref} className={`project${open ? " is-open" : ""}${wide ? " is-wide" : ""}${right ? " is-right" : ""}`} id={`p-${p.id}`}>
       <div className="pmeta mono">
         <span>{num(n)}</span>
         <span>{p.period}</span>
@@ -195,14 +195,32 @@ function wides(ps: Project[], openIds: string[]): [Project, boolean][] {
   return ps.map((p, i) => [p, wide[i]]);
 }
 
+// 2열에서 오른쪽 칸에 놓이는 카드(앞에 짝이 되는 왼쪽 카드가 있는 경우). 가운데 구분선을 이 카드 왼쪽에 긋는다.
+function rights(ws: [Project, boolean][]): boolean[] {
+  let col = 0;
+  return ws.map(([, wide]) => {
+    if (wide) {
+      col = 0;
+      return false;
+    }
+    const right = col === 1;
+    col = right ? 0 : 1;
+    return right;
+  });
+}
+
 function Grid({ ps, showOrg, numOf }: { ps: Project[]; showOrg: boolean; numOf: (id: string) => number }) {
   const [openIds, setOpenIds] = useState<string[]>([]);
   const toggle = (id: string) => setOpenIds((o) => (o.includes(id) ? o.filter((x) => x !== id) : [...o, id]));
   return (
     <ul className="projects">
-      {wides(ps, openIds).map(([p, wide]) => (
-        <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} open={openIds.includes(p.id)} onToggle={() => toggle(p.id)} />
-      ))}
+      {(() => {
+        const ws = wides(ps, openIds);
+        const rs = rights(ws);
+        return ws.map(([p, wide], i) => (
+          <Item key={p.id} p={p} n={numOf(p.id)} showOrg={showOrg} wide={wide} right={rs[i]} open={openIds.includes(p.id)} onToggle={() => toggle(p.id)} />
+        ));
+      })()}
     </ul>
   );
 }
