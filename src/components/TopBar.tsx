@@ -61,7 +61,18 @@ export default function TopBar() {
   return (
     <div className="topbar">
       <div className="wrap topbar-in">
-        <a className="brand" href="#top">{ui.lang === "en" ? site.nameEn : site.nameKo}</a>
+        <a
+          className="brand"
+          href="#top"
+          onClick={(e) => {
+            // 맨 위로만 올리고 주소창에 #top을 남기지 않는다(JS가 없으면 href로 이동).
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+          }}
+        >
+          {ui.lang === "en" ? site.nameEn : site.nameKo}
+        </a>
         <nav className="topnav" aria-label={site.nameEn}>
           {links.map(([id, text]) =>
             text ? (
