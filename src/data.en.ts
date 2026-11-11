@@ -17,9 +17,9 @@ export const site = {
 
 export const hero = {
   tagline: [
-    "I like finding and fixing the problems that come up when running a service.",
-    "I handle live cheering (WebSocket), deployment and incident response for Hufscheer, a live cheering service for university sports,",
-    "and the frontend of Vling at Buzz & Beyond.",
+    "I measure a problem first to narrow down its cause, and I recheck wrong conclusions to correct them.",
+    "I work on the search pages of Vling at Buzz & Beyond,",
+    "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
     "I also build my own setup and rules for working with AI agents.",
   ],
 };
@@ -557,5 +557,5 @@ export const ui = {
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
   docTitle: "Kim Taewoo | Full-stack Engineer",
-  description: "Portfolio of Kim Taewoo, a full-stack engineer. I like finding and fixing the problems that come up when running a service.",
+  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measure a problem first to narrow down its cause, and I recheck wrong conclusions to correct them.",
 };
