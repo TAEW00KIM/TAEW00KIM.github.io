@@ -107,7 +107,7 @@ ul, ol { list-style: none; }
 .dash li::before { content: "\2013"; position: absolute; left: 0; color: var(--faint); }
 
 /* projects */
-.pgroup { margin-top: 48px; }
+.pgroup { margin-top: 48px; scroll-margin-top: 72px; }
 .gname { font-size: var(--fs-sm); font-weight: 600; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; }
 .gnote { font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
 .grange { margin-left: auto; font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
@@ -212,7 +212,7 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .topnav-m .is-active { color: var(--ink); font-weight: 600; }
   .hero { scroll-margin-top: 110px; }
   .section { scroll-margin-top: 110px; }
-  .project { scroll-margin-top: 126px; }
+  .project, .pgroup { scroll-margin-top: 126px; }
   .numbers { grid-template-columns: minmax(0, 1fr); }
   .numbers li { display: block; grid-row: auto; border-left: 0; padding: 20px 0; }
   .num-value, .num-label { display: block; }

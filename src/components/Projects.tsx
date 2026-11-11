@@ -214,7 +214,7 @@ export default function Projects() {
     <section className="section" id="projects" aria-labelledby="proj-h">
       <h2 id="proj-h">{ui.projectsTitle}</h2>
       {groups.map((g) => (
-        <div className="pgroup" key={g.name}>
+        <div className="pgroup" key={g.name} id={g.id ? `g-${g.id}` : undefined}>
           <p className="gname">
             {g.name}
             {g.note && <span className="gnote">{g.note}</span>}
