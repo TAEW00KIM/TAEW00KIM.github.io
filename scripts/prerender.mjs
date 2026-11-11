@@ -39,9 +39,11 @@ function projectsInOrder(d) {
   const byId = new Map(d.projects.map((p) => [p.id, p]));
   return d.projectGroups.flatMap((g) => g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)));
 }
-const projSummary = (p) => (p.summary ? p.summary : [p.problem, p.result].filter(Boolean).join(" "));
+// Data strings mark emphasis with **...** for the page; JSON-LD, llms.txt and meta get plain text.
+const plain = (s) => s.replace(/\*\*/g, "");
+const projSummary = (p) => plain(p.summary ? p.summary : [p.problem, p.result].filter(Boolean).join(" "));
 // JSON-LD describes only what is on screen: problem + result lines when the card shows them, otherwise the summary lead.
-const projOnScreen = (p) => (p.problem || p.solution || p.result ? [p.problem, p.result].filter(Boolean).join(" ") : p.summary);
+const projOnScreen = (p) => plain(p.problem || p.solution || p.result ? [p.problem, p.result].filter(Boolean).join(" ") : p.summary);
 
 function buildLd(lang) {
   const d = datasets[lang];
@@ -67,7 +69,7 @@ function buildLd(lang) {
     inLanguage: d.ui.lang,
     dateModified: modifiedAt,
     url: url(lang),
-    description: d.ui.description,
+    description: plain(d.ui.description),
     mainEntity: person,
   };
   const list = {
@@ -111,7 +113,7 @@ function page(lang) {
     };
     const swaps = [
       ['<html lang="ko">', '<html lang="en">'],
-      [/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(d.ui.description)}" />`],
+      [/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(plain(d.ui.description))}" />`],
       [/<meta property="og:title" content="[^"]*" \/>/, '<meta property="og:title" content="Kim Taewoo | Full-stack Engineer" />'],
       [/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${og.desc}" />`],
       [/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url("en")}" />`],
@@ -219,9 +221,9 @@ function llms(lang) {
   const lines = [
     `# ${title}`,
     "",
-    `> ${d.ui.description}`,
+    `> ${plain(d.ui.description)}`,
     "",
-    d.hero.tagline.join(" "),
+    plain(d.hero.tagline.join(" ")),
     "",
     `## ${ko ? "프로젝트" : "Projects"}`,
     "",

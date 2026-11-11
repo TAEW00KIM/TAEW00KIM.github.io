@@ -1,9 +1,34 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import type { Project } from "../data";
+import type { Bullet, Project } from "../data";
 import { useData } from "../i18n";
 
-// **강조** 표시만 <strong>으로 바꾼다(개요 문단용).
-const emph = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part));
+// **강조** 표시만 <strong>으로 바꾼다(개요, 카드 문제/해결/결과, 자세히 보기, 경력 불릿).
+export const emph = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part));
+
+// 대시 불릿 목록. 문자열 배열 항목은 바로 앞 항목 아래 하위 불릿으로 보인다.
+export function DashList({ items, className = "dash" }: { items: Bullet[]; className?: string }) {
+  const rows: { text: string; sub: string[] }[] = [];
+  for (const it of items) {
+    if (Array.isArray(it)) rows[rows.length - 1]?.sub.push(...it);
+    else rows.push({ text: it, sub: [] });
+  }
+  return (
+    <ul className={className}>
+      {rows.map((r, i) => (
+        <li key={i}>
+          {emph(r.text)}
+          {r.sub.length > 0 && (
+            <ul className="dash sub">
+              {r.sub.map((t, j) => (
+                <li key={j}>{emph(t)}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 const num = (n: number) => String(n).padStart(2, "0");
 const range = (ns: number[]) => (ns.length > 1 ? `${num(ns[0])}~${num(ns[ns.length - 1])}` : ns.length ? num(ns[0]) : "");
@@ -124,7 +149,7 @@ function Item({ p, n, showOrg, wide, right, open, onToggle }: ItemProps) {
           {lines.map(([label, text]) => (
             <div key={label} className={label === ui.labelResult ? "is-result" : undefined}>
               <dt>{label}</dt>
-              <dd>{text}</dd>
+              <dd>{emph(text)}</dd>
             </div>
           ))}
         </dl>
@@ -150,11 +175,7 @@ function Detail({ p, open }: { p: Project; open: boolean }) {
           {p.sections.map((s) => (
             <section key={s.heading}>
               <h4>{s.heading}</h4>
-              <ul className="dash">
-                {s.paras.map((t) => (
-                  <li key={t.slice(0, 24)}>{t}</li>
-                ))}
-              </ul>
+              <DashList items={s.paras} />
             </section>
           ))}
         </div>
@@ -253,13 +274,7 @@ export default function Projects() {
               ))}
             </p>
           )}
-          {g.about && (
-            <ul className="gabout dash">
-              {g.about.map((t) => (
-                <li key={t.slice(0, 24)}>{emph(t)}</li>
-              ))}
-            </ul>
-          )}
+          {g.about && <DashList items={g.about} className="gabout dash" />}
           <Grid ps={g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)!)} showOrg={!!g.showOrg} numOf={numOf} />
         </div>
       ))}

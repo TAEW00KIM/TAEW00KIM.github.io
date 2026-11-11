@@ -111,6 +111,9 @@ ul, ol { list-style: none; }
 .dash { margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
 .dash li { position: relative; padding-left: 16px; margin-top: 3px; }
 .dash li::before { content: "\2013"; position: absolute; left: 0; color: var(--faint); }
+/* 하위 불릿: 앞 항목 글 시작선에서 들여 쓰고 간격을 좁힌다 */
+.dash .dash { margin-top: 3px; font-size: inherit; }
+.dash .dash li { margin-top: 3px; }
 
 /* projects */
 .pgroup { margin-top: 48px; scroll-margin-top: 72px; }
@@ -153,8 +156,10 @@ ul, ol { list-style: none; }
 .psr dt { font-size: var(--fs-sm); font-weight: 700; color: var(--ink); }
 .psr dd { color: var(--body); }
 .psr .is-result dt { color: var(--ink); }
-.psr .is-result dd { color: var(--ink); font-weight: 600; }
-.gabout strong { color: var(--ink); font-weight: 700; }
+.psr .is-result dd { color: var(--ink); font-weight: 500; }
+/* **…** 강조: 개요, 카드 문제/해결/결과, 자세히 보기, 경력 불릿 */
+.dash strong, .summary strong, .psr dd strong { color: var(--ink); font-weight: 700; }
+.psr .is-result dd strong { font-weight: 800; }
 .lead { margin-top: 10px; font-size: var(--fs-sm); color: var(--body); }
 .more {
   all: unset; cursor: pointer; margin-top: 12px; font-size: var(--fs-xs); color: var(--sub);
