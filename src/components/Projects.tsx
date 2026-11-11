@@ -220,6 +220,16 @@ export default function Projects() {
             {g.note && <span className="gnote">{g.note}</span>}
             <span className="grange mono">{range(g.ids.filter((id) => byId.has(id)).map(numOf))}</span>
           </p>
+          {g.links && (
+            <p className="glinks">
+              {g.links.map((l, i) => (
+                <span key={l.href}>
+                  {i > 0 && " / "}
+                  <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
+                </span>
+              ))}
+            </p>
+          )}
           {g.about && (
             <div className="gabout">
               {g.about.map((t) => (

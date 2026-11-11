@@ -51,3 +51,4 @@
 - 배포는 main 커밋 단위다. 되돌릴 범위의 커밋을 `git revert`하고 push하면 이전 빌드로 돌아간다.
 - 기준점: 23224f4(2열 상세 이전), a71f73f(테두리와 링크까지), 7d72b39(디자인 B 첫 배포), 793faf6(디자인 개편 전, SEO와 네이버 메타만), 718aefc(이번 개편 전체 이전).
 - 미리 렌더링을 빼려면 `package.json` build를 `tsc -b && vite build && node scripts/copy-en.mjs`로 되돌리고 `scripts/copy-en.mjs`를 718aefc에서 복원한다.
+23. 11/11 저녁: 묶음 이름을 본문보다 크게(fs-lg, 700) 키웠다. 국문 Hufscheer 묶음 이름은 "훕치치 (Hufscheer)", 설명은 "백엔드와 매니저 웹"이고, 묶음 머리에 공개 저장소 링크 2개(서버 hufscheer/spectator-server, 웹 hufscheer/web)를 단다(`ProjectGroup.links`). 영문 이름은 Hufscheer 그대로다. 04 카드 "대회 운영자용 PC 매니저 웹"(id manager-desktop)을 더해 Vling 이하 번호가 한 칸씩 밀렸다. 근거: hufscheer/web a0779856(9/24), 0661134f, fb0b095e(버그 5건), 369ce20e(#612, 모바일 화면 26개 비교, route group), 화면 19개는 운영 브랜치 wip-v2 기준(와이즈버즈 체크리스트 63행). 운영 첫 반영 PR #620은 팀원 것이라 카드 한계에 적었다. 화면 이미지는 매니저 로그인이 필요해 넣지 않았다.

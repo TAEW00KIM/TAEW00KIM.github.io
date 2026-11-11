@@ -155,6 +155,7 @@ export type Project = {
 };
 
 const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spectator-server" };
+const hufscheerWebRepo = { label: "GitHub (웹)", href: "https://github.com/hufscheer/web" };
 
 const hufscheerOverview = [
   "Hufscheer는 교내 축구와 농구 대회의 점수, 타임라인, 라인업을 실시간으로 보여 주는 대학 스포츠 라이브 응원 서비스입니다. 응원톡으로 함께 응원할 수도 있습니다.",
@@ -283,6 +284,41 @@ export const projects: Project[] = [
         heading: "측정",
         paras: [
           "테스트 DB 시간은 101~632초에서 54초로 줄었습니다(CI에서 조합마다 2회 측정).",
+        ],
+      },
+    ],
+  },
+  {
+    id: "manager-desktop",
+    title: "대회 운영자용 PC 매니저 웹",
+    org: "Hufscheer, 프론트엔드", period: "2026.08 ~ 10",
+    summary: "매니저 화면이 모바일용뿐이라 대회 운영자가 PC에서 쓸 화면이 없었습니다. 모바일 매니저와 같은 서버, 같은 TanStack Query 훅으로 데스크탑 매니저를 만들어 화면 19개를 운영 서버에 올렸습니다.",
+    stat: { value: "화면 19개", label: "운영 서버에 올라간 데스크탑 매니저 화면(로그인 제외)" },
+    key: "운영 화면 19개",
+    problem: "매니저 화면이 모바일용뿐이라, 대회 운영자가 PC에서 대회와 경기를 등록하고 기록을 입력할 화면이 없었습니다.",
+    solution: "모바일 매니저의 TanStack Query 훅을 함께 쓰고 데스크탑에 필요한 조회와 변경 훅을 더해 Next.js로 만들었습니다. 팀 리뷰를 받아 별도 앱 대신 모바일 매니저 앱 하나에 경로를 나눠 합쳤습니다.",
+    result: "대회 생성, 대진표, 경기 기록 입력, 선수와 팀 관리 등 운영 서버에 올라간 화면 19개를 만들었고, 합친 뒤 모바일 화면 26개가 이전과 같은지 확인했습니다.",
+    bullets: [
+      "모바일 매니저와 같은 서버, 같은 TanStack Query 훅으로 PC용 매니저를 만듦",
+      "별도 앱과 API 패키지는 유지보수에 불리하다는 리뷰를 받아 한 앱의 /desktop 경로로 합치고, route group으로 두 레이아웃의 CSS를 분리",
+      "선수 교체 직후 기록 시트에 나간 선수가 남던 문제를 찾아, 함께 바뀌는 목록을 다시 불러오게 고침",
+    ],
+    tags: ["Next.js", "React", "TypeScript", "TanStack Query"],
+    links: [hufscheerWebRepo],
+    sections: [
+      {
+        heading: "결정과 근거",
+        paras: [
+          "학교 전체 경기 목록은 한 페이지로 받으면 잘려서, 커서를 끝까지 따라가 모두 받도록 했습니다.",
+          "처음에는 API 계층을 공용 패키지로 떼어 별도 앱으로 두었습니다. 별도 앱과 패키지는 유지보수와 응집성에 불리하다는 리뷰를 받고, 모바일 매니저 앱 안의 /desktop 경로로 합쳤습니다(PR #612). 두 화면의 CSS가 섞이지 않게 루트 레이아웃을 모바일과 데스크탑 두 route group으로 나눴습니다.",
+          "합친 뒤에는 모바일 화면 26개를 375px에서 이전 화면과 요소의 위치, 크기, 글꼴, 색까지 비교해 바뀐 곳이 없음을 확인했습니다.",
+          "교체, 기록 삭제, 포지션 변경 뒤에 출전 선수 목록을 다시 받지 않아, 교체 직후 기록 시트에 나간 선수가 남아 있었습니다. 쓰기 뒤에 함께 바뀌는 목록 키를 무효화하게 고쳤습니다. PM 피드백을 반영하면서 시작 시간이 바뀌지 않던 날짜 입력 등 버그 5건도 고쳤습니다.",
+        ],
+      },
+      {
+        heading: "한계",
+        paras: [
+          "운영 서버에 배포된 것까지 확인했고, 대회 운영자가 이 화면을 실제로 얼마나 쓰는지는 재지 않았습니다. 운영 브랜치에 처음 반영한 PR은 팀원이 올렸습니다.",
         ],
       },
     ],
@@ -568,7 +604,7 @@ export const resume = {
 };
 
 // about: 묶음 소개(같은 서비스의 프로젝트마다 반복하지 않고 묶음 위에 한 번만 보여 준다)
-export type ProjectGroup = { id?: string; name: string; note?: string; about?: string[]; ids: string[]; showOrg?: boolean };
+export type ProjectGroup = { id?: string; name: string; note?: string; about?: string[]; links?: { label: string; href: string }[]; ids: string[]; showOrg?: boolean };
 
 // 첫 화면 핵심 수치 3칸. href는 그 수치가 나온 프로젝트나 묶음으로 간다.
 export type Highlight = { value: string; label: string; href: string; linkText: string };
@@ -580,7 +616,7 @@ export const highlights: Highlight[] = [
 ];
 
 export const projectGroups: ProjectGroup[] = [
-  { id: "hufscheer", name: "Hufscheer", note: "대학 스포츠 응원 서비스, 백엔드", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "ci-deploy"] },
+  { id: "hufscheer", name: "훕치치 (Hufscheer)", note: "대학 스포츠 응원 서비스, 백엔드와 매니저 웹", about: hufscheerOverview, links: [{ label: "서버 GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "웹 GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
   { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
   { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },

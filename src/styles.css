@@ -108,7 +108,8 @@ ul, ol { list-style: none; }
 
 /* projects */
 .pgroup { margin-top: 48px; scroll-margin-top: 72px; }
-.gname { font-size: var(--fs-sm); font-weight: 600; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; }
+.gname { font-size: var(--fs-lg); font-weight: 700; color: var(--ink); display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; }
+.glinks { margin-top: 4px; font-size: var(--fs-xs); color: var(--sub); }
 .gnote { font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
 .grange { margin-left: auto; font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
 .gabout { margin: 10px 0 0; font-size: var(--fs-sm); color: var(--body); max-width: var(--prose); }

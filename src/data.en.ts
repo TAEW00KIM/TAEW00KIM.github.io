@@ -117,6 +117,7 @@ export const experience: { tabs: ExpTab[] } = {
 };
 
 const hufscheerRepo = { label: "GitHub", href: "https://github.com/hufscheer/spectator-server" };
+const hufscheerWebRepo = { label: "GitHub (web)", href: "https://github.com/hufscheer/web" };
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
@@ -245,6 +246,41 @@ export const projects: Project[] = [
         heading: "Measurements",
         paras: [
           "Test DB time went from 101 to 632 seconds down to 54 seconds (2 runs per setup in CI).",
+        ],
+      },
+    ],
+  },
+  {
+    id: "manager-desktop",
+    title: "Desktop Manager Web for Tournament Organizers",
+    org: "Hufscheer, frontend", period: "2026.08 ~ 10",
+    summary: "The manager screens were mobile only, so tournament organizers had nothing to use on a PC. I built a desktop manager on the same server and the same TanStack Query hooks as the mobile manager and shipped 19 screens to production.",
+    stat: { value: "19 screens", label: "desktop manager screens on the production server (excluding login)" },
+    key: "19 production screens",
+    problem: "The manager screens were mobile only, so organizers had no PC screen for registering tournaments and matches or entering records.",
+    solution: "I built it with Next.js, sharing the mobile manager's TanStack Query hooks and adding the query and mutation hooks the desktop needed. After team review, I merged it into the mobile manager app as a separate route instead of a separate app.",
+    result: "I built 19 screens now on the production server, including tournament creation, brackets, match record entry, and player and team management, and confirmed after the merge that 26 mobile screens were unchanged.",
+    bullets: [
+      "Built the PC manager on the same server and TanStack Query hooks as the mobile manager",
+      "Merged a separate app and API package into one app's /desktop route after review, splitting the two layouts' CSS with route groups",
+      "Found substituted players staying on the record sheet and made the related lists refetch after writes",
+    ],
+    tags: ["Next.js", "React", "TypeScript", "TanStack Query"],
+    links: [hufscheerWebRepo],
+    sections: [
+      {
+        heading: "Decisions and reasoning",
+        paras: [
+          "The school-wide match list was cut off when fetched as one page, so it follows the cursor to the end.",
+          "At first I split the API layer into a shared package with a separate app. Review said a separate app and package hurt maintainability and cohesion, so I merged it into the /desktop route of the mobile manager app (PR #612), splitting the root layout into mobile and desktop route groups so the two screens' CSS would not mix.",
+          "After the merge I compared 26 mobile screens at 375px with the previous version, down to element position, size, font, and color, and found no changes.",
+          "Substitutions, record deletions, and position changes did not refetch the playing lineup, so a substituted player stayed on the record sheet. I made writes invalidate the list keys they change. While applying PM feedback I also fixed 5 bugs, such as a date input that did not change the start time.",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
+          "I confirmed it is deployed to the production server; I have not measured how much organizers actually use it. A teammate opened the first PR that brought it into the production branch.",
         ],
       },
     ],
@@ -536,7 +572,7 @@ export const highlights: Highlight[] = [
 ];
 
 export const projectGroups: ProjectGroup[] = [
-  { id: "hufscheer", name: "Hufscheer", note: "live cheering service for university sports, backend", about: hufscheerOverview, ids: ["cheer-spam", "llm-masking", "ci-deploy"] },
+  { id: "hufscheer", name: "Hufscheer", note: "live cheering service for university sports, backend and manager web", about: hufscheerOverview, links: [{ label: "Server on GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "Web on GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
   { name: "AI Work Environment", note: "personal", ids: ["history-mcp", "agent-env"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
