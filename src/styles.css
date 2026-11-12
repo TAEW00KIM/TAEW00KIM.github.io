@@ -85,7 +85,7 @@ ul, ol { list-style: none; }
 .num-title { margin-top: 10px; font-size: var(--fs-xs); align-self: end; width: fit-content; }
 
 /* sections */
-.section { margin-top: 120px; scroll-margin-top: 56px; }
+.section { margin-top: 120px; scroll-margin-top: 88px; }
 .section h2 {
   display: flex; align-items: center; gap: 12px; font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.02em; line-height: 1.3;
   color: var(--ink); padding-bottom: 16px; border-bottom: 1px solid var(--rule);
@@ -116,7 +116,7 @@ ul, ol { list-style: none; }
 .dash .dash li { margin-top: 3px; }
 
 /* projects */
-.pgroup { margin-top: 48px; scroll-margin-top: 72px; }
+.pgroup { margin-top: 48px; scroll-margin-top: 96px; }
 .gname { font-size: var(--fs-lg); font-weight: 700; color: var(--ink); display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; }
 .glinks { margin-top: 4px; font-size: var(--fs-xs); color: var(--sub); }
 .gnote { font-size: var(--fs-xs); font-weight: 400; color: var(--sub); }
@@ -124,7 +124,7 @@ ul, ol { list-style: none; }
 .gabout { margin: 10px 0 0; font-size: var(--fs-sm); color: var(--body); max-width: var(--prose); }
 .gabout li + li { margin-top: 6px; }
 .projects { margin-top: 16px; display: grid; grid-template-columns: 1fr; gap: 0 40px; align-items: start; }
-.project { border-top: 1px solid var(--rule); padding: 16px 0 28px; scroll-margin-top: 72px; min-width: 0; }
+.project { border-top: 1px solid var(--rule); padding: 16px 0 28px; scroll-margin-top: 96px; min-width: 0; }
 .pmeta { display: flex; justify-content: space-between; font-size: var(--fs-xs); color: var(--sub); }
 .ptitle { margin-top: 10px; font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.015em; line-height: 1.4; }
 .pkey { margin-top: 4px; font-size: var(--fs-xs); color: var(--sub); line-height: 1.5; }
@@ -235,8 +235,8 @@ figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-h
   .topnav-m a { flex: none; display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; white-space: nowrap; }
   .topnav-m .is-active { color: var(--ink); font-weight: 600; }
   .hero { scroll-margin-top: 110px; }
-  .section { scroll-margin-top: 110px; }
-  .project, .pgroup { scroll-margin-top: 126px; }
+  .section { scroll-margin-top: 136px; }
+  .project, .pgroup { scroll-margin-top: 150px; }
   .numbers { grid-template-columns: minmax(0, 1fr); }
   .numbers li { display: block; grid-row: auto; border-left: 0; padding: 20px 0; }
   .num-value, .num-label { display: block; }
