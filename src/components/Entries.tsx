@@ -16,7 +16,7 @@ export default function Entries({ id, title, items }: { id: string; title: strin
               <div>
                 <h3>{it.title}</h3>
                 <p className="org">{it.org}</p>
-                {it.bullets.length === 1 && <p className="summary">{emph(it.bullets[0])}</p>}
+                {it.bullets.length === 1 && typeof it.bullets[0] === "string" && <p className="summary">{emph(it.bullets[0])}</p>}
                 {it.bullets.length > 1 && <DashList items={it.bullets} />}
               </div>
               {((it.tags && it.tags.length > 0) || (it.related && it.related.length > 0)) && (

@@ -20,7 +20,6 @@ export const hero = {
     "I measure a problem first to narrow down its cause, and I recheck wrong conclusions to correct them.",
     "I work on the search pages of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
-    "I also build my own setup and rules for working with AI agents.",
   ],
 };
 
@@ -36,9 +35,10 @@ export const experience: { tabs: ExpTab[] } = {
           period: "2026.07 ~ 2026.12",
           bullets: [
             "I work on the frontend of Vling, a SaaS for YouTube channel and video data, and shipped the video search and channel search redesigns with teammates.",
+            ["My part was splitting the list query, the channel cards, and URL search; the curation sections and the favorites folder feature were teammates' work."],
             "In the design system, I consolidated the filter popover and modal components.",
           ],
-          tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
+          tags: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)"],
           related: ["vling-search", "vling-perf"],
         },
         {
@@ -91,7 +91,11 @@ export const experience: { tabs: ExpTab[] } = {
           title: "VitaCheck Booth Operation",
           org: "2025 Seoul Job Fair (Seoul Metropolitan Government and Industrial Bank of Korea)",
           period: "2025.11",
-          bullets: ["At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and demoed it to visitors in person to collect feedback."],
+          bullets: [
+            "At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and demoed it to visitors in person to collect feedback.",
+            "On the 5-person team I worked on the backend: I built the purpose-based ingredient pagination with QueryDSL, and implemented the duplicate ingredient check for Gemini recommendations and Google login.",
+          ],
+          tags: ["Java", "Spring Boot", "QueryDSL"],
         },
         {
           title: "Senior KATUSA, 1st Platoon",
@@ -129,14 +133,14 @@ const hufscheerOverview = [
   "In quiet matches, spectators' WebSocket connections dropped every 2 minutes.",
   [
     "I measured that connections through Cloudflare closed at **126 seconds** while direct connections inside the server stayed up past **240 seconds**, and traced the cause to the server's STOMP heartbeat being off (0,0).",
-    "I turned the heartbeat on at 10 seconds and left a test that fails without the fix (PR #753).",
+    "I turned the heartbeat on at 10 seconds and left a test that fails without the fix ([PR #753](https://github.com/hufscheer/spectator-server/pull/753)).",
     "After the fix, a connection through Cloudflare on the dev server stayed up past **260 seconds**.",
   ],
   "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them.",
   [
     "I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway).",
-    "Then I added a permission check to **7** update and delete APIs for teams and players that allows only managers of the same school (PR #527, #543).",
-    "When a player is created, the manager's school is attached automatically, and a team's school was later set through its college unit instead (PR #666).",
+    "Then I added a permission check to **7** update and delete APIs for teams and players that allows only managers of the same school ([PR #527](https://github.com/hufscheer/spectator-server/pull/527), [#543](https://github.com/hufscheer/spectator-server/pull/543)).",
+    "When a player is created, the manager's school is attached automatically, and a team's school was later set through its college unit instead ([PR #666](https://github.com/hufscheer/spectator-server/pull/666)).",
   ],
 ];
 
@@ -201,7 +205,7 @@ export const projects: Project[] = [
     key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
     solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache meant to cut LLM calls (the reduction was not measured).",
-    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy **88.6% → 100%**, 22 sentences twice); the effect in production is not measured yet.",
+    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy 88.6% → 100% on 22 test sentences, run twice); the effect in production is not measured yet.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to cut calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
@@ -241,8 +245,8 @@ export const projects: Project[] = [
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
       "CI took anywhere from 8 to 17 minutes, and every deployment cut the service while the container was recreated. I found the causes, shortened CI, and switched deployment to Blue/Green.",
-    stat: { value: "510s → 132s", label: "time for one production deploy" },
-    key: "Production deploy 510s → 132s",
+    stat: { value: "510s → 132s", label: "time for one production deploy, mostly from dropping a full test suite that ran twice" },
+    key: "Production deploy 510s → 132s (duplicate tests removed)",
     problem: "CI swung between 8 and 17 minutes, and every deploy took the service down for 10 to 30 seconds while the container was recreated (a design-time estimate, not measured).",
     solution: "Put the test DB on tmpfs and removed duplicate tests from the deploy job. Switched deploys to Blue/Green.",
     result: "nginx now switches to the new container only after it passes its health check. Real-time connections (WebSocket) drop at the switch and reconnect 5 seconds later. The deploy job went **from 510s to 132s**, mostly by removing the full test suite that ran twice in the deploy job.",
@@ -293,7 +297,7 @@ export const projects: Project[] = [
         paras: [
           "The school-wide match list was cut off when fetched as one page, so it follows the cursor to the end.",
           "At first I split the API layer into a shared package with a separate app.",
-          "Review said a separate app and package hurt maintainability and cohesion, so I merged it into the /desktop route of the mobile manager app (PR #612).",
+          "Review said a separate app and package hurt maintainability and cohesion, so I merged it into the /desktop route of the mobile manager app ([PR #612](https://github.com/hufscheer/web/pull/612)).",
           "I split the root layout into mobile and desktop route groups so the two screens' CSS would not mix.",
           "After the merge I compared **26 mobile screens** at 375px with the previous version, down to element position, size, font, and color, and found no changes.",
           "Substitutions, record deletions, and position changes did not refetch the playing lineup, so a substituted player stayed on the record sheet.",
@@ -325,7 +329,7 @@ export const projects: Project[] = [
       "Prevented duplicates from concurrent updates to the same cell with a unique constraint, a pessimistic lock, and retries",
       "Split notifications into async events after commit, and fixed N+1 with @BatchSize and JOIN FETCH",
     ],
-    tags: ["Java", "Spring Boot", "MySQL", "Redis", "Uber H3"],
+    tags: ["Java", "Spring Boot", "JPA", "MySQL", "Redis", "Uber H3"],
     sections: [
       {
         heading: "Decisions and reasoning",
@@ -335,6 +339,7 @@ export const projects: Project[] = [
           "In case the new query was wrong, I made it switchable with the old query through a configuration flag. If the new query throws an exception, it falls back to the old query.",
           "If the same user posted to the same cell almost at the same time, two aggregate rows could be created or a count could be lost.",
           ["I added a unique constraint and took a pessimistic lock on the row when updating. If creating the first row at the same time hits the constraint, it retries."],
+          "I fixed N+1 queries with JPA's @BatchSize and JOIN FETCH.",
         ],
       },
       {
@@ -419,13 +424,13 @@ export const projects: Project[] = [
     key: "2 search screens shipped",
     problem: "A field that needs permission was mixed into the list query, so some plans **got no search results at all** and others **lost as many views as there were cards at once**.",
     solution: "The value is not drawn while locked, so I took it out of the list query and fetch it one channel at a time when the lock is lifted.",
-    result: "Shipped the video search (**Sep 8**) and channel search (**Sep 9**) redesigns to production with teammates.",
+    result: "Shipped the video search (**Sep 8**) and channel search (**Sep 9**) redesigns to production. I did the list query split, channel cards, URL search, and moving favorites between folders; teammates did the curation sections and the folder feature; we built the video results grid and the channel attribute filters together.",
     bullets: [
       "Fixed autocomplete Enter running a channel jump and a search together",
       "Restored search usage deductions that had silently stopped after a refactor",
       "Handled shared URLs that failed on re-entry (unknown category, 115-character URL)",
     ],
-    tags: ["TypeScript", "React", "Next.js", "Apollo Client", "Zustand"],
+    tags: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)", "Zustand"],
     links: [
       { label: "Video search", href: "https://vling.net/algorithm-score" },
       { label: "Channel search", href: "https://vling.net/search" },
@@ -435,7 +440,7 @@ export const projects: Project[] = [
         heading: "Decisions and reasoning",
         paras: [
           "Picking a channel in autocomplete with the arrow keys and pressing Enter moved to the channel **and also ran a search**, charging a search the user never saw. Two key handlers on the same input ran one after the other, so the second now steps back when the first has handled Enter.",
-          "A refactor renamed the search query so it no longer matched the usage rules, and **search deductions silently stopped with no error**. I found it and restored it by matching the name.",
+          "A refactor renamed the search GraphQL operation so it no longer matched the usage rules, and **search deductions silently stopped with no error**. I found it and restored it by matching the name.",
           "On re-entry from a shared URL, an unknown category value made the query fail, and a **115-character** playlist URL was cut by the **100-character** input limit. Values are now validated and ignored, and the length limit applies on submit, not while typing.",
         ],
       },
@@ -443,7 +448,6 @@ export const projects: Project[] = [
         heading: "Role",
         paras: [
           "As a frontend intern, I split the channel search (started July 20) and video search (started August 5) redesigns with teammates.",
-          "I built the channel cards, part of the channel attribute filters, URL search, and moving favorited channels between folders.",
         ],
       },
     ],
@@ -461,7 +465,7 @@ export const projects: Project[] = [
       { label: "'Vlog' search time", before: 8.6, after: 2.4, unit: "s" },
       { label: "Candidates for one two-word query", before: 1330, after: 22, unit: "K" },
     ],
-    key: "CLS 0.246 → 0.003",
+    key: "CLS 0.246 → 0.003 (sandbox)",
     problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
     solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes no longer refetch server-rendered data unrelated to the results, thanks to shallow routing.",
     result: "CLS **0.246 → 0.003**, skeleton after a sort change **2,194ms → 40ms**, 'vlog' search **8.6s → 2.4s** (sandbox measurements).",
@@ -576,7 +580,7 @@ export const projects: Project[] = [
     key: "Kanban auto-cleanup, reply marked done 0.9s sooner",
     problem: "In the web app I used for AI assistant bots and Claude Code on one screen, work in progress did not show on the kanban and replies were slow.",
     solution: "Cards linked to in-progress Notion tasks now move into the in-progress column automatically, and a reply is marked done as soon as the CLI returns its result.",
-    result: "**About 0.9 seconds** saved per message (1 measurement). In October I moved it to native iOS and Mac apps on the same server.",
+    result: "About 0.9 seconds saved per message (1 measurement). In October I moved it to native iOS and Mac apps on the same server.",
     bullets: [
       "Fixed in-progress work missing from the kanban board with a Notion-linked cleanup job and automatic archiving 3 days after completion",
       "Did not apply the reasoning effort and priority processing options, because measuring showed no confirmed gain",
@@ -618,10 +622,10 @@ export const resume = {
     { group: "Data", items: ["MySQL", "Flyway", "SQLite"] },
     {
       group: "Infrastructure",
-      items: ["AWS", "Docker", "nginx", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
+      items: ["AWS", "Docker", "nginx", "GitHub Actions", "Prometheus"],
     },
-    { group: "Web", items: ["TypeScript", "React", "Next.js", "GraphQL"] },
-    { group: "AI", items: ["Claude Code", "Codex", "MCP", "Embedding search (e5, RRF)", "LLM output validation"] },
+    { group: "Web", items: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)", "TanStack Query"] },
+    { group: "AI", items: ["LLM APIs (Gemini, OpenRouter)", "LLM output validation", "MCP", "Embedding search", "Claude Code"] },
   ],
 };
 
@@ -634,8 +638,8 @@ export const highlights: Highlight[] = [
 export const projectGroups: ProjectGroup[] = [
   { id: "hufscheer", name: "Hufscheer", note: "live cheering service for university sports, backend and manager web", about: hufscheerOverview, links: [{ label: "Server on GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "Web on GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
-  { name: "AI Work Environment", note: "personal", ids: ["history-mcp", "agent-env"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
+  { name: "Personal Project", ids: ["history-mcp"] },
 ];
 
 export const ui = {

@@ -1,9 +1,24 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { Fragment, type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import type { Bullet, Project } from "../data";
 import { useData } from "../i18n";
 
-// **강조** 표시만 <strong>으로 바꾼다(개요, 카드 문제/해결/결과, 자세히 보기, 경력 불릿).
-export const emph = (t: string) => t.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{part}</strong> : part));
+// [글](주소)는 새 창 링크로 바꾼다(PR 번호 등).
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const linkify = (t: string) => {
+  const out: ReactNode[] = [];
+  let last = 0;
+  for (const m of t.matchAll(LINK)) {
+    if (m.index! > last) out.push(t.slice(last, m.index));
+    out.push(<a key={m.index} href={m[2]} target="_blank" rel="noopener noreferrer">{m[1]}</a>);
+    last = m.index! + m[0].length;
+  }
+  if (last < t.length) out.push(t.slice(last));
+  return out;
+};
+
+// **강조** 표시는 <strong>으로 바꾼다(개요, 카드 문제/해결/결과, 자세히 보기, 경력 불릿).
+export const emph = (t: string) =>
+  t.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i}>{linkify(part)}</strong> : <Fragment key={i}>{linkify(part)}</Fragment>));
 
 // 대시 불릿 목록. 문자열 배열 항목은 바로 앞 항목 아래 하위 불릿으로 보인다.
 export function DashList({ items, className = "dash" }: { items: Bullet[]; className?: string }) {

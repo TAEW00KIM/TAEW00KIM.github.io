@@ -20,7 +20,6 @@ export const hero = {
     "문제를 먼저 재서 원인을 좁히고, 틀린 결론은 다시 확인해 바로잡습니다.",
     "버즈앤비 Vling에서는 검색 화면을,",
     "대학 스포츠 응원 서비스 Hufscheer에서는 실시간 응원 서버와 배포를 맡고 있습니다.",
-    "AI 에이전트와 일하는 환경과 규칙도 직접 만들어 씁니다.",
   ],
 };
 
@@ -28,7 +27,7 @@ export type ExpItem = {
   title: string;
   org: string;
   period: string;
-  bullets: string[];
+  bullets: Bullet[];
   tags?: string[];
   related?: string[];
 };
@@ -47,9 +46,10 @@ export const experience: { tabs: ExpTab[] } = {
           period: "2026.07 ~ 2026.12",
           bullets: [
             "유튜브 채널과 영상 데이터를 다루는 SaaS인 Vling의 프론트엔드를 맡아, 영상 검색과 채널 검색 개편을 팀원과 함께 출시했습니다.",
+            ["제 몫은 리스트 조회 분리, 채널 카드, URL 검색이고, 큐레이션 섹션과 즐겨찾기 폴더 기능은 팀원 몫입니다."],
             "디자인 시스템에서는 필터 팝오버와 모달 컴포넌트를 정리했습니다.",
           ],
-          tags: ["TypeScript", "React", "Next.js", "Apollo Client"],
+          tags: ["TypeScript", "React", "Next.js", "GraphQL(Apollo Client)"],
           related: ["vling-search", "vling-perf"],
         },
         {
@@ -102,7 +102,11 @@ export const experience: { tabs: ExpTab[] } = {
           title: "VitaCheck 부스 운영",
           org: "2025 서울시 일자리박람회 (서울시, IBK기업은행)",
           period: "2025.11",
-          bullets: ["박람회의 UMC 프로젝트 데모존에서 팀 프로젝트인 영양제 추천 서비스 VitaCheck를 선보이고 방문객에게 직접 시연하며 피드백을 받았습니다."],
+          bullets: [
+            "박람회의 UMC 프로젝트 데모존에서 팀 프로젝트인 영양제 추천 서비스 VitaCheck를 선보이고 방문객에게 직접 시연하며 피드백을 받았습니다.",
+            "5인 팀에서 백엔드를 맡아 목적별 성분 조회 페이지네이션을 QueryDSL로 만들고, Gemini 추천의 중복 성분 검증과 구글 로그인을 구현했습니다.",
+          ],
+          tags: ["Java", "Spring Boot", "QueryDSL"],
         },
         {
           title: "1소대 Senior KATUSA",
@@ -170,14 +174,14 @@ const hufscheerOverview = [
   "조용한 경기에서 관객 WebSocket이 2분마다 끊겼습니다.",
   [
     "Cloudflare를 거친 연결은 **126초**에 끊기고 서버 안에서 직접 붙은 연결은 **240초** 넘게 유지되는 차이를 실측해, 서버 STOMP 하트비트가 꺼져 있던 것(0,0)을 원인으로 찾았습니다.",
-    "하트비트를 10초로 켜고, 수정 전에는 실패하는 테스트를 남겼습니다(PR #753).",
+    "하트비트를 10초로 켜고, 수정 전에는 실패하는 테스트를 남겼습니다([PR #753](https://github.com/hufscheer/spectator-server/pull/753)).",
     "수정 뒤에는 개발 서버에서 Cloudflare를 거친 연결이 **260초** 넘게 유지되는 것을 확인했습니다.",
   ],
   "여러 학교가 한 서비스를 함께 쓰게 되면서 팀과 선수에는 소속 학교가 없어, 어느 학교 매니저든 수정할 수 있는 구조였습니다.",
   [
     "기존 데이터에 영향이 없도록 팀과 선수에 nullable 학교 FK를 먼저 넣었습니다(Flyway).",
-    "이어서 팀과 선수의 수정과 삭제 API **7개**에 같은 학교 매니저만 허용하는 권한 검증을 붙였습니다(PR #527, #543).",
-    "선수를 만들 때는 매니저의 학교가 자동으로 붙고, 팀의 학교는 뒤에 단과대를 거쳐 정해지도록 정리했습니다(PR #666).",
+    "이어서 팀과 선수의 수정과 삭제 API **7개**에 같은 학교 매니저만 허용하는 권한 검증을 붙였습니다([PR #527](https://github.com/hufscheer/spectator-server/pull/527), [#543](https://github.com/hufscheer/spectator-server/pull/543)).",
+    "선수를 만들 때는 매니저의 학교가 자동으로 붙고, 팀의 학교는 뒤에 단과대를 거쳐 정해지도록 정리했습니다([PR #666](https://github.com/hufscheer/spectator-server/pull/666)).",
   ],
 ];
 
@@ -242,7 +246,7 @@ export const projects: Project[] = [
     key: "설명문 노출을 출력 검사로 차단",
     problem: "욕설을 가리는 LLM이 가린 문장 대신 설명문을 돌려줬고, 그 설명이 그대로 화면에 나갔습니다.",
     solution: "팀원이 만든 LLM 마스킹 위에, 모델 출력을 코드로 검사해 이상하면 원문을 쓰는 단계를 넣고, 정적 필터와 5분 캐시로 LLM 호출을 줄이도록 했습니다(줄어든 양은 재지 않음).",
-    result: "설명문이 섞인 응답은 출력 검사에서 걸러 원문으로 대신합니다. 모델은 같은 문장으로 9개를 오프라인 비교해 바꿨고(정확도 **88.6% → 100%**, 22문장 2회), 운영에서 효과는 아직 재지 않았습니다.",
+    result: "설명문이 섞인 응답은 출력 검사에서 걸러 원문으로 대신합니다. 모델은 같은 문장으로 9개를 오프라인 비교해 바꿨고(평가 문장 22개를 2회 돌린 정확도 88.6% → 100%), 운영에서 효과는 아직 재지 않았습니다.",
     bullets: [
       "정적 필터와 결과 캐시를 LLM 앞단에 두어 호출을 줄이도록 함",
       "공급자를 인터페이스로 분리해 설정만으로 Gemini와 OpenRouter 전환",
@@ -282,8 +286,8 @@ export const projects: Project[] = [
     org: "Hufscheer, 백엔드", period: "2026.02 ~ 현재",
     summary:
       "CI가 8~17분을 오갔고, 배포 때마다 컨테이너를 다시 만드느라 서비스가 끊겼습니다. 원인을 찾아 CI를 줄이고 배포를 Blue/Green으로 바꿨습니다.",
-    stat: { value: "510초 → 132초", label: "운영 배포 한 번에 걸리는 시간" },
-    key: "운영 배포 510초 → 132초",
+    stat: { value: "510초 → 132초", label: "운영 배포 한 번에 걸리는 시간, 대부분 배포 잡에서 중복으로 돌던 전체 테스트를 뺀 효과" },
+    key: "운영 배포 510초 → 132초(중복 테스트 제거)",
     problem: "CI가 8~17분을 오갔고, 배포할 때마다 컨테이너를 다시 만드느라 서비스가 10~30초 끊겼습니다(설계 때 추정, 측정은 하지 않음).",
     solution: "테스트 DB를 tmpfs에 올리고 배포 잡의 중복 테스트를 걷어냈습니다. 배포는 Blue/Green으로 바꿨습니다.",
     result: "배포는 새 컨테이너가 헬스체크를 통과한 뒤 nginx가 넘겨받습니다. 실시간 연결(WebSocket)은 전환할 때 끊겼다가 5초 뒤 다시 붙습니다. 배포 잡은 **510초에서 132초로** 줄었는데, 대부분 배포 잡에서 중복으로 돌던 전체 테스트를 걷어낸 효과입니다.",
@@ -334,7 +338,7 @@ export const projects: Project[] = [
         paras: [
           "학교 전체 경기 목록은 한 페이지로 받으면 잘려서, 커서를 끝까지 따라가 모두 받도록 했습니다.",
           "처음에는 API 계층을 공용 패키지로 떼어 별도 앱으로 두었습니다.",
-          "별도 앱과 패키지는 유지보수와 응집성에 불리하다는 리뷰를 받고, 모바일 매니저 앱 안의 /desktop 경로로 합쳤습니다(PR #612).",
+          "별도 앱과 패키지는 유지보수와 응집성에 불리하다는 리뷰를 받고, 모바일 매니저 앱 안의 /desktop 경로로 합쳤습니다([PR #612](https://github.com/hufscheer/web/pull/612)).",
           "두 화면의 CSS가 섞이지 않게 루트 레이아웃을 모바일과 데스크탑 두 route group으로 나눴습니다.",
           "합친 뒤에는 **모바일 화면 26개**를 375px에서 이전 화면과 요소의 위치, 크기, 글꼴, 색까지 비교해 바뀐 곳이 없음을 확인했습니다.",
           "교체, 기록 삭제, 포지션 변경 뒤에 출전 선수 목록을 다시 받지 않아, 교체 직후 기록 시트에 나간 선수가 남아 있었습니다.",
@@ -366,7 +370,7 @@ export const projects: Project[] = [
       "같은 셀의 동시 갱신 중복을 유니크 제약, 비관적 락, 재시도로 방지",
       "알림은 커밋 뒤 비동기 이벤트로 분리, N+1은 @BatchSize와 JOIN FETCH로 해결",
     ],
-    tags: ["Java", "Spring Boot", "MySQL", "Redis", "Uber H3"],
+    tags: ["Java", "Spring Boot", "JPA", "MySQL", "Redis", "Uber H3"],
     sections: [
       {
         heading: "결정과 근거",
@@ -376,6 +380,7 @@ export const projects: Project[] = [
           "새 쿼리가 틀렸을 때를 대비해 설정 플래그로 옛 쿼리와 바꿀 수 있게 했습니다. 새 쿼리에서 예외가 나면 옛 쿼리로 돌아갑니다.",
           "같은 사용자가 같은 셀에 거의 동시에 글을 올리면 집계 행이 두 개 생기거나 개수가 빠질 수 있었습니다.",
           ["유니크 제약을 두고, 갱신할 때 행을 비관적 락으로 잡았습니다. 첫 행을 동시에 만들다 제약에 걸리면 다시 시도합니다."],
+          "N+1 쿼리는 JPA의 @BatchSize와 JOIN FETCH로 풀었습니다.",
         ],
       },
       {
@@ -460,13 +465,13 @@ export const projects: Project[] = [
     key: "검색 화면 2개 출시",
     problem: "리스트 조회에 권한이 필요한 필드가 섞여, 일부 요금제는 **검색 결과가 한 건도 나오지 않고** 다른 요금제는 **카드 수만큼 열람 횟수가 한꺼번에 깎였습니다**.",
     solution: "잠금 상태에서는 그리지 않는 값이라 리스트 조회에서 빼고, 잠금을 풀 때 채널 하나씩 조회하도록 나눴습니다.",
-    result: "영상 검색(**9월 8일**)과 채널 검색(**9월 9일**) 개편을 팀원과 함께 운영에 출시했습니다.",
+    result: "영상 검색(**9월 8일**)과 채널 검색(**9월 9일**) 개편을 운영에 출시했습니다. 리스트 조회 분리, 채널 카드, URL 검색, 즐겨찾기 폴더 이동은 제가, 큐레이션 섹션과 폴더 기능은 팀원이 맡았고, 영상 결과 그리드와 채널 성격 필터는 함께 만들었습니다.",
     bullets: [
       "자동완성 Enter가 채널 이동과 검색을 함께 실행하던 문제 수정",
       "리팩터링 뒤 오류 없이 검색 차감이 빠지던 결함 복구",
       "공유 URL 재진입 때 조회가 실패하던 경우(모르는 카테고리, 115자 URL) 처리",
     ],
-    tags: ["TypeScript", "React", "Next.js", "Apollo Client", "Zustand"],
+    tags: ["TypeScript", "React", "Next.js", "GraphQL(Apollo Client)", "Zustand"],
     links: [
       { label: "영상 검색", href: "https://vling.net/algorithm-score" },
       { label: "채널 검색", href: "https://vling.net/search" },
@@ -476,7 +481,7 @@ export const projects: Project[] = [
         heading: "결정과 근거",
         paras: [
           "자동완성에서 방향키로 채널을 고르고 Enter를 누르면 채널로 이동하면서 **검색까지 실행**돼, 사용자가 보지 않은 검색에 횟수가 차감됐습니다. 같은 입력창에 붙은 두 키 처리기가 연달아 돈 것이 원인이라, 앞에서 처리한 Enter는 뒤에서 물러나게 했습니다.",
-          "리팩터링으로 검색 쿼리 이름이 바뀌며 사용량 규칙과 어긋나, **오류 없이 검색 차감이 통째로 빠지던 결함**을 찾아 이름을 맞춰 복구했습니다.",
+          "리팩터링으로 검색 GraphQL 쿼리의 operation 이름이 바뀌며 사용량 규칙과 어긋나, **오류 없이 검색 차감이 통째로 빠지던 결함**을 찾아 이름을 맞춰 복구했습니다.",
           "공유한 URL로 다시 들어오면 모르는 카테고리 값은 조회를 실패시켰고, **115자** 재생목록 URL은 **100자** 입력 제한에 잘려 실패했습니다. 값은 검증해 무시하고, 글자 수 제한은 입력이 아니라 제출할 때 걸었습니다.",
         ],
       },
@@ -484,7 +489,6 @@ export const projects: Project[] = [
         heading: "역할",
         paras: [
           "프론트엔드 현장실습생으로 채널 검색(7월 20일 시작)과 영상 검색(8월 5일 시작) 개편을 팀원과 나눠 개발했습니다.",
-          "채널 카드, 채널 성격 필터 일부, URL 검색, 즐겨찾기한 채널의 폴더 이동을 맡았습니다.",
         ],
       },
     ],
@@ -502,7 +506,7 @@ export const projects: Project[] = [
       { label: "'브이로그' 검색 소요", before: 8.6, after: 2.4, unit: "초" },
       { label: "'편의점 신상' 검색 후보", before: 133, after: 2.2, unit: "만 건" },
     ],
-    key: "CLS 0.246 → 0.003",
+    key: "CLS 0.246 → 0.003(샌드박스 측정)",
     problem: "검색 화면만 로딩 중 레이아웃이 크게 흔들렸고(CLS 0.246), 정렬을 바꾸면 2초 넘게 옛 결과에 멈춰 있었습니다.",
     solution: "측정 스크립트로 원인을 스켈레톤 key로 좁혀 고쳤고, 정렬을 바꿀 때마다 결과와 상관없는 서버 렌더링 데이터를 다시 받던 것은 shallow 라우팅으로 없앴습니다.",
     result: "CLS **0.246 → 0.003**, 정렬 변경 후 스켈레톤 **2,194ms → 40ms**, '브이로그' 검색 **8.6초 → 2.4초** (샌드박스 측정).",
@@ -617,7 +621,7 @@ export const projects: Project[] = [
     key: "칸반 자동 정리, 완료 표시 0.9초 단축",
     problem: "AI 비서 봇과 Claude Code를 한 화면에서 쓰던 웹앱에서, 진행 중인 일이 칸반에 보이지 않고 응답이 느렸습니다.",
     solution: "노션에서 진행중인 할 일과 연결된 카드를 '진행 중' 칸으로 자동으로 옮기고, CLI가 결과를 내는 즉시 완료로 처리하게 바꿨습니다.",
-    result: "메시지당 **약 0.9초**를 줄였습니다(1회 측정). 10월에는 같은 서버를 쓰는 iOS와 Mac 네이티브 앱으로 옮겼습니다.",
+    result: "메시지당 약 0.9초를 줄였습니다(1회 측정). 10월에는 같은 서버를 쓰는 iOS와 Mac 네이티브 앱으로 옮겼습니다.",
     bullets: [
       "칸반에 안 보이던 진행 중인 일을 노션 연동 정리 작업과 완료 3일 뒤 자동 보관으로 해결",
       "추론 강도와 우선 처리 옵션은 재 봐도 이득이 확인되지 않아 적용하지 않음",
@@ -659,10 +663,10 @@ export const resume = {
     { group: "데이터", items: ["MySQL", "Flyway", "SQLite"] },
     {
       group: "인프라",
-      items: ["AWS", "Docker", "nginx", "Terraform", "GitHub Actions", "Prometheus", "Grafana"],
+      items: ["AWS", "Docker", "nginx", "GitHub Actions", "Prometheus"],
     },
-    { group: "웹", items: ["TypeScript", "React", "Next.js", "GraphQL"] },
-    { group: "AI", items: ["Claude Code", "Codex", "MCP", "임베딩 검색(e5, RRF)", "LLM 출력 검증"] },
+    { group: "웹", items: ["TypeScript", "React", "Next.js", "GraphQL(Apollo Client)", "TanStack Query"] },
+    { group: "AI", items: ["LLM API(Gemini, OpenRouter)", "LLM 출력 검증", "MCP", "임베딩 검색", "Claude Code"] },
   ],
 };
 
@@ -681,8 +685,9 @@ export const highlights: Highlight[] = [
 export const projectGroups: ProjectGroup[] = [
   { id: "hufscheer", name: "훕치치 (Hufscheer)", note: "대학 스포츠 응원 서비스, 백엔드와 매니저 웹", about: hufscheerOverview, links: [{ label: "서버 GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "웹 GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
-  { name: "AI 작업 환경", note: "개인", ids: ["history-mcp", "agent-env"] },
   { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },
+  // 에이전트 비서 앱(agent-env)은 AI 비중을 줄이려고 화면에서 뺐다(11/12 외부 리뷰). 되돌리려면 ids에 다시 넣는다.
+  { name: "개인 프로젝트", ids: ["history-mcp"] },
 ];
 
 export const ui = {

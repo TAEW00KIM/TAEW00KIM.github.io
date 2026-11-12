@@ -39,8 +39,8 @@ function projectsInOrder(d) {
   const byId = new Map(d.projects.map((p) => [p.id, p]));
   return d.projectGroups.flatMap((g) => g.ids.filter((id) => byId.has(id)).map((id) => byId.get(id)));
 }
-// Data strings mark emphasis with **...** for the page; JSON-LD, llms.txt and meta get plain text.
-const plain = (s) => s.replace(/\*\*/g, "");
+// Data strings mark emphasis with **...** and links with [text](url) for the page; JSON-LD, llms.txt and meta get plain text.
+const plain = (s) => s.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)\s]+\)/g, "$1");
 const projSummary = (p) => plain(p.summary ? p.summary : [p.problem, p.result].filter(Boolean).join(" "));
 // JSON-LD describes only what is on screen: problem + result lines when the card shows them, otherwise the summary lead.
 const projOnScreen = (p) => plain(p.problem || p.solution || p.result ? [p.problem, p.result].filter(Boolean).join(" ") : p.summary);
