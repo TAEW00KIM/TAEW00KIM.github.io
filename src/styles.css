@@ -185,6 +185,7 @@ figure { max-width: 100%; }
 figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; }
 figure:has(img[height="900"]) { width: 200px; }
 figure:not(:has(img[height="900"])) { width: 100%; }
+figure:not(:has(img[height="900"])) img { width: 100%; }
 figcaption { font-size: var(--fs-xs); color: var(--sub); margin-top: 8px; line-height: 1.6; }
 .plinks { margin-top: 20px; font-size: var(--fs-xs); }
 
