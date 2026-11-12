@@ -443,7 +443,7 @@ export const projects: Project[] = [
         heading: "Role",
         paras: [
           "As a frontend intern, I split the channel search (started July 20) and video search (started August 5) redesigns with teammates.",
-          "I built the channel cards, part of the channel attribute filters, URL search, and the favorites folders shared by videos and channels.",
+          "I built the channel cards, part of the channel attribute filters, URL search, and moving favorited channels between folders.",
         ],
       },
     ],

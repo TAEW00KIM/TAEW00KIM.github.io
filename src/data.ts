@@ -450,7 +450,7 @@ export const projects: Project[] = [
   {
     id: "vling-search",
     images: [
-      { src: "/vling-video-search.webp", src2x: "/vling-video-search@2x.webp", width: 1110, height: 676, live: "https://vling.net/algorithm-score?na=KR", alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 큐레이션 섹션과 결과 그리드를 팀원과 함께 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
+      { src: "/vling-video-search.webp", src2x: "/vling-video-search@2x.webp", width: 1110, height: 676, live: "https://vling.net/algorithm-score?na=KR", alt: "Vling 영상 검색 화면", caption: "영상 검색 화면. 결과 그리드를 팀원과 함께 구현했습니다(큐레이션 섹션은 팀원 담당). 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
       { src: "/vling-channel-search.webp", src2x: "/vling-channel-search@2x.webp", width: 1110, height: 588, live: "https://vling.net/search?na=KR&sort=trendsScorePercentile", alt: "Vling 채널 검색 화면", caption: "채널 검색 화면. 채널 카드와 채널 성격 필터 일부를 구현했습니다. 채널 이름은 서비스에서 가려 둔 상태이고, 썸네일과 프로필 사진은 흐리게 처리했습니다." },
     ],
     title: "Vling 영상 검색과 채널 검색 개편",
@@ -484,7 +484,7 @@ export const projects: Project[] = [
         heading: "역할",
         paras: [
           "프론트엔드 현장실습생으로 채널 검색(7월 20일 시작)과 영상 검색(8월 5일 시작) 개편을 팀원과 나눠 개발했습니다.",
-          "채널 카드, 채널 성격 필터 일부, URL 검색, 영상과 채널이 함께 쓰는 즐겨찾기 폴더를 맡았습니다.",
+          "채널 카드, 채널 성격 필터 일부, URL 검색, 즐겨찾기한 채널의 폴더 이동을 맡았습니다.",
         ],
       },
     ],
