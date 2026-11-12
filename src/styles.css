@@ -167,7 +167,7 @@ ul, ol { list-style: none; }
   margin-top: 14px; padding: 4px 10px; min-height: 30px; border: 1px solid var(--ink); border-radius: 4px;
   font-size: var(--fs-xs); font-weight: 600; color: var(--ink); transition: background 0.15s, color 0.15s;
 }
-.more:hover { background: var(--ink); color: var(--paper); }
+@media (hover: hover) { .more:hover { background: var(--ink); color: var(--paper); } }
 .is-open .more { border-color: var(--faint); color: var(--sub); font-weight: 500; }
 .more:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 /* 자세히 보기: 카드 안에서 버튼 아래로 이어서 열린다 */
