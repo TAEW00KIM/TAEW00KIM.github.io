@@ -8,7 +8,7 @@
   .label{font-size:26px;color:#737373;letter-spacing:0.01em}
   h1{margin:18px 0 0;font-size:84px;font-weight:700;letter-spacing:-0.02em;line-height:1.1}
   .rule{height:2px;background:#ebebe9;margin:52px 0 40px}
-  p{margin:0;font-size:32px;line-height:1.55;color:#3d3d3d;max-width:900px}
+  p{margin:0;font-size:32px;line-height:1.55;color:#3d3d3d;max-width:900px;word-break:keep-all;text-wrap:balance}
   .url{margin-top:auto;font-size:26px;color:#a3a3a3}
 </style></head>
 <body><div class="page">
@@ -20,8 +20,8 @@
 </div>
 <script>
   const T = {
-    ko: { label: "풀스택 개발자", name: "김태우", line: "문제를 먼저 재서 원인을 좁히고, 틀린 결론은 다시 확인해 바로잡습니다.", url: "kimtaewoo.dev" },
-    en: { label: "Full-stack Engineer", name: "Kim Taewoo", line: "I measure a problem first to narrow down its cause, and I recheck wrong conclusions to correct them.", url: "kimtaewoo.dev/en" },
+    ko: { label: "풀스택 개발자", name: "김태우", line: "먼저 측정해 원인을 좁힌 뒤 고치고, 틀린 결론은 다시 확인해 바로잡습니다.", url: "kimtaewoo.dev" },
+    en: { label: "Full-stack Engineer", name: "Kim Taewoo", line: "I measure first to narrow down the cause before I fix it, and I recheck wrong conclusions to correct them.", url: "kimtaewoo.dev/en" },
   }[new URLSearchParams(location.search).get("lang") || "ko"];
   for (const k in T) document.getElementById(k).textContent = T[k];
 </script></body></html>

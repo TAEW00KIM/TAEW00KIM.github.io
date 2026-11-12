@@ -109,7 +109,7 @@ function page(lang) {
   let html = base;
   if (lang === "en") {
     const og = {
-      desc: "I measure a problem first to narrow down its cause, and I recheck wrong conclusions to correct them.",
+      desc: "I measure first to narrow down the cause before I fix it, and I recheck wrong conclusions to correct them.",
     };
     const swaps = [
       ['<html lang="ko">', '<html lang="en">'],
