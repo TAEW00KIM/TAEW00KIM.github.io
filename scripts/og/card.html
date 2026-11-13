@@ -20,8 +20,8 @@
 </div>
 <script>
   const T = {
-    ko: { label: "풀스택 개발자", name: "김태우", line: "먼저 측정해 원인을 좁힌 뒤 고치고, 틀린 결론은 다시 확인해 바로잡습니다.", url: "kimtaewoo.dev" },
-    en: { label: "Full-stack Engineer", name: "Kim Taewoo", line: "I measure first to narrow down the cause before I fix it, and I recheck wrong conclusions to correct them.", url: "kimtaewoo.dev/en" },
+    ko: { label: "풀스택 개발자", name: "김태우", line: "배포 시간과 CI DB 시간을 측정해 원인을 좁혀 고쳤고, 근거가 틀린 결론은 커밋에서 거뒀습니다.", url: "kimtaewoo.dev" },
+    en: { label: "Full-stack Engineer", name: "Kim Taewoo", line: "I measured deploy time and CI database time to narrow down the causes before fixing them, and withdrew conclusions from commits when their evidence was wrong.", url: "kimtaewoo.dev/en" },
   }[new URLSearchParams(location.search).get("lang") || "ko"];
   for (const k in T) document.getElementById(k).textContent = T[k];
 </script></body></html>

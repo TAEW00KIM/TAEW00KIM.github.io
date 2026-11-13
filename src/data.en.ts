@@ -17,7 +17,7 @@ export const site = {
 
 export const hero = {
   tagline: [
-    "I measure first to narrow down the cause before I fix it, and I recheck wrong conclusions to correct them.",
+    "I measured deploy time and CI database time to narrow down the causes before fixing them, and withdrew conclusions from commits when their evidence was wrong.",
     "I work on the frontend of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
   ],
@@ -659,5 +659,5 @@ export const ui = {
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
   docTitle: "Kim Taewoo | Full-stack Engineer",
-  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measure first to narrow down the cause before I fix it, and I recheck wrong conclusions to correct them.",
+  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measured deploy time and CI database time to narrow down the causes before fixing them, and withdrew conclusions from commits when their evidence was wrong.",
 };
