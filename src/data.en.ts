@@ -17,7 +17,7 @@ export const site = {
 
 export const hero = {
   tagline: [
-    "I measured deploy time and CI database time to narrow down the causes before fixing them, and withdrew conclusions from commits when their evidence was wrong.",
+    "I measure slow spots before fixing them, and I recheck the evidence to correct wrong conclusions.",
     "I work on the frontend of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
   ],
@@ -261,7 +261,7 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "I narrowed the cause of the varying CI time to the TRUNCATE run for every test and the runner disk. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
+          "The varying CI time came from the TRUNCATE run for every test and from the runner disk. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
           "Before a day when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, **CPU peaked at 32% and heap at 44%**.",
           "Even on May 6, when abnormal requests flooded in, CPU stayed in **single digits (3.4 to 7.6%)**. I decided not to do a load test, which I estimated would take 5 to 10 days.",
         ],
@@ -457,7 +457,7 @@ export const projects: Project[] = [
     metric: "CLS 0.246 → 0.003",
     title: "Vling Search Page Performance Measurement and Improvement",
     org: "Buzz & Beyond internship", period: "2026.08 ~ 09",
-    summary: "The search page was slow, and the layout shifted while loading. I narrowed the causes with a measurement script and fixed them. All numbers were measured in a sandbox environment.",
+    summary: "The search page was slow, and the layout shifted while loading. A measurement script showed that the skeleton keys caused the shift, and I fixed it by keying them to grid slot numbers. All numbers were measured in a sandbox environment.",
     bars: [
       { label: "Search screen CLS", before: 0.246, after: 0.003, unit: "" },
       { label: "Skeleton shown after a sort change", before: 2194, after: 40, unit: "ms" },
@@ -467,7 +467,7 @@ export const projects: Project[] = [
     ],
     key: "CLS 0.246 → 0.003 (sandbox)",
     problem: "Only the search screen shifted heavily while loading (CLS 0.246), and changing the sort froze it on the old results for over 2 seconds.",
-    solution: "Measurement scripts narrowed the cause to the skeleton keys, which I fixed. Sort changes no longer refetch server-rendered data unrelated to the results, thanks to shallow routing.",
+    solution: "Measurement scripts showed the cause was skeleton keys set to array indexes, which I changed to grid slot numbers. Sort changes no longer refetch server-rendered data unrelated to the results, thanks to shallow routing.",
     result: "CLS **0.246 → 0.003**, skeleton after a sort change **2,194ms → 40ms**, 'vlog' search **8.6s → 2.4s** (sandbox measurements).",
     bullets: [
       "Search page CLS **0.246 → 0.003** (changed the skeleton key to the grid slot number)",
@@ -659,5 +659,5 @@ export const ui = {
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
   docTitle: "Kim Taewoo | Full-stack Engineer",
-  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measured deploy time and CI database time to narrow down the causes before fixing them, and withdrew conclusions from commits when their evidence was wrong.",
+  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measure slow spots before fixing them, and I recheck the evidence to correct wrong conclusions.",
 };
