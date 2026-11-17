@@ -17,7 +17,7 @@ export const site = {
 
 export const hero = {
   tagline: [
-    "I measure slow spots before fixing them, and I recheck the evidence to correct wrong conclusions.",
+    "I build and run services that real users rely on.",
     "I work on the frontend of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
   ],
@@ -659,5 +659,5 @@ export const ui = {
   langLinkHref: "/",
   resumeFilename: "Kim_Taewoo_Resume_ko.pdf",
   docTitle: "Kim Taewoo | Full-stack Engineer",
-  description: "Portfolio of Kim Taewoo, a full-stack engineer. I measure slow spots before fixing them, and I recheck the evidence to correct wrong conclusions.",
+  description: "Portfolio of Kim Taewoo, a full-stack engineer. I build and run services that real users rely on.",
 };
