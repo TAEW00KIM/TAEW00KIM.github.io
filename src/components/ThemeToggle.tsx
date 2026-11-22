@@ -30,6 +30,7 @@ export default function ThemeToggle() {
     const next: Mode = (mode ?? currentMode()) === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", next === "dark" ? "#111111" : "#fcfcfb"));
+    document.querySelector('meta[name="color-scheme"]')?.setAttribute("content", next);
     try {
       localStorage.setItem("theme", next);
     } catch {
