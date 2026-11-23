@@ -20,7 +20,6 @@ export const hero = {
     "실사용자가 있는 서비스를 직접 운영해 온 개발자입니다.",
     "버즈앤비에서 Vling의 프론트엔드를,",
     "대학 스포츠 응원 서비스 Hufscheer에서 실시간 응원 서버와 배포를 맡고 있습니다.",
-    "구현은 AI 에이전트에게 많이 맡기고, 메일 발송이나 앱 심사 제출처럼 되돌리기 어려운 일은 직접 승인합니다.",
   ],
 };
 
@@ -719,17 +718,11 @@ export const highlights: Highlight[] = [
   { value: "126초", label: "2분마다 끊기던 실시간 연결의 원인(Cloudflare 경유 126초, 직접 연결 240초 넘게)을 찾아 수정", href: "#g-hufscheer", linkText: "Hufscheer 실시간 응원(WebSocket)" },
 ];
 
-const aiOverview = [
-  "세 프로젝트 모두 구현의 상당 부분은 Claude Code 에이전트가 했고, 무엇을 만들지와 끝의 기준(돌릴 테스트, 볼 화면)은 제가 정합니다. 에이전트가 됐다고 보고하면 그 말보다 다시 돌린 테스트와 서버 응답을 봅니다. 이 순서가 지켜지지 않은 적도 있어 벤토 카드의 한계에 적었습니다.",
-  "운영 배포와 앱 심사 제출처럼 사용자에게 닿는 일은 개발 세션과 따로 둔 검증 세션이 통과시킨 뒤에 합니다. 메일과 메신저 발송, 캘린더 쓰기는 Claude Code 설정으로 확인 창을 강제해, 모델이 규칙을 놓쳐도 제가 누르기 전에는 나가지 않습니다.",
-];
-
 export const projectGroups: ProjectGroup[] = [
   { id: "hufscheer", name: "훕치치 (Hufscheer)", note: "대학 스포츠 응원 서비스, 백엔드와 매니저 웹", about: hufscheerOverview, links: [{ label: "서버 GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "웹 GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "버즈앤비 현장실습, 프론트엔드", ids: ["vling-search", "vling-perf"] },
-  // AI 묶음은 11/23 코쏘 면접 준비 때 Vling 다음으로 올리고 벤토(agent-env)를 다시 넣었다(PROGRESS 결정 37).
-  { name: "AI 에이전트와 만든 개인 프로젝트", note: "Claude Code 에이전트와 함께 만들고 운영", about: aiOverview, ids: ["hanpan", "agent-env", "history-mcp"] },
   { name: "사이드 프로젝트", ids: ["loci", "pinta"], showOrg: true },
+  { name: "개인 프로젝트", ids: ["history-mcp", "hanpan", "agent-env"] },
 ];
 
 export const ui = {

@@ -20,7 +20,6 @@ export const hero = {
     "I build and run services that real users rely on.",
     "I work on the frontend of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
-    "I hand much of the implementation to AI agents, and I approve anything hard to undo, like sending email or submitting an app for review, myself.",
   ],
 };
 
@@ -672,16 +671,11 @@ export const highlights: Highlight[] = [
   { value: "126s", label: "Found and fixed why live connections dropped every 2 minutes (126s via Cloudflare, over 240s direct)", href: "#g-hufscheer", linkText: "Hufscheer live cheering (WebSocket)" },
 ];
 
-const aiOverview = [
-  "Claude Code agents wrote a large part of the code in all three; I decide what to build and what counts as done (which tests to run, which screens to check). When an agent reports something as done, I look at rerun tests and server responses rather than the report. That order was broken once; it is under Limits in the Bento card.",
-  "Anything that reaches users, like a production deploy or an app review submission, goes out only after a QA session separate from the development session passes it. Sending email and chat messages and writing to calendars require a confirmation prompt in my Claude Code settings, so nothing goes out until I click, even if the model misses a rule.",
-];
-
 export const projectGroups: ProjectGroup[] = [
   { id: "hufscheer", name: "Hufscheer", note: "live cheering service for university sports, backend and manager web", about: hufscheerOverview, links: [{ label: "Server on GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "Web on GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
-  { name: "Personal Projects Built with AI Agents", note: "built and run with Claude Code agents", about: aiOverview, ids: ["hanpan", "agent-env", "history-mcp"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
+  { name: "Personal Projects", ids: ["history-mcp", "hanpan", "agent-env"] },
 ];
 
 export const ui = {
