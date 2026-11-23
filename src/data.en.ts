@@ -593,8 +593,8 @@ export const projects: Project[] = [
         paras: [
           "PUBG and Overwatch have no way to verify account ownership, so 1.0 keeps them for preview users only. Otherwise anyone who knows a nickname could get someone else's game start alerts.",
           "TestFlight and the App Store get the same binary, so which games are public is set per user on the server, not by a build flag.",
-          "Because this was a production deploy, an agent session doing the implementation and a separate QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
-          "When a deploy was reported as done, my main agent session, which hands out the work, rechecked the remote commit and the production server's responses. It marked TestFlight processing, which it could not see, as reported but not verified.",
+          "Because this was a production deploy, a development session and a QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
+          "When a deploy was reported as done, my main agent session rechecked the remote commit and the production server's responses. It marked TestFlight processing, which it could not see, as reported but not verified.",
         ],
       },
       {
