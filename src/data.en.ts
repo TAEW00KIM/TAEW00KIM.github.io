@@ -93,7 +93,7 @@ export const experience: { tabs: ExpTab[] } = {
           period: "2025.11",
           bullets: [
             "At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and gave live demos to visitors to collect feedback.",
-            "On the 5-person team I worked on the backend: I built pagination for ingredient searches by purpose with QueryDSL, added the duplicate ingredient check to Gemini recommendations, and implemented Google login.",
+            "On the 5-person team I handled the backend: QueryDSL pagination for ingredient searches by purpose, a duplicate ingredient check for Gemini recommendations, and Google login.",
           ],
           tags: ["Java", "Spring Boot", "QueryDSL"],
         },
