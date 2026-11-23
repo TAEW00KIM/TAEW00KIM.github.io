@@ -20,6 +20,7 @@ export const hero = {
     "I build and run services that real users rely on.",
     "I work on the frontend of Vling at Buzz & Beyond,",
     "and the live cheering server and deployment of Hufscheer, a live cheering service for university sports.",
+    "I hand much of the implementation to AI agents, and I approve anything hard to undo, like sending email or submitting an app for review, myself.",
   ],
 };
 
@@ -205,7 +206,7 @@ export const projects: Project[] = [
     key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
     solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache meant to cut LLM calls (the reduction was not measured).",
-    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I switched models after an offline comparison of 9 models on the same sentences (accuracy 88.6% → 100% on 22 test sentences, run twice); the effect in production is not measured yet.",
+    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I compared 9 candidate models on 22 test sentences, twice each, and switched (accuracy 88.6% → 100%), but the score comes from the same sentences used to choose, so I do not treat it as production accuracy. The effect in production is not measured yet.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to cut calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
@@ -348,7 +349,6 @@ export const projects: Project[] = [
           "The only test was context loading, and I could not verify the concurrent update handling with a load test.",
           "Because the aggregate update is async, the aggregate can drift if even the retry fails.",
           "The IN list also grows as the number of friends grows.",
-          "Since this experience, I measure before changing in Hufscheer and Vling, and keep the measurement conditions together.",
         ],
       },
     ],
@@ -419,15 +419,15 @@ export const projects: Project[] = [
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
-    summary: "A field that needs permission was mixed into the list query, so some plans got no search results at all and others lost as many views as there were cards in one request. I moved that field to a per-channel query and shipped the video search and channel search redesigns with teammates.",
+    summary: "During the channel search redesign, I found that a field used only after unlocking was in the list query, so depending on the plan, searches returned nothing or deducted views incorrectly. I moved that field to a per-channel query and shipped the video search and channel search redesigns with teammates.",
     visual: true,
     key: "2 search screens shipped",
-    problem: "A field that needs permission was mixed into the list query, so some plans **got no search results at all** and others **lost as many views as there were cards at once**.",
+    problem: "During the channel search redesign, I found that a field used only after unlocking was in the list query, so depending on the plan, searches returned nothing or deducted views incorrectly.",
     solution: "The value is not drawn while locked, so I took it out of the list query and fetch it one channel at a time when the lock is lifted.",
     result: "Shipped the video search (**Sep 8**) and channel search (**Sep 9**) redesigns to production. I did the list query split, channel cards, URL search, and moving favorites between folders; teammates did the curation sections and the folder feature; we built the video results grid and the channel attribute filters together.",
     bullets: [
       "Fixed autocomplete Enter running a channel jump and a search together",
-      "Restored search usage deductions that had silently stopped after a refactor",
+      "Restored search usage tracking that a refactor broke during the redesign",
       "Handled shared URLs that failed on re-entry (unknown category, 115-character URL)",
     ],
     tags: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)", "Zustand"],
@@ -440,7 +440,7 @@ export const projects: Project[] = [
         heading: "Decisions and reasoning",
         paras: [
           "Picking a channel in autocomplete with the arrow keys and pressing Enter moved to the channel **and also ran a search**, charging a search the user never saw. Two key handlers on the same input ran one after the other, so the second now steps back when the first has handled Enter.",
-          "A refactor renamed the search GraphQL operation so it no longer matched the usage rules, and **search deductions silently stopped with no error**. I found it and restored it by matching the name.",
+          "During the redesign, a refactor renamed the search GraphQL operation so the usage rules no longer matched it. It raised no error, so it could not be seen on screen. I found the mismatch and fixed the name.",
           "On re-entry from a shared URL, an unknown category value made the query fail, and a **115-character** playlist URL was cut by the **100-character** input limit. Values are now validated and ignored, and the length limit applies on submit, not while typing.",
         ],
       },
@@ -495,7 +495,7 @@ export const projects: Project[] = [
           "A condition split two-word keywords and let a candidate in if any one word matched, so one two-word query ('convenience store new items') grew to 1,330K candidates.",
           ["Removing that condition cut it to **22K**."],
           "Separately, with no period condition the search scanned everything, so a search for 'vlog' took 8.6 seconds.",
-          ["Setting the default period to the last 6 months brought it to **2.4s** (candidates 1.2M to 130K)."],
+          ["Setting the default period to the last 6 months brought it to **2.4s** (candidates 1.2M to 130K). The two other keywords measured with it went from 4.5s to 1.7s ('mukbang') and from 2.8s to 1.7s ('travel')."],
         ],
       },
       {
@@ -508,9 +508,8 @@ export const projects: Project[] = [
       {
         heading: "Limits",
         paras: [
-          "All numbers were measured in a sandbox or locally, and are not production numbers.",
-          "The sample size was 1 to 5 runs, and the same record notes a cold and warm variation of ±30%. So these should be read as direction and magnitude, not exact ratios.",
-          "I did not measure production numbers because of access rules.",
+          "All numbers were measured in a sandbox or locally; production was not measured because of access rules.",
+          "The sample size was 1 to 5 runs, and the same measurement log shows a ±30% cold and warm variation, so read these as direction and magnitude, not exact ratios.",
         ],
       },
     ],
@@ -526,7 +525,7 @@ export const projects: Project[] = [
     key: "Answer in top 10: 25 → 29 of 35",
     problem: "By default, Claude Code deletes conversations after 30 days, so past decisions and their reasons could not be found again.",
     solution: "Conversations, commits and documents are collected and indexed automatically when a work session starts or ends, and each day's decisions and reasons are extracted with their source records and served through a search server (MCP) that combines keyword and semantic search.",
-    result: "**About 540,000 records** in the full-text index as of November 17, 2026 (about 90,000 of them embedded), with **about 1,400 decision records** as of November 11. Documents losing out to conversation messages on reworded questions was fixed by pulling document candidates separately: questions with the answer in the top 10 went **from 25 to 29 of 35**, and from 6 to 9 of 20 questions written after the design.",
+    result: "**About 540,000 records** in the full-text index as of November 17, 2026 (about 90,000 of them embedded), with **about 1,400 decision records** as of November 11. To reduce documents losing out to conversation messages on reworded questions, I added a channel that pulls document candidates separately: questions with the answer in the top 10 went **from 25 to 29 of 35**, and from 6 to 9 of 20 questions written after the design.",
     bullets: [
       "Indexes conversations, commits and documents automatically at every work session (as of November 17, 2026, **about 540,000** in full-text search, about 90,000 of them embedded) and extracts each day's decisions and reasons",
       "Serves **about 1,400 decision records** (as of November 11) through an MCP search server",
@@ -565,48 +564,85 @@ export const projects: Project[] = [
         heading: "Limits",
         paras: [
           "The October figures (0.84, 0.93) were tuned and evaluated on the same 43 questions and may be overfitted, so in November I measured on separately written questions. The 10 reworded questions among the 35 were looked at while designing the channel, so they are not fully held out.",
-          "The evaluation questions were written by an agent, and on reworded questions alone the targets were missed by 1 to 3 each.",
+          "The evaluation questions were written by an agent. On reworded questions the results fell 1 to 3 short of the targets set in advance (9 against a target of 10 on the 20 new questions). The 20 new questions were also written by a session that had read the design, so they are not fully held out.",
           "I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
         ],
       },
     ],
   },
   {
-    id: "agent-env",
-    title: "Agent Assistant App and Working Rules",
-    org: "Personal", period: "2026.06 ~ present",
+    id: "hanpan",
+    title: "Hanpan: Game Alert iOS App",
+    org: "Personal, server and iOS app", period: "2026.11 ~ present",
     summary:
-      "In a web app that puts my AI assistant bots and Claude Code on one screen, in-progress work did not show on the kanban board and Claude responses were slow. I fixed it with a cleanup job that moves cards linked to in-progress Notion tasks into the in-progress column and a fix to when a response is marked complete.",
-    key: "Kanban auto-cleanup, reply marked done 0.9s sooner",
-    problem: "In the web app I used for AI assistant bots and Claude Code on one screen, work in progress did not show on the kanban and replies were slow.",
-    solution: "Cards linked to in-progress Notion tasks now move into the in-progress column automatically, and a reply is marked done as soon as the CLI returns its result.",
-    result: "About 0.9 seconds saved per message (1 measurement). In October I moved it to native iOS and Mac apps on the same server.",
+      "An app that tells someone close to you when your League of Legends game starts and ends. Before 1.0, a separate security review found a way to hijack another person's account verification; I closed it and submitted 1.0 to App Store review on November 23.",
+    stat: { value: "13 → 0", label: "successful hijacks in 20 runs of the reproduced attack (before the fix → after)" },
+    key: "1.0 submitted to App Store review",
+    problem: "An app that announces game starts becomes a stalking tool if you can attach someone else's account. So alerts go only to accounts whose owner verified them, but the security review found that accounts pre-registered with someone else's Riot ID could take over that account the moment its owner verified it.",
+    solution: "I changed the server so only the latest registrant of an account can attempt verification, and only a challenge issued after the owner's verification can change the owner. The 10 new tests fail on the code before the fix.",
+    result: "Running the same attack script 20 times, successful hijacks went **from 13 to 0**. 1.0 was submitted to App Store review on November 23, with manual release so that I publish it myself even after approval.",
     bullets: [
-      "Fixed in-progress work missing from the kanban board with a Notion-linked cleanup job and automatic archiving 3 days after completion",
-      "Did not apply the reasoning effort and priority processing options, because measuring showed no confirmed gain",
-      "Accept agent output only after I re-run and check it myself",
+      "Found and closed an account verification hijack in a security review (13 of 20 reproduced attacks succeeded before, 0 after)",
+      "Deployed only after fixing the 2 defects the QA session blocked in round 1, rerunning 212 server tests and 126 app tests",
+      "Submitted to App Store review on November 23, manual release",
     ],
-    tags: ["React", "PWA", "TypeScript", "Node.js", "MCP"],
+    tags: ["Swift", "SwiftUI", "Node.js", "SQLite", "APNs", "Riot API"],
+    links: [{ label: "About and privacy policy (Korean)", href: "/hanpan/" }],
     sections: [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "I also measured the reasoning effort and priority processing options, but with only 2 to 3 samples I could not confirm a usable gain, so I did not apply them.",
-          "When fixing a bug, I run the new test without the fixed code to check that it actually fails.",
-          "Hard-to-reverse or outward-facing actions, such as sending email or deleting data, are done only on targets a person has approved.",
-          "I limited concurrent sub-agents to 2. I set that rule after 12 ran at once in late September and work could not be tracked.",
-        ],
-      },
-      {
-        heading: "Measurements",
-        paras: [
-          "Measuring each stage showed that the CLI stayed alive for 0.7 to 1 second after producing its result.",
+          "PUBG and Overwatch have no way to verify account ownership, so 1.0 keeps them for preview users only. Otherwise anyone who knows a nickname could get someone else's game start alerts.",
+          "TestFlight and the App Store get the same binary, so which games are public is set per user on the server, not by a build flag.",
+          "Because this was a production deploy, a development session and a QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
+          "When a deploy was reported as done, my main agent session reopened the remote commit and the production server's responses to check them, and marked TestFlight processing, which it could not see, as reported, not verified.",
         ],
       },
       {
         heading: "Limits",
         paras: [
-          "I have not measured numerically how often the rules are followed or their effect.",
+          "Two people use it now.",
+          "One Medium finding from the review (one user can use up the Riot API limit and stop game detection for everyone) is left to fix before opening it wider.",
+        ],
+      },
+    ],
+  },
+  {
+    id: "agent-env",
+    title: "Bento: Personal AI Assistant App",
+    org: "Personal, iOS and Mac app, server", period: "2026.06 ~ present",
+    summary:
+      "The assistant bots took several seconds to say anything, so a fast model in front now sends the first sentence. A step where that model shortened long answers was dropped after QA found that it lost content.",
+    key: "First sentence first, long answers verbatim",
+    problem: "Even for questions that needed no tools, Fetch, the research assistant bot, took a median 5.7 seconds before the first content appeared.",
+    solution: "Sonnet in front sends the first sentence, and questions that need research or tools go to the original bot. Its answer is not rewritten; the original text is split into paragraphs and sent.",
+    result: "In a test setup, the first sentence of a knowledge question appeared in **about 1.9 seconds**. Since November 23 all 4 assistant bots use this front.",
+    bullets: [
+      "A front model sends the first sentence and hands research questions to the original bot (first sentence in about 1.9 seconds in a test setup)",
+      "Dropped the step that rewrote long answers after all 3 rewritten answers out of 10 long ones lost content in QA",
+      "Code checks the first sentence and holds it back if it has numbers not in the source or claims a task is done",
+    ],
+    tags: ["Swift", "SwiftUI", "Node.js", "Python", "LLM API"],
+    sections: [
+      {
+        heading: "Decisions and reasoning",
+        paras: [
+          "At first the front model shortened long answers before sending them. When the QA session ran 10 long originals, all 3 that were rewritten lost content (shortening dropped items, and restoring them duplicated items). So rewriting is off and the original text goes out as is.",
+          "Code checks the one sentence the front sends first. If it has numbers or words that are not in the source, or claims something is done, it is not sent and the reply waits for the body.",
+          "I compared Haiku and Sonnet on the same questions for the front and chose Sonnet. Haiku mixed its routing reason into the answer in 10 of 14 knowledge questions.",
+        ],
+      },
+      {
+        heading: "Measurements",
+        paras: [
+          "On 6 knowledge questions without tools, the original bot's first content took 3.2 to 11.7 seconds (median 5.7), and Sonnet's first sentence about 1.9 seconds (test setup).",
+        ],
+      },
+      {
+        heading: "Limits",
+        paras: [
+          "The first sentence time was measured in a test setup.",
+          "On November 19 the front's development session deployed to the production server before the QA verdict. The deployed code matched the passing version, so it was not rolled back, but deploying only after QA is still a written rule, not something a machine enforces.",
         ],
       },
     ],
@@ -625,21 +661,27 @@ export const resume = {
       items: ["AWS", "Docker", "nginx", "GitHub Actions", "Prometheus"],
     },
     { group: "Web", items: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)", "TanStack Query"] },
+    { group: "Apps", items: ["Swift", "SwiftUI"] },
     { group: "AI", items: ["LLM APIs (Gemini, OpenRouter)", "LLM output validation", "MCP", "Embedding search", "Claude Code"] },
   ],
 };
 
 export const highlights: Highlight[] = [
   { value: "~210K views", label: "Hufscheer page views, 2026.01 to 11.09, with about 7,600 active users (GA)", href: "#g-hufscheer", linkText: "Hufscheer, live cheering for university sports" },
-  { value: "8.6s → 2.4s", label: "Vling video search time, measured on a test server", href: "#p-vling-perf", linkText: "Vling search performance" },
+  { value: "8.6s → 2.4s", label: "Vling 'vlog' search time after limiting the default period to 6 months (test server)", href: "#p-vling-perf", linkText: "Vling search performance" },
   { value: "126s", label: "Found and fixed why live connections dropped every 2 minutes (126s via Cloudflare, over 240s direct)", href: "#g-hufscheer", linkText: "Hufscheer live cheering (WebSocket)" },
+];
+
+const aiOverview = [
+  "Claude Code agents wrote a large part of the code in all three; I decide what to build and what counts as done (which tests to run, which screens to check). When an agent reports something as done, I look at rerun tests and server responses rather than the report. That order was broken once; it is under Limits in the Bento card.",
+  "Anything that reaches users, like a production deploy or an app review submission, goes out only after a QA session separate from the development session passes it. Sending email and chat messages and writing to calendars require a confirmation prompt in my Claude Code settings, so nothing goes out until I click, even if the model misses a rule.",
 ];
 
 export const projectGroups: ProjectGroup[] = [
   { id: "hufscheer", name: "Hufscheer", note: "live cheering service for university sports, backend and manager web", about: hufscheerOverview, links: [{ label: "Server on GitHub", href: "https://github.com/hufscheer/spectator-server" }, { label: "Web on GitHub", href: "https://github.com/hufscheer/web" }], ids: ["cheer-spam", "llm-masking", "ci-deploy", "manager-desktop"] },
   { name: "Vling", note: "Buzz & Beyond internship, frontend", ids: ["vling-search", "vling-perf"] },
+  { name: "Personal Projects Built with AI Agents", note: "built and run with Claude Code agents", about: aiOverview, ids: ["hanpan", "agent-env", "history-mcp"] },
   { name: "Side Projects", ids: ["loci", "pinta"], showOrg: true },
-  { name: "Personal Project", ids: ["history-mcp"] },
 ];
 
 export const ui = {
