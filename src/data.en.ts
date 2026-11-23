@@ -563,7 +563,7 @@ export const projects: Project[] = [
         heading: "Limits",
         paras: [
           "The October figures (0.84, 0.93) were tuned and evaluated on the same 43 questions and may be overfitted, so in November I measured on separately written questions. The 10 reworded questions among the 35 were looked at while designing the channel, so they are not fully held out.",
-          "The evaluation questions were written by an agent. On reworded questions the results fell 1 to 3 short of the targets set in advance (9 against a target of 10 on the 20 new questions). The 20 new questions were also written by a session that had read the design, so they are not fully held out.",
+          "The evaluation questions were written by an agent. On reworded questions the results fell 1 to 3 short of the targets set in advance (9 against a target of 10 on the 20 new questions). The 20 new questions were also written by an agent that had read the design, so they are not fully held out.",
           "I run the benchmark by hand when I change search; it fails if results drop below the baseline. It is not wired into CI or deploy.",
         ],
       },
@@ -582,7 +582,7 @@ export const projects: Project[] = [
     result: "In 20 runs of the same attack script, successful hijacks went **from 13 to 0**. 1.0 was submitted to App Store review on November 23 with manual release, so I publish it myself even after approval.",
     bullets: [
       "Found and closed an account verification hijack in a security review (13 of 20 reproduced attacks succeeded before, 0 after)",
-      "Deployed only after fixing the 2 defects the QA session blocked in round 1, rerunning 212 server tests and 126 app tests",
+      "Deployed only after fixing the 2 defects the QA agent blocked in round 1, rerunning 212 server tests and 126 app tests",
       "Submitted to App Store review on November 23, manual release",
     ],
     tags: ["Swift", "SwiftUI", "Node.js", "SQLite", "APNs", "Riot API"],
@@ -593,8 +593,8 @@ export const projects: Project[] = [
         paras: [
           "PUBG and Overwatch have no way to verify account ownership, so 1.0 keeps them for preview users only. Otherwise anyone who knows a nickname could get someone else's game start alerts.",
           "TestFlight and the App Store get the same binary, so which games are public is set per user on the server, not by a build flag.",
-          "Because this was a production deploy, a development session and a QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
-          "When a deploy was reported as done, my main agent session rechecked the remote commit and the production server's responses. It marked TestFlight processing, which it could not see, as reported but not verified.",
+          "Because this was a production deploy, one agent built the change and a separate agent only checked it, working as a pair. The checking agent blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
+          "When a deploy was reported as done, the agent that hands out the work rechecked the remote commit and the production server's responses. It marked TestFlight processing, which it could not see, as reported but not verified.",
         ],
       },
       {
@@ -626,7 +626,7 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "At first the front model shortened long answers before sending them. When the QA session tested 10 long answers, all 3 that were rewritten lost content (shortening dropped items, and restoring them duplicated items). So rewriting is off, and the original text is sent unchanged.",
+          "At first the front model shortened long answers before sending them. When a separate agent that only checks the work tested 10 long answers, all 3 that were rewritten lost content (shortening dropped items, and restoring them duplicated items). So rewriting is off, and the original text is sent unchanged.",
           "Code checks the one sentence the front sends first. If it has numbers or words that are not in the source, or claims something is done, it is not sent, and the reply waits for the full answer.",
           "I compared Haiku and Sonnet on the same questions for the front and chose Sonnet. Haiku mixed its routing reason into the answer in 10 of 14 knowledge questions.",
         ],
@@ -641,7 +641,7 @@ export const projects: Project[] = [
         heading: "Limits",
         paras: [
           "The first sentence time was measured in a test setup.",
-          "On November 19 the front's development session deployed to the production server before the QA verdict. The deployed code matched the passing version, so it was not rolled back, but deploying only after QA is still a written rule, not something a machine enforces.",
+          "On November 19 the agent building the front deployed to the production server before the QA verdict. The deployed code matched the passing version, so it was not rolled back, but deploying only after QA is still a written rule, not something a machine enforces.",
         ],
       },
     ],
