@@ -35,7 +35,7 @@ export const experience: { tabs: ExpTab[] } = {
           period: "2026.07 ~ 2026.12",
           bullets: [
             "I work on the frontend of Vling, a SaaS for YouTube channel and video data, and shipped the video search and channel search redesigns with teammates.",
-            ["My part was splitting the list query, the channel cards, and URL search; the curation sections and the favorites folder feature were teammates' work."],
+            ["I handled the list query split, the channel cards, and URL search; teammates built the curation sections and the favorites folder feature."],
             "In the design system, I consolidated the filter popover and modal components.",
           ],
           tags: ["TypeScript", "React", "Next.js", "GraphQL (Apollo Client)"],
@@ -48,7 +48,7 @@ export const experience: { tabs: ExpTab[] } = {
           bullets: [
             "I built a cold email channel for finding US B2B customers from scratch, covering lead sourcing and segmentation, an English email sequence, and sending domain setup.",
             "By hand-checking a sample of the lead list, I found that filtering by department alone left few actual marketers, so I added job title filters.",
-            "When rising bounces paused sending automatically, I traced them to policy-blocked recipients and a blacklisted sending domain, removed both, and resumed.",
+            "When sending paused automatically as bounces rose, I traced the bounces to policy-blocked recipients and a blacklisted sending domain, removed both, and resumed sending.",
             "I built and ran a sending status dashboard and an unsubscribe list.",
           ],
           tags: ["Python", "Instantly", "Claude Code"],
@@ -92,8 +92,8 @@ export const experience: { tabs: ExpTab[] } = {
           org: "2025 Seoul Job Fair (Seoul Metropolitan Government and Industrial Bank of Korea)",
           period: "2025.11",
           bullets: [
-            "At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and demoed it to visitors in person to collect feedback.",
-            "On the 5-person team I worked on the backend: I built the purpose-based ingredient pagination with QueryDSL, and implemented the duplicate ingredient check for Gemini recommendations and Google login.",
+            "At the fair's UMC project demo zone, we showcased our team project VitaCheck, a supplement recommendation service, and gave live demos to visitors to collect feedback.",
+            "On the 5-person team I worked on the backend: I built pagination for ingredient searches by purpose with QueryDSL, added the duplicate ingredient check to Gemini recommendations, and implemented Google login.",
           ],
           tags: ["Java", "Spring Boot", "QueryDSL"],
         },
@@ -116,7 +116,7 @@ export const experience: { tabs: ExpTab[] } = {
           title: "H-UP First Place (최우수상)",
           org: "HUFS career exploration credit program",
           period: "2022",
-          bullets: ["I received it for an educational iOS app that helps people who find smartphones hard learn basic operations through games."],
+          bullets: ["I received the award for an educational iOS app that uses games to teach basic operations to people who struggle with smartphones."],
         },
       ],
     },
@@ -128,19 +128,19 @@ const hufscheerWebRepo = { label: "GitHub (web)", href: "https://github.com/hufs
 
 const hufscheerOverview = [
   "Hufscheer is a live cheering service for university sports. It shows scores, timelines, and lineups for on-campus soccer and basketball tournaments in real time. Users can also cheer together through cheer chat messages.",
-  "The service has run since 2023, and I joined its backend in February 2026.",
+  "The service has been running since 2023, and I started working on its backend in February 2026.",
   "From January to November 9, 2026 (GA), the service had **about 7,600 active users** and **about 210,000 views**, with up to **672 active users a day** during tournaments.",
   "In quiet matches, spectators' WebSocket connections dropped every 2 minutes.",
   [
-    "I measured that connections through Cloudflare closed at **126 seconds** while direct connections inside the server stayed up past **240 seconds**, and traced the cause to the server's STOMP heartbeat being off (0,0).",
+    "I measured that connections through Cloudflare closed after **126 seconds** while direct connections inside the server stayed open past **240 seconds**, and traced the cause to the server's STOMP heartbeat being disabled (0,0).",
     "I turned the heartbeat on at 10 seconds and left a test that fails without the fix ([PR #753](https://github.com/hufscheer/spectator-server/pull/753)).",
     "After the fix, a connection through Cloudflare on the dev server stayed up past **260 seconds**.",
   ],
-  "As several schools started sharing the service, teams and players had no school of their own, so a manager from any school could edit them.",
+  "Several schools began sharing the service, but teams and players were not tied to a school, so a manager from any school could edit them.",
   [
     "I first added a nullable school foreign key to teams and players so existing data was unaffected (Flyway).",
     "Then I added a permission check to **7** update and delete APIs for teams and players that allows only managers of the same school ([PR #527](https://github.com/hufscheer/spectator-server/pull/527), [#543](https://github.com/hufscheer/spectator-server/pull/543)).",
-    "When a player is created, the manager's school is attached automatically, and a team's school was later set through its college unit instead ([PR #666](https://github.com/hufscheer/spectator-server/pull/666)).",
+    "When a player is created, the manager's school is assigned automatically; for teams, the school was later set through the team's college unit instead ([PR #666](https://github.com/hufscheer/spectator-server/pull/666)).",
   ],
 ];
 
@@ -154,13 +154,13 @@ export const projects: Project[] = [
     title: "Cheer Chat Spam Defense",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "Floods of identical cheer chat messages could distort the team rankings, which count cheer messages. I layered limits so students on a shared school network are not blocked together.",
+      "Floods of identical cheer chat messages could distort the team rankings, which are based on cheer counts. I layered several limits so students on a shared school network are not blocked together.",
     stat: { value: "~600 / min", label: "Problem scale: peak rate of identical cheer messages on a match not yet started" },
     statIsScale: true,
     key: "Spam blocked, award rule rethought",
-    problem: "At 2 a.m., identical cheer messages piled onto a match that had not started, at **up to about 600 per minute**, reaching **7,617** of the same message in under two hours, which could distort the team ranking based on cheer counts.",
-    solution: "Kept the IP limit loose enough for shared school IPs to stop only floods, and added a sliding-window limit per visitor cookie on top: 120 messages per 60 seconds, and the 4th identical message within 3 seconds is blocked.",
-    result: "The PM set the limit values, and I have not yet measured how many requests were blocked afterwards. I also found that **97%** of cheer messages from the preset launch to mid-May were one of the three presets (mostly on the one flooded match), and asked the team how the award should be decided.",
+    problem: "At 2 a.m., a match that had not started was flooded with identical cheer messages at **up to about 600 per minute**, reaching **7,617** copies of the same message in under two hours. This could distort the team ranking based on cheer counts.",
+    solution: "I kept the IP limit high enough for shared school IPs so it only stops floods, and added a sliding-window limit per visitor cookie: 120 messages per 60 seconds, with the 4th identical message within 3 seconds blocked.",
+    result: "The PM set the limit values, and I have not yet measured how many requests were blocked afterwards. I also found that **97%** of cheer messages from the preset launch to mid-May were sent with the three preset buttons, mostly in that one flooded match, so I asked the team how the award should be decided.",
     bullets: [
       "Block at 120 requests per 60 seconds per visitor (cookie), and from the 4th identical message within 3 seconds (Caffeine)",
       "Abnormal requests that tried to inflate the cheer count (57 per minute) were all rejected by input range validation",
@@ -185,7 +185,7 @@ export const projects: Project[] = [
         paras: [
           "On May 6, requests came in trying to raise the cheer count to 1101, 57 times per minute, and all were rejected with 400.",
           "But when I traced which stage blocked them, it was the value range validation, not the rate limit. A request with an in-range value would have passed.",
-          "Since then I check block results by the stage that blocked, not by the response code.",
+          "Since then I check which stage blocked a request, not just its response code.",
         ],
       },
       {
@@ -201,11 +201,11 @@ export const projects: Project[] = [
     title: "LLM Profanity Masking Improvements",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and it went straight to the screen. I blocked this by checking the output in code, and added steps to cut LLM calls.",
+      "The LLM that masks profanity sometimes returned an explanation instead of the masked sentence, and that explanation appeared on screen. I blocked this with an output check in code, and added steps that reduce LLM calls.",
     key: "Output checks block leaked explanations",
     problem: "The LLM that masks profanity returned an explanation instead of the masked sentence, and it went straight to the screen.",
-    solution: "On top of the LLM masking a teammate built, I added an output check that falls back to the original text, plus a static filter and a 5-minute cache meant to cut LLM calls (the reduction was not measured).",
-    result: "Responses with an explanation mixed in are caught by the output check and replaced with the original text. I compared 9 candidate models on 22 test sentences, twice each, and switched (accuracy 88.6% → 100%), but the score comes from the same sentences used to choose, so I do not treat it as production accuracy. The effect in production is not measured yet.",
+    solution: "I added an output check in code to the LLM masking a teammate built, so abnormal output falls back to the original text, plus a static filter and a 5-minute cache meant to reduce LLM calls (the reduction was not measured).",
+    result: "The output check catches responses that include an explanation and replaces them with the original text. I compared 9 candidate models on 22 test sentences, running each twice, and switched models (accuracy 88.6% → 100%). The same sentences were used to choose the model, so I do not treat this score as production accuracy. The effect in production has not been measured yet.",
     bullets: [
       "Put a static filter and a result cache in front of the LLM to cut calls",
       "Split the provider behind an interface, so Gemini and OpenRouter can be switched by configuration alone",
@@ -219,21 +219,21 @@ export const projects: Project[] = [
         paras: [
           "Model responses vary in format even for the same input. That was the key constraint.",
           "A regex profanity dictionary is fast and cheap but often masks normal sentences. So I left the judgment to the LLM and set the principle to not mask when in doubt.",
-          "I did not leave this principle only in the prompt. I enforced it in code at the output stage, and when a check fails, the original text is used as is.",
-          ["It rejects responses whose length grew abnormally, responses with the model's explanation mixed in, responses where the sentence changed without a mask marker, and responses where the consonant-only cheers of the original disappeared."],
+          "Rather than leaving this principle only in the prompt, I enforced it in code at the output stage: when a check fails, the original text is used as is.",
+          ["Responses are rejected if they grew abnormally long, include the model's explanation, change the sentence without a mask marker, or drop the consonant-only cheers of the original."],
         ],
       },
       {
         heading: "Measurements",
         paras: [
-          "The one I chose, gemma-4-31b, had 100% with a median response of **0.5 seconds** and **$0.18 per 1,000 requests**.",
-          "Some reasoning models returned empty responses in other features, and some had a high pass rate but broken actual output. So I chose by reading the outputs directly instead of looking only at the pass rate.",
+          "The model I chose, gemma-4-31b, scored 100%, with a median response time of **0.5 seconds** and a cost of **$0.18 per 1,000 requests**.",
+          "Some reasoning models returned empty responses in other features, and some had high pass rates but produced broken output. So I chose the model by reading the outputs directly rather than relying only on pass rates.",
         ],
       },
       {
         heading: "Limits",
         paras: [
-          "I have not yet confirmed that the replaced model is actually called in the deployed app. Forcing the response into JSON format also remains as follow-up work.",
+          "I have not yet confirmed that the deployed app actually calls the new model. Enforcing JSON responses also remains follow-up work.",
         ],
       },
     ],
@@ -244,7 +244,7 @@ export const projects: Project[] = [
     title: "CI Speedup and Blue/Green Deployment",
     org: "Hufscheer, backend", period: "2026.02 ~ present",
     summary:
-      "CI took anywhere from 8 to 17 minutes, and every deployment cut the service while the container was recreated. I found the causes, shortened CI, and switched deployment to Blue/Green.",
+      "CI took anywhere from 8 to 17 minutes, and every deployment interrupted the service while the container was recreated. I found the causes, reduced CI time, and switched deployment to Blue/Green.",
     stat: { value: "510s → 132s", label: "time for one production deploy, mostly from dropping a full test suite that ran twice" },
     key: "Production deploy 510s → 132s (duplicate tests removed)",
     problem: "CI swung between 8 and 17 minutes, and every deploy took the service down while the container was recreated.",
@@ -261,7 +261,7 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "The varying CI time came from the TRUNCATE run for every test and from the runner disk. In the deploy job, which had been running the full tests a second time, I kept only the documentation tests.",
+          "CI times varied because TRUNCATE ran for every test and because of the runner disk. The deploy job had been running the full test suite a second time, so I kept only the documentation tests there.",
           "Before a day when 2 tournaments overlapped, I considered whether to run a load test. Looking at 14 days of Prometheus data, **CPU peaked at 32% and heap at 44%**.",
           "Even on May 6, when abnormal requests flooded in, CPU stayed in **single digits (3.4 to 7.6%)**. I decided not to do a load test, which I estimated would take 5 to 10 days.",
         ],
@@ -269,7 +269,7 @@ export const projects: Project[] = [
       {
         heading: "Measurements",
         paras: [
-          "Test DB time went **from 101 to 632 seconds down to 54 seconds** (2 runs per setup in CI).",
+          "Test DB time dropped **from a range of 101 to 632 seconds to 54 seconds** (2 runs per setup in CI).",
         ],
       },
     ],
@@ -278,12 +278,12 @@ export const projects: Project[] = [
     id: "manager-desktop",
     title: "Desktop Manager Web for Tournament Organizers",
     org: "Hufscheer, frontend", period: "2026.08 ~ 10",
-    summary: "The manager screens were mobile only, so tournament organizers had nothing to use on a PC. I built a desktop manager on the same server and the same TanStack Query hooks as the mobile manager and shipped 19 screens to production.",
+    summary: "The manager screens were available only on mobile, so tournament organizers had no desktop interface. I built a desktop manager using the same server and the same TanStack Query hooks as the mobile manager and shipped 19 screens to production.",
     stat: { value: "19 screens", label: "desktop manager screens on the production server (excluding login)" },
     key: "19 production screens",
     problem: "The manager screens were mobile only, so organizers had no PC screen for registering tournaments and matches or entering records.",
     solution: "I built it with Next.js, sharing the mobile manager's TanStack Query hooks and adding the query and mutation hooks the desktop needed. After team review, I merged it into the mobile manager app as a separate route instead of a separate app.",
-    result: "I built **19 screens** now on the production server, including tournament creation, brackets, match record entry, and player and team management, and confirmed after the merge that **26 mobile screens** were unchanged.",
+    result: "I built **19 screens** now live in production, including tournament creation, brackets, match record entry, and player and team management, and confirmed after the merge that **26 mobile screens** were unchanged.",
     bullets: [
       "Built the PC manager on the same server and TanStack Query hooks as the mobile manager",
       "Merged a separate app and API package into one app's /desktop route after review, splitting the two layouts' CSS with route groups",
@@ -295,13 +295,13 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "The school-wide match list was cut off when fetched as one page, so it follows the cursor to the end.",
+          "The school-wide match list was incomplete when fetched as a single page, so it now follows the cursor through all pages.",
           "At first I split the API layer into a shared package with a separate app.",
-          "Review said a separate app and package hurt maintainability and cohesion, so I merged it into the /desktop route of the mobile manager app ([PR #612](https://github.com/hufscheer/web/pull/612)).",
+          "A review pointed out that a separate app and package hurt maintainability and cohesion, so I merged it into the /desktop route of the mobile manager app ([PR #612](https://github.com/hufscheer/web/pull/612)).",
           "I split the root layout into mobile and desktop route groups so the two screens' CSS would not mix.",
-          "After the merge I compared **26 mobile screens** at 375px with the previous version, down to element position, size, font, and color, and found no changes.",
+          "After the merge I compared **26 mobile screens** at 375px with the previous version, checking element position, size, font, and color, and found no changes.",
           "Substitutions, record deletions, and position changes did not refetch the playing lineup, so a substituted player stayed on the record sheet.",
-          ["I made writes invalidate the list keys they change."],
+          ["I made write operations invalidate the keys of the lists they affect."],
           "While applying PM feedback I also fixed **5 bugs**, such as a date input that did not change the start time.",
         ],
       },
@@ -335,10 +335,10 @@ export const projects: Project[] = [
         heading: "Decisions and reasoning",
         paras: [
           "The post table also had no latitude and longitude index.",
-          "What the map needs is not each post. It needs how many friend posts are in a cell and what the latest thumbnail is.",
+          "The map does not need individual posts. It needs the number of friends' posts in a cell and the latest thumbnail.",
           "In case the new query was wrong, I made it switchable with the old query through a configuration flag. If the new query throws an exception, it falls back to the old query.",
           "If the same user posted to the same cell almost at the same time, two aggregate rows could be created or a count could be lost.",
-          ["I added a unique constraint and took a pessimistic lock on the row when updating. If creating the first row at the same time hits the constraint, it retries."],
+          ["I added a unique constraint and took a pessimistic row lock for updates. If concurrent attempts to create the first row hit the constraint, the operation retries."],
           "I fixed N+1 queries with JPA's @BatchSize and JOIN FETCH.",
         ],
       },
@@ -378,7 +378,7 @@ export const projects: Project[] = [
       {
         heading: "Limits",
         paras: [
-          "Because of the cache, an account that has left or been deleted can still pass for up to 30 seconds. I did not build the invalidation logic to fix this.",
+          "Because of the cache, an account can still pass the check for up to 30 seconds after its user leaves the service or the account is deleted. I did not build invalidation logic to prevent this.",
         ],
       },
     ],
@@ -418,11 +418,11 @@ export const projects: Project[] = [
     ],
     title: "Vling Video Search and Channel Search Redesign",
     org: "Buzz & Beyond internship", period: "2026.07 ~ 09",
-    summary: "During the channel search redesign, I found that a field used only after unlocking was in the list query, so depending on the plan, searches returned nothing or deducted views incorrectly. I moved that field to a per-channel query and shipped the video search and channel search redesigns with teammates.",
+    summary: "During the channel search redesign, I found that the list query included a field used only after a channel is unlocked, so depending on the plan, searches returned nothing or deducted views incorrectly. I moved that field to a per-channel query and shipped the video search and channel search redesigns with teammates.",
     visual: true,
     key: "2 search screens shipped",
     problem: "During the channel search redesign, I found that a field used only after unlocking was in the list query, so depending on the plan, searches returned nothing or deducted views incorrectly.",
-    solution: "The value is not drawn while locked, so I took it out of the list query and fetch it one channel at a time when the lock is lifted.",
+    solution: "The value is not displayed while locked, so I removed it from the list query and now fetch it one channel at a time when the lock is lifted.",
     result: "Shipped the video search (**Sep 8**) and channel search (**Sep 9**) redesigns to production. I did the list query split, channel cards, URL search, and moving favorites between folders; teammates did the curation sections and the folder feature; we built the video results grid and the channel attribute filters together.",
     bullets: [
       "Fixed autocomplete Enter running a channel jump and a search together",
@@ -438,9 +438,9 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "Picking a channel in autocomplete with the arrow keys and pressing Enter moved to the channel **and also ran a search**, charging a search the user never saw. Two key handlers on the same input ran one after the other, so the second now steps back when the first has handled Enter.",
-          "During the redesign, a refactor renamed the search GraphQL operation so the usage rules no longer matched it. It raised no error, so it could not be seen on screen. I found the mismatch and fixed the name.",
-          "On re-entry from a shared URL, an unknown category value made the query fail, and a **115-character** playlist URL was cut by the **100-character** input limit. Values are now validated and ignored, and the length limit applies on submit, not while typing.",
+          "Selecting a channel in autocomplete with the arrow keys and pressing Enter opened the channel **and also ran a search**, deducting a search the user never saw. Two key handlers on the same input ran in sequence, so the second now ignores Enter when the first has already handled it.",
+          "During the redesign, a refactor renamed the search GraphQL operation, so the usage rules no longer matched it. It threw no error, so nothing showed on screen; I traced the mismatch and fixed the name.",
+          "On re-entry from a shared URL, an unknown category value made the query fail, and a **115-character** playlist URL was cut off by the **100-character** input limit. Category values are now validated and unknown ones ignored, and the length limit is checked on submit rather than while typing.",
         ],
       },
       {
@@ -480,8 +480,8 @@ export const projects: Project[] = [
         paras: [
           "The home page had a CLS of 0.002, but only the search page had 0.246. The cause of the CLS was that the skeleton key was the array index.",
           [
-            "Each time a card was settled, the remaining skeletons were pushed to later slots.",
-            "When several were settled at once they moved together, so a single shift exceeded 0.1.",
+            "Each time a card was finalized, the remaining skeletons shifted to later slots.",
+            "When several cards were finalized at once, the skeletons moved together, so a single shift exceeded 0.1.",
             "I changed the key to the absolute slot number in the grid.",
           ],
           "Every time sort or filter changed, the router re-ran the server data function and transferred about 115KB.",
@@ -490,8 +490,8 @@ export const projects: Project[] = [
             "So I changed **21** routing calls on the search page to shallow routing.",
           ],
           "With optimization, thumbnails download about 32KB less each (54.4KB → 22.7KB).",
-          ["Still, I chose to download 32KB more over delaying each grid card by 800ms. So I made only thumbnails skip optimization."],
-          "A condition split two-word keywords and let a candidate in if any one word matched, so one two-word query ('convenience store new items') grew to 1,330K candidates.",
+          ["Still, I accepted the extra 32KB rather than delay each grid card by 800ms, so only thumbnails skip optimization."],
+          "A condition split two-word keywords and admitted a candidate if any one word matched, so one two-word query ('convenience store new items') grew to 1,330K candidates.",
           ["Removing that condition cut it to **22K**."],
           "Separately, with no period condition the search scanned everything, so a search for 'vlog' took 8.6 seconds.",
           ["Setting the default period to the last 6 months brought it to **2.4s** (candidates 1.2M to 130K). The two other keywords measured with it went from 4.5s to 1.7s ('mukbang') and from 2.8s to 1.7s ('travel')."],
@@ -535,7 +535,7 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "I solved the similarity clustering by collecting the top 100 by cosine, then re-ranking them with a bonus added to documents.",
+          "I solved the clustered similarity scores by taking the top 100 results by cosine similarity, then re-ranking them with a bonus for documents.",
           "I also tried weight tuning, excluding short chunks, and switching to a larger model. The effect was small or none, so I did not include them.",
           "I measured the rate at which the answer is in the top 10, saved the baseline, and run the same benchmark every time I change search.",
           "In November, decision records and documents were still losing out to conversation messages on reworded questions. So I added a channel that pulls semantic search candidates from documents only and merges them in.",
@@ -546,7 +546,7 @@ export const projects: Project[] = [
         paras: [
           "Even after adding semantic search, reworded questions only went from 0.333 to 0.417, which is 1 more out of 12.",
           ["Looking at the cause, the embedding cosine similarities clustered at 0.86 to 0.91. So tens of thousands of conversation messages were pushing out the decision records and documents that should have been found."],
-          "The October gain in the share of 43 questions with the answer in the top 10, 0.74 → 0.84, came mostly from the 2-character index; semantic search alone moved it from 0.81 to 0.84.",
+          "In October, on 43 questions, the share with the answer in the top 10 went from 0.74 to 0.84, mostly because of the 2-character index; semantic search alone moved it from 0.81 to 0.84.",
           [
             "After adding the bonus, reworded questions went from 0.42 to 0.75 and the overall figure became 0.93.",
             "Other categories did not drop, and response time stayed at a p50 of 27ms.",
@@ -577,9 +577,9 @@ export const projects: Project[] = [
       "An app that tells someone close to you when your League of Legends game starts and ends. Before 1.0, a separate security review found a way to hijack another person's account verification; I closed it and submitted 1.0 to App Store review on November 23.",
     stat: { value: "13 → 0", label: "successful hijacks in 20 runs of the reproduced attack (before the fix → after)" },
     key: "1.0 submitted to App Store review",
-    problem: "An app that announces game starts becomes a stalking tool if you can attach someone else's account. So alerts go only to accounts whose owner verified them, but the security review found that accounts pre-registered with someone else's Riot ID could take over that account the moment its owner verified it.",
+    problem: "An app that announces game starts becomes a stalking tool if you can register someone else's account. So alerts go only to accounts whose owner verified them, but the security review found that someone who pre-registered another person's Riot ID could take over that account the moment the real owner verified it.",
     solution: "I changed the server so only the latest registrant of an account can attempt verification, and only a challenge issued after the owner's verification can change the owner. The 10 new tests fail on the code before the fix.",
-    result: "Running the same attack script 20 times, successful hijacks went **from 13 to 0**. 1.0 was submitted to App Store review on November 23, with manual release so that I publish it myself even after approval.",
+    result: "In 20 runs of the same attack script, successful hijacks went **from 13 to 0**. 1.0 was submitted to App Store review on November 23 with manual release, so I publish it myself even after approval.",
     bullets: [
       "Found and closed an account verification hijack in a security review (13 of 20 reproduced attacks succeeded before, 0 after)",
       "Deployed only after fixing the 2 defects the QA session blocked in round 1, rerunning 212 server tests and 126 app tests",
@@ -593,8 +593,8 @@ export const projects: Project[] = [
         paras: [
           "PUBG and Overwatch have no way to verify account ownership, so 1.0 keeps them for preview users only. Otherwise anyone who knows a nickname could get someone else's game start alerts.",
           "TestFlight and the App Store get the same binary, so which games are public is set per user on the server, not by a build flag.",
-          "Because this was a production deploy, a development session and a QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
-          "When a deploy was reported as done, my main agent session reopened the remote commit and the production server's responses to check them, and marked TestFlight processing, which it could not see, as reported, not verified.",
+          "Because this was a production deploy, an agent session doing the implementation and a separate QA session worked as a pair. The QA session blocked the deploy in round 1 (a screen asking to pick several games when only one exists, and an app version still at 0.8.0). After the fixes, 212 server tests and 126 app tests were rerun and passed before the deploy.",
+          "When a deploy was reported as done, my main agent session, which hands out the work, rechecked the remote commit and the production server's responses. It marked TestFlight processing, which it could not see, as reported but not verified.",
         ],
       },
       {
@@ -614,7 +614,7 @@ export const projects: Project[] = [
       "The assistant bots took several seconds to say anything, so a fast model in front now sends the first sentence. A step where that model shortened long answers was dropped after QA found that it lost content.",
     key: "First sentence first, long answers verbatim",
     problem: "Even for questions that needed no tools, Fetch, the research assistant bot, took a median 5.7 seconds before the first content appeared.",
-    solution: "Sonnet in front sends the first sentence, and questions that need research or tools go to the original bot. Its answer is not rewritten; the original text is split into paragraphs and sent.",
+    solution: "Sonnet answers first with one sentence, and questions that need research or tools go to the original bot. The original bot's answer is not rewritten; it is split into paragraphs and sent.",
     result: "In a test setup, the first sentence of a knowledge question appeared in **about 1.9 seconds**. Since November 23 all 4 assistant bots use this front.",
     bullets: [
       "A front model sends the first sentence and hands research questions to the original bot (first sentence in about 1.9 seconds in a test setup)",
@@ -626,8 +626,8 @@ export const projects: Project[] = [
       {
         heading: "Decisions and reasoning",
         paras: [
-          "At first the front model shortened long answers before sending them. When the QA session ran 10 long originals, all 3 that were rewritten lost content (shortening dropped items, and restoring them duplicated items). So rewriting is off and the original text goes out as is.",
-          "Code checks the one sentence the front sends first. If it has numbers or words that are not in the source, or claims something is done, it is not sent and the reply waits for the body.",
+          "At first the front model shortened long answers before sending them. When the QA session tested 10 long answers, all 3 that were rewritten lost content (shortening dropped items, and restoring them duplicated items). So rewriting is off, and the original text is sent unchanged.",
+          "Code checks the one sentence the front sends first. If it has numbers or words that are not in the source, or claims something is done, it is not sent, and the reply waits for the full answer.",
           "I compared Haiku and Sonnet on the same questions for the front and chose Sonnet. Haiku mixed its routing reason into the answer in 10 of 14 knowledge questions.",
         ],
       },
