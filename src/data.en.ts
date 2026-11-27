@@ -298,7 +298,7 @@ export const projects: Project[] = [
           "I counted every nginx log line on the production API server from November 2 to 26, split by Referer path (/desktop).",
           [
             "Of 2,900 manager write requests, **2,775 (95.7%)** came from the desktop screens, as did **2,092 (97.3%)** of 2,149 in-match records; phones sent 0 writes apart from logins.",
-            "Records came in for **40 matches** across 3 tournaments: **100%** of the 14 Gohwang Games basketball matches, **96.9%** of the 19 football matches, and 66.1% of the 7 Samgeonmul football matches were recorded on desktop.",
+            "Records came in for **40 matches** across 3 tournaments. The desktop share of match records was **100%** for the 14 Gohwang Games basketball matches, **96.9%** for its 19 football matches, and 66.1% for the 7 Samgeonmul football matches.",
             "Desktop match records had **0** server errors (5xx) and 15 failed requests (4xx, 0.7%).",
           ],
         ],
@@ -319,7 +319,7 @@ export const projects: Project[] = [
       {
         heading: "Defects found in production logs",
         paras: [
-          "On 11/23 two devices recorded two basketball matches at the same time, but the match console fetched server data only on entry, so neither saw the other's records. One device reloaded that screen 51 and 43 times.",
+          "On 11/23 two devices recorded two basketball matches at the same time, but the match console fetched server data only on entry, so neither saw the other's records. In each match, one of the two devices reloaded that screen (51 and 43 times).",
           [
             "I first fixed it with 5-second polling, then switched to subscribing to server STOMP notifications because polling sent too many requests. In local measurements against polling, another device's record appeared in **0.9 s** instead of 3.9 ~ 4.8 s, and the viewing console's requests per 60 s fell from 72 to **18** ([PR #648](https://github.com/hufscheer/web/pull/648)).",
             "Once another device's substitution arrived, the selected player could silently change and a goal could be saved to the wrong player; I reproduced this locally and blocked the save before release ([PR #645](https://github.com/hufscheer/web/pull/645), [#646](https://github.com/hufscheer/web/pull/646)).",
